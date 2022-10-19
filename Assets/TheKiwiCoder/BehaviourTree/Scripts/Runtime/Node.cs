@@ -14,7 +14,7 @@ namespace TheKiwiCoder {
 
         [HideInInspector] public State state = State.Running;
         [HideInInspector] public bool started = false;
-        [HideInInspector] public string guid;
+        [HideInInspector] public string guid = System.Guid.NewGuid().ToString();
         [HideInInspector] public Vector2 position;
         [HideInInspector] public Context context;
         [HideInInspector] public Blackboard blackboard;

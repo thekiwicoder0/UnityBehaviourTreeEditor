@@ -26,35 +26,9 @@ namespace TheKiwiCoder {
                 return;
             }
 
-            //var root = new InspectorElement(nodeView.node);
 
+            EditorUtility.CreatePropertyInspector(this, nodeProp);
             
-
-            var root = new VisualElement();
-            root.style.flexGrow = 1.0f;
-
-            //PropertyField propField = new PropertyField(nodeProp);
-            //propField.style.flexGrow = 1.0f;
-            //propField.BindProperty(nodeProp);
-            //root.Add(propField);
-
-            var iter = nodeProp.GetEnumerator();
-
-            while (iter.MoveNext()) {
-               
-                var property = iter.Current as SerializedProperty;
-                var propertyField = new PropertyField();
-                propertyField.BindProperty(iter.Current as SerializedProperty);
-
-                root.Add(propertyField);
-                    //if (prop.name == "m_Script") {
-                    //field.SetEnabled(false);
-                    //}
-
-                
-            }
-
-            Add(root);
         }
     }
 }

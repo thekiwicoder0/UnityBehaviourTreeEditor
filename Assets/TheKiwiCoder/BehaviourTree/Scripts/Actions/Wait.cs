@@ -7,8 +7,6 @@ namespace TheKiwiCoder {
     [System.Serializable]
     public class Wait : ActionNode {
 
-        public BlackboardKey floatKey;
-
         public float duration = 1;
         float startTime;
 
@@ -22,10 +20,6 @@ namespace TheKiwiCoder {
         protected override State OnUpdate() {
             
             float timeRemaining = Time.time - startTime;
-
-            floatKey.SetFloat(timeRemaining);
-
-
             if (timeRemaining > duration) {
                 return State.Success;
             }

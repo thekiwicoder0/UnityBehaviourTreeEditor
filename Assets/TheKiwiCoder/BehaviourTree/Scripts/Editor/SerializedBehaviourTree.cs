@@ -4,18 +4,33 @@ using UnityEngine;
 using UnityEditor;
 
 namespace TheKiwiCoder {
+
+    // This is a helper class which wraps a serialized object for finding properties on the behaviour.
+    // It's best to modify the behaviour tree via SerializedObjects and SerializedProperty interfaces
+    // to keep the UI in sync, and undo/redo
+    // It's a hodge podge mix of various functions that will evolve over time. It's not exhaustive by any means.
     public class SerializedBehaviourTree {
+
+        // Wrapper serialized object for writing changes to the behaviour tree
         public SerializedObject serializedObject;
+
+        // Property names. These correspond to the variable names on the behaviour tree
+        const string sPropRootNode = "rootNode";
+        const string sPropNodes = "nodes";
+        const string sPropGuid = "guid";
+        const string sPropChild = "child";
+        const string sPropChildren = "children";
+        const string sPropPosition = "position";
 
         public SerializedProperty RootNode {
             get {
-                return serializedObject.FindProperty("rootNode");
+                return serializedObject.FindProperty(sPropRootNode);
             }
         }
 
         public SerializedProperty Nodes {
             get {
-                return serializedObject.FindProperty("nodes");
+                return serializedObject.FindProperty(sPropNodes);
             }
         }
 
@@ -32,7 +47,7 @@ namespace TheKiwiCoder {
         public SerializedProperty FindNode(SerializedProperty array, Node node) {
             for(int i = 0; i < array.arraySize; ++i) {
                 var current = array.GetArrayElementAtIndex(i);
-                if (current.FindPropertyRelative("guid").stringValue == node.guid) {
+                if (current.FindPropertyRelative(sPropGuid).stringValue == node.guid) {
                     return current;
                 }
             }
@@ -41,14 +56,14 @@ namespace TheKiwiCoder {
 
         public void SetNodePosition(Node node, Vector2 position) {
             var nodeProp = FindNode(Nodes, node);
-            nodeProp.FindPropertyRelative("position").vector2Value = position;
+            nodeProp.FindPropertyRelative(sPropPosition).vector2Value = position;
             serializedObject.ApplyModifiedProperties();
         }
 
         public void DeleteNode(SerializedProperty array, Node node) {
             for (int i = 0; i < array.arraySize; ++i) {
                 var current = array.GetArrayElementAtIndex(i);
-                if (current.FindPropertyRelative("guid").stringValue == node.guid) {
+                if (current.FindPropertyRelative(sPropGuid).stringValue == node.guid) {
                     array.DeleteArrayElementAtIndex(i);
                     return;
                 }
@@ -90,7 +105,7 @@ namespace TheKiwiCoder {
 
             for(int i = 0; i < nodesProperty.arraySize; ++i) {
                 var prop = nodesProperty.GetArrayElementAtIndex(i);
-                var guid = prop.FindPropertyRelative("guid").stringValue;
+                var guid = prop.FindPropertyRelative(sPropGuid).stringValue;
                 DeleteNode(Nodes, node);
                 serializedObject.ApplyModifiedProperties();
             }
@@ -101,7 +116,7 @@ namespace TheKiwiCoder {
             var parentProperty = FindNode(Nodes, parent);
 
             // RootNode, Decorator node
-            var childProperty = parentProperty.FindPropertyRelative("child");
+            var childProperty = parentProperty.FindPropertyRelative(sPropChild);
             if (childProperty != null) {
                 childProperty.managedReferenceValue = child;
                 serializedObject.ApplyModifiedProperties();
@@ -109,8 +124,8 @@ namespace TheKiwiCoder {
             }
 
             // Composite nodes
-            var childrenProperty = parentProperty.FindPropertyRelative("children");
-            if (childProperty != null) {
+            var childrenProperty = parentProperty.FindPropertyRelative(sPropChildren);
+            if (childrenProperty != null) {
                 SerializedProperty newChild = AppendArrayElement(childrenProperty);
                 newChild.managedReferenceValue = child;
                 serializedObject.ApplyModifiedProperties();
@@ -122,7 +137,7 @@ namespace TheKiwiCoder {
             var parentProperty = FindNode(Nodes, parent);
 
             // RootNode, Decorator node
-            var childProperty = parentProperty.FindPropertyRelative("child");
+            var childProperty = parentProperty.FindPropertyRelative(sPropChild);
             if (childProperty != null) {
                 childProperty.managedReferenceValue = null;
                 serializedObject.ApplyModifiedProperties();
@@ -130,8 +145,8 @@ namespace TheKiwiCoder {
             }
 
             // Composite nodes
-            var childrenProperty = parentProperty.FindPropertyRelative("children");
-            if (childProperty != null) {
+            var childrenProperty = parentProperty.FindPropertyRelative(sPropChildren);
+            if (childrenProperty != null) {
                 DeleteNode(childrenProperty, child);
                 serializedObject.ApplyModifiedProperties();
                 return;

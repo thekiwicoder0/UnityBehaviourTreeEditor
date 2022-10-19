@@ -18,7 +18,7 @@ public class RandomPosition : ActionNode {
         Vector3 pos = new Vector3();
         pos.x = Random.Range(min.x, max.x);
         pos.y = Random.Range(min.y, max.y);
-        //blackboard.SetVector3("playerPosition", pos);
+        blackboard.moveToPosition = pos;
         return State.Success;
     }
 }

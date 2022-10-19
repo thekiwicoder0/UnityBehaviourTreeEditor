@@ -13,6 +13,7 @@ namespace TheKiwiCoder {
         public Action<NodeView> OnNodeSelected;
         public new class UxmlFactory : UxmlFactory<BehaviourTreeView, GraphView.UxmlTraits> { }
         BehaviourTree tree;
+        SerializedBehaviourTree serializer;
         BehaviourTreeSettings settings;
 
         public struct ScriptTemplate {
@@ -48,7 +49,6 @@ namespace TheKiwiCoder {
         private void OnUndoRedo() {
             if (tree) {
                 PopulateView(tree);
-                //AssetDatabase.SaveAssets();
             }
         }
 
@@ -58,17 +58,13 @@ namespace TheKiwiCoder {
 
         internal void PopulateView(BehaviourTree tree) {
             this.tree = tree;
+            serializer = new SerializedBehaviourTree(this.tree);
 
             graphViewChanged -= OnGraphViewChanged;
             DeleteElements(graphElements.ToList());
             graphViewChanged += OnGraphViewChanged;
 
-
-            if (tree.rootNode == null) {
-                SerializedBehaviourTree behaviourTreeSerializer = new SerializedBehaviourTree(tree);
-                RootNode root = behaviourTreeSerializer.CreateNode(typeof(RootNode), Vector2.zero) as RootNode;
-                behaviourTreeSerializer.SetRootNode(root);
-            }
+            Debug.Assert(tree.rootNode != null);
 
             // Creates node view
             tree.nodes.ForEach(n => CreateNodeView(n));
@@ -98,7 +94,6 @@ namespace TheKiwiCoder {
                 graphViewChange.elementsToRemove.ForEach(elem => {
                     NodeView nodeView = elem as NodeView;
                     if (nodeView != null) {
-                        SerializedBehaviourTree serializer = new SerializedBehaviourTree(tree);
                         serializer.DeleteNode(nodeView.node);
                         OnNodeSelected(null);
                     }
@@ -107,8 +102,6 @@ namespace TheKiwiCoder {
                     if (edge != null) {
                         NodeView parentView = edge.output.node as NodeView;
                         NodeView childView = edge.input.node as NodeView;
-
-                        SerializedBehaviourTree serializer = new SerializedBehaviourTree(tree);
                         serializer.RemoveChild(parentView.node, childView.node);
                     }
                 });
@@ -118,8 +111,6 @@ namespace TheKiwiCoder {
                 graphViewChange.edgesToCreate.ForEach(edge => {
                     NodeView parentView = edge.output.node as NodeView;
                     NodeView childView = edge.input.node as NodeView;
-
-                    SerializedBehaviourTree serializer = new SerializedBehaviourTree(tree);
                     serializer.AddChild(parentView.node, childView.node);
                 });
             }
@@ -192,7 +183,6 @@ namespace TheKiwiCoder {
         }
 
         void CreateNode(System.Type type, Vector2 position) {
-            SerializedBehaviourTree serializer = new SerializedBehaviourTree(tree);
             Node node = serializer.CreateNode(type, position);
             CreateNodeView(node);
         }

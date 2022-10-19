@@ -8,7 +8,8 @@ namespace TheKiwiCoder {
     public class RootNode : Node {
 
         [SerializeReference]
-        [HideInInspector] public Node child;
+        [HideInInspector] 
+        public Node child;
 
         protected override void OnStart() {
 

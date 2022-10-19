@@ -7,8 +7,8 @@ namespace TheKiwiCoder {
     [System.Serializable]
     public abstract class CompositeNode : Node {
 
-        [SerializeReference]
         [HideInInspector] 
+        [SerializeReference]
         public List<Node> children = new List<Node>();
     }
 }

@@ -1,0 +1,113 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d285eb63c2cdd74180de7cfceaa96ad, type: 3}
+  m_Name: TestTree
+  m_EditorClassIdentifier: 
+  rootNode:
+    rid: 4200190926137589867
+  nodes:
+  - rid: 4200190926137589867
+  - rid: 4200190926137589870
+  - rid: 4200190926137589871
+  - rid: 4200190926137589872
+  - rid: 4200190926137589873
+  - rid: 4200190926137589874
+  treeState: 0
+  blackboard:
+    moveToPosition: {x: 0, y: 0, z: 0}
+  references:
+    version: 2
+    RefIds:
+    - rid: 4200190926137589867
+      type: {class: RootNode, ns: TheKiwiCoder, asm: Assembly-CSharp}
+      data:
+        state: 0
+        started: 0
+        guid: 08babbf2-251b-4019-9d8e-2f9fc5bc6b8b
+        position: {x: -46, y: -150}
+        blackboard:
+          moveToPosition: {x: 0, y: 0, z: 0}
+        description: Where it all begins!
+        drawGizmos: 0
+        child:
+          rid: 4200190926137589870
+    - rid: 4200190926137589870
+      type: {class: Repeat, ns: TheKiwiCoder, asm: Assembly-CSharp}
+      data:
+        state: 0
+        started: 0
+        guid: dcafe99d707d250419e5d8ff0ada012e
+        position: {x: -25, y: 113}
+        blackboard:
+          moveToPosition: {x: 0, y: 0, z: 0}
+        description: Repeat forever
+        drawGizmos: 0
+        child:
+          rid: 4200190926137589871
+        restartOnSuccess: 1
+        restartOnFailure: 0
+    - rid: 4200190926137589871
+      type: {class: Sequencer, ns: TheKiwiCoder, asm: Assembly-CSharp}
+      data:
+        state: 0
+        started: 0
+        guid: 5e06deafef5af5b49aa50aaed9884138
+        position: {x: -14, y: 285}
+        blackboard:
+          moveToPosition: {x: 0, y: 0, z: 0}
+        description: Select random position, move to it, then wait
+        drawGizmos: 0
+        children:
+        - rid: 4200190926137589872
+        - rid: 4200190926137589873
+        - rid: 4200190926137589874
+    - rid: 4200190926137589872
+      type: {class: RandomPosition, ns: , asm: Assembly-CSharp}
+      data:
+        state: 0
+        started: 0
+        guid: 9a1467763237cb145b9cf65e90ce3193
+        position: {x: -252, y: 511}
+        blackboard:
+          moveToPosition: {x: 0, y: 0, z: 0}
+        description: Randomly generates a position into the blackboard
+        drawGizmos: 0
+        min: {x: -10, y: -10}
+        max: {x: 10, y: 10}
+    - rid: 4200190926137589873
+      type: {class: MoveToPosition, ns: , asm: Assembly-CSharp}
+      data:
+        state: 0
+        started: 0
+        guid: 6d43e0274b9a6b647a32a83ae71f5c62
+        position: {x: -14, y: 511}
+        blackboard:
+          moveToPosition: {x: 0, y: 0, z: 0}
+        description: Move to the random position in the blackboard
+        drawGizmos: 0
+        speed: 5
+        stoppingDistance: 0.1
+        updateRotation: 1
+        acceleration: 40
+        tolerance: 1
+    - rid: 4200190926137589874
+      type: {class: Wait, ns: TheKiwiCoder, asm: Assembly-CSharp}
+      data:
+        state: 0
+        started: 0
+        guid: a6398ba3eee6567469a804864807353b
+        position: {x: 236, y: 524}
+        blackboard:
+          moveToPosition: {x: 0, y: 0, z: 0}
+        description: Wait
+        drawGizmos: 0
+        duration: 1

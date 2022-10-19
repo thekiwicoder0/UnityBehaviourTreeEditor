@@ -1,6 +1,0 @@
-<UXML xmlns="UnityEngine.UIElements" xmlns:ue="UnityEditor.UIElements">
-    <Box style="flex-direction: row;">
-        <Label binding-path="key" />
-        <IntegerField binding-path="id" readonly="true" style="flex-grow: 1;"/>
-    </Box>
-</UXML>

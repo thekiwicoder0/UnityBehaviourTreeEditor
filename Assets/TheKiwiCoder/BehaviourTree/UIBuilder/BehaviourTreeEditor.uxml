@@ -12,13 +12,7 @@
                 <ui:VisualElement name="blackboard-container">
                     <ui:Label text="Blackboard" display-tooltip-when-elided="true" style="background-color: rgb(37, 37, 37);" />
                     <TheKiwiCoder.BlackboardView style="flex-grow: 1;">
-                        <ui:VisualElement name="Header" />
-                        <ui:ListView focusable="true" name="ListView" show-border="true" show-alternating-row-backgrounds="All" reorderable="true" show-foldout-header="true" header-title="Keys" show-add-remove-footer="false" reorder-mode="Animated" style="flex-grow: 1;" />
-                        <ui:VisualElement name="Footer" style="flex-grow: 0; flex-direction: column; border-top-width: 1px; border-top-color: rgb(0, 0, 0);">
-                            <ui:TextField picking-mode="Ignore" label="Name" text="NewKey" name="NewKeyTextField" style="flex-grow: 1;" />
-                            <ui:EnumField label="Type" type="TheKiwiCoder.BlackboardItem+Type, Assembly-CSharp" name="NewKeyType" />
-                            <ui:Button tabindex="-1" text="Create" display-tooltip-when-elided="true" name="NewKeyButton" />
-                        </ui:VisualElement>
+                        <uie:PropertyField />
                     </TheKiwiCoder.BlackboardView>
                 </ui:VisualElement>
             </TheKiwiCoder.SplitView>

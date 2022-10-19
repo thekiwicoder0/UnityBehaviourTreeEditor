@@ -11,7 +11,7 @@ namespace TheKiwiCoder {
     public class BehaviourTree : ScriptableObject {
 
         [SerializeReference]
-        public Node rootNode;
+        public RootNode rootNode;
 
         [SerializeReference]
         public List<Node> nodes = new List<Node>();
@@ -19,6 +19,11 @@ namespace TheKiwiCoder {
         public Node.State treeState = Node.State.Running;
 
         public Blackboard blackboard = new Blackboard();
+
+        public BehaviourTree() {
+            rootNode = new RootNode();
+            nodes.Add(rootNode);
+        }
 
         public Node.State Update() {
             if (rootNode.state == Node.State.Running) {
