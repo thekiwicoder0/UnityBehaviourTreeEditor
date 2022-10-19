@@ -76,7 +76,7 @@ Some sample action node types included in the package are:
 
 Composite nodes represent the control flow of the tree, and can have many children. It's up to each composite node type to decide which order the children should be executed in. Composite nodes also monitor the failure state of it's children. There are many ways to handle failures and execution order, and this is what differentiates each composite node from another. The two most common composite node types are sequencer and selector (a.k.a fallback), however many other composite node types are usually necessary to create complex logic. One example is the parallel node which is capable of executing multiple children at once.
 
-The sequencer node executes it's children from left to right, stopping when one of the children returns failure, in which case it will stop also and return failure back to it's parent. This is most useful for executing a sequence (:P) of actions in order. If any of the children fail the entire sequence will stop.
+The sequencer node executes it's children from left to right, stopping when one of the children returns failure, in which case it will stop also and return failure back to it's parent. This is most useful for executing a sequence of actions in order. If any of the children fail the entire sequence will stop.
 
 A selector is the opposite of a sequencer. Instead it will continue executing each children, and stop when a child that returns success. This is useful if there are a sequence of actions that can fail and require a backup plan. For example, an agent may first try to look for cover, and if there is none in sight then it will might attempt to run instead.
 
@@ -86,7 +86,7 @@ The composite node types included in the package are:
 ---| --- | --- | --- |
 | Sequencer | Executes children one at a time left to right | When all children return success | When one child returns failure
 | Selector | Executes children one at a time left to right | When one child returns success | When all children return failure
-| Random Selector | Randomly selects one child to execute | When the child returns success | When the child returns failure
+| Random Selector | Randomly selects one child to execute (:O) | When the child returns success | When the child returns failure
 | Parallel | Executes all children 'at once' concurrently. Multiple children can be in the running state at the same time. | When all children return success | When one child returns failure. Remaining running children are aborted.
 | Interrupt Selector | Similar to Selector, but children are constantly reevaluated each tick. If a child with higher priority succeeds, the current running child is aborted and control is given to the new child. | When one child returns success | When all children return failure
 

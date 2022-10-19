@@ -23,7 +23,7 @@ MonoBehaviour:
   - rid: 4200190926137589874
   treeState: 0
   blackboard:
-    moveToPosition: {x: 0, y: 0, z: 0}
+    moveToPosition: {x: 100, y: 0, z: 0}
   references:
     version: 2
     RefIds:
@@ -33,7 +33,7 @@ MonoBehaviour:
         state: 0
         started: 0
         guid: 08babbf2-251b-4019-9d8e-2f9fc5bc6b8b
-        position: {x: -46, y: -150}
+        position: {x: -25, y: -87}
         blackboard:
           moveToPosition: {x: 0, y: 0, z: 0}
         description: Where it all begins!
@@ -46,7 +46,7 @@ MonoBehaviour:
         state: 0
         started: 0
         guid: dcafe99d707d250419e5d8ff0ada012e
-        position: {x: -25, y: 113}
+        position: {x: -25, y: 100}
         blackboard:
           moveToPosition: {x: 0, y: 0, z: 0}
         description: Repeat forever
@@ -61,7 +61,7 @@ MonoBehaviour:
         state: 0
         started: 0
         guid: 5e06deafef5af5b49aa50aaed9884138
-        position: {x: -14, y: 285}
+        position: {x: -25, y: 276}
         blackboard:
           moveToPosition: {x: 0, y: 0, z: 0}
         description: Select random position, move to it, then wait
@@ -89,7 +89,7 @@ MonoBehaviour:
         state: 0
         started: 0
         guid: 6d43e0274b9a6b647a32a83ae71f5c62
-        position: {x: -14, y: 511}
+        position: {x: -25, y: 511}
         blackboard:
           moveToPosition: {x: 0, y: 0, z: 0}
         description: Move to the random position in the blackboard
@@ -105,7 +105,7 @@ MonoBehaviour:
         state: 0
         started: 0
         guid: a6398ba3eee6567469a804864807353b
-        position: {x: 236, y: 524}
+        position: {x: 204, y: 511}
         blackboard:
           moveToPosition: {x: 0, y: 0, z: 0}
         description: Wait

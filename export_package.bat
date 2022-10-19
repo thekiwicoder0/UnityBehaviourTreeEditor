@@ -1,0 +1,1 @@
+"C:\Program Files\Unity\Hub\Editor\<version>\Editor\Unity.exe" -projectPath "D:\TheKiwiCoder\UnityBehaviourTreeEditor" -exportPackage Scenes TheKiwiCoder
