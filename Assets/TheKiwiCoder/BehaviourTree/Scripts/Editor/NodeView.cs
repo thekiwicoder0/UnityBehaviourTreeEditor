@@ -30,11 +30,15 @@ namespace TheKiwiCoder {
             SetupClasses();
             SetupDataBinding();
         }
-
+        
         private void SetupDataBinding() {
+            SerializedBehaviourTree serializer = new SerializedBehaviourTree(tree);
+            var nodeProp = serializer.FindNode(serializer.Nodes, node);
+
+            var descriptionProp = nodeProp.FindPropertyRelative("description");
+           
             Label descriptionLabel = this.Q<Label>("description");
-            descriptionLabel.bindingPath = "description";
-            //descriptionLabel.Bind(new SerializedObject(node));
+            descriptionLabel.BindProperty(descriptionProp);
         }
 
         private void SetupClasses() {
@@ -87,9 +91,10 @@ namespace TheKiwiCoder {
 
         public override void SetPosition(Rect newPos) {
             base.SetPosition(newPos);
-            Undo.RecordObject(tree, "Behaviour Tree (Set Position");
-            node.position.x = newPos.xMin;
-            node.position.y = newPos.yMin;
+
+            Vector2 position = new Vector2(newPos.xMin, newPos.yMin);
+            SerializedBehaviourTree serializer = new SerializedBehaviourTree(tree);
+            serializer.SetNodePosition(node, position);
         }
 
         public override void OnSelected() {

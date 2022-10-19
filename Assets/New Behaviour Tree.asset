@@ -18,47 +18,67 @@ MonoBehaviour:
   - rid: 4200190909219602432
   - rid: 4200190909340712960
   - rid: 4200190909386326016
+  - rid: 4200190925321273363
   treeState: 0
   blackboard:
     items:
-    - rid: 4200190909407035396
-    - rid: 4200190909364043781
+    - rid: 4200190925291913221
+    - rid: 4200190925291913222
   references:
     version: 2
     RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
     - rid: 4200190909219602432
       type: {class: RootNode, ns: TheKiwiCoder, asm: Assembly-CSharp}
       data:
         state: 0
         started: 1
         guid: 8289793ffa94e194abe473e25ced0b21
-        position: {x: 133, y: -467}
+        position: {x: 236, y: -494}
         blackboard:
           items:
-          - rid: 4200190909364043781
-          - rid: 4200190909407035396
+          - rid: -2
+          - rid: -2
         description: 
         drawGizmos: 0
         child:
-          rid: 4200190909340712960
+          rid: 4200190909386326016
     - rid: 4200190909340712960
       type: {class: Repeat, ns: TheKiwiCoder, asm: Assembly-CSharp}
       data:
         state: 0
         started: 1
         guid: 20a47e01724ec704481cdc6d88c40060
-        position: {x: 102, y: -242}
+        position: {x: 236, y: -582}
         blackboard:
           items:
-          - rid: 4200190909364043781
-          - rid: 4200190909407035396
+          - rid: -2
+          - rid: -2
         description: 
         drawGizmos: 0
         child:
-          rid: 4200190909386326016
+          rid: -2
         restartOnSuccess: 1
         restartOnFailure: 0
-    - rid: 4200190909364043781
+    - rid: 4200190909386326016
+      type: {class: Wait, ns: TheKiwiCoder, asm: Assembly-CSharp}
+      data:
+        state: 0
+        started: 1
+        guid: b660a190157d7d840b7e653279536630
+        position: {x: 236, y: -384}
+        blackboard:
+          items:
+          - rid: -2
+          - rid: -2
+        description: 
+        drawGizmos: 0
+        floatKey:
+          item:
+            rid: 4200190925291913222
+        duration: 1
+    - rid: 4200190925291913221
       type: {class: BlackboardItem, ns: TheKiwiCoder, asm: Assembly-CSharp}
       data:
         key: NewKey
@@ -68,30 +88,24 @@ MonoBehaviour:
         booleanValue: 0
         vector3Value: {x: 0, y: 0, z: 0}
         gameObjectValue: {fileID: 0}
-    - rid: 4200190909386326016
-      type: {class: Wait, ns: TheKiwiCoder, asm: Assembly-CSharp}
-      data:
-        state: 0
-        started: 1
-        guid: b660a190157d7d840b7e653279536630
-        position: {x: 188, y: -55}
-        blackboard:
-          items:
-          - rid: 4200190909364043781
-          - rid: 4200190909407035396
-        description: 
-        drawGizmos: 0
-        floatKey:
-          item:
-            rid: 4200190909364043781
-        duration: 1
-    - rid: 4200190909407035396
+    - rid: 4200190925291913222
       type: {class: BlackboardItem, ns: TheKiwiCoder, asm: Assembly-CSharp}
       data:
-        key: NewKey123
+        key: NewKey2
         type: 0
         floatValue: 0
         intValue: 0
         booleanValue: 0
         vector3Value: {x: 0, y: 0, z: 0}
         gameObjectValue: {fileID: 0}
+    - rid: 4200190925321273363
+      type: {class: Breakpoint, ns: , asm: Assembly-CSharp}
+      data:
+        state: 0
+        started: 0
+        guid: b06df583eacee16469cf5be753390be2
+        position: {x: 236, y: -310}
+        blackboard:
+          items: []
+        description: 
+        drawGizmos: 0

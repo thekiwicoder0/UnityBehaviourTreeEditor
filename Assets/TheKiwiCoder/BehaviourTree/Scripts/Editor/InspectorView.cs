@@ -21,7 +21,7 @@ namespace TheKiwiCoder {
             }
 
             SerializedBehaviourTree serializedBehaviourTree = new SerializedBehaviourTree(tree);
-            var nodeProp = serializedBehaviourTree.FindNode(nodeView.node.guid);
+            var nodeProp = serializedBehaviourTree.FindNode(serializedBehaviourTree.Nodes, nodeView.node);
             if (nodeProp == null) {
                 return;
             }
