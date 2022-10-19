@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using TheKiwiCoder;
 
-public class RandomPosition : ActionNode
-{
+[System.Serializable]
+public class RandomPosition : ActionNode {
     public Vector2 min = Vector2.one * -10;
     public Vector2 max = Vector2.one * 10;
 
@@ -15,8 +15,10 @@ public class RandomPosition : ActionNode
     }
 
     protected override State OnUpdate() {
-        blackboard.moveToPosition.x = Random.Range(min.x, max.x);
-        blackboard.moveToPosition.z = Random.Range(min.y, max.y);
+        Vector3 pos = new Vector3();
+        pos.x = Random.Range(min.x, max.x);
+        pos.y = Random.Range(min.y, max.y);
+        //blackboard.SetVector3("playerPosition", pos);
         return State.Success;
     }
 }

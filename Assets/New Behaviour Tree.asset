@@ -1,0 +1,97 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d285eb63c2cdd74180de7cfceaa96ad, type: 3}
+  m_Name: New Behaviour Tree
+  m_EditorClassIdentifier: 
+  rootNode:
+    rid: 4200190909219602432
+  nodes:
+  - rid: 4200190909219602432
+  - rid: 4200190909340712960
+  - rid: 4200190909386326016
+  treeState: 0
+  blackboard:
+    items:
+    - rid: 4200190909407035396
+    - rid: 4200190909364043781
+  references:
+    version: 2
+    RefIds:
+    - rid: 4200190909219602432
+      type: {class: RootNode, ns: TheKiwiCoder, asm: Assembly-CSharp}
+      data:
+        state: 0
+        started: 1
+        guid: 8289793ffa94e194abe473e25ced0b21
+        position: {x: 133, y: -467}
+        blackboard:
+          items:
+          - rid: 4200190909364043781
+          - rid: 4200190909407035396
+        description: 
+        drawGizmos: 0
+        child:
+          rid: 4200190909340712960
+    - rid: 4200190909340712960
+      type: {class: Repeat, ns: TheKiwiCoder, asm: Assembly-CSharp}
+      data:
+        state: 0
+        started: 1
+        guid: 20a47e01724ec704481cdc6d88c40060
+        position: {x: 102, y: -242}
+        blackboard:
+          items:
+          - rid: 4200190909364043781
+          - rid: 4200190909407035396
+        description: 
+        drawGizmos: 0
+        child:
+          rid: 4200190909386326016
+        restartOnSuccess: 1
+        restartOnFailure: 0
+    - rid: 4200190909364043781
+      type: {class: BlackboardItem, ns: TheKiwiCoder, asm: Assembly-CSharp}
+      data:
+        key: NewKey
+        type: 0
+        floatValue: 0
+        intValue: 0
+        booleanValue: 0
+        vector3Value: {x: 0, y: 0, z: 0}
+        gameObjectValue: {fileID: 0}
+    - rid: 4200190909386326016
+      type: {class: Wait, ns: TheKiwiCoder, asm: Assembly-CSharp}
+      data:
+        state: 0
+        started: 1
+        guid: b660a190157d7d840b7e653279536630
+        position: {x: 188, y: -55}
+        blackboard:
+          items:
+          - rid: 4200190909364043781
+          - rid: 4200190909407035396
+        description: 
+        drawGizmos: 0
+        floatKey:
+          item:
+            rid: 4200190909364043781
+        duration: 1
+    - rid: 4200190909407035396
+      type: {class: BlackboardItem, ns: TheKiwiCoder, asm: Assembly-CSharp}
+      data:
+        key: NewKey123
+        type: 0
+        floatValue: 0
+        intValue: 0
+        booleanValue: 0
+        vector3Value: {x: 0, y: 0, z: 0}
+        gameObjectValue: {fileID: 0}

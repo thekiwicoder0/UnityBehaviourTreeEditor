@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace TheKiwiCoder {
-    public abstract class Node : ScriptableObject {
+
+    [System.Serializable]
+    public abstract class Node {
         public enum State {
             Running,
             Failure,
@@ -34,10 +36,6 @@ namespace TheKiwiCoder {
             }
 
             return state;
-        }
-
-        public virtual Node Clone() {
-            return Instantiate(this);
         }
 
         public void Abort() {

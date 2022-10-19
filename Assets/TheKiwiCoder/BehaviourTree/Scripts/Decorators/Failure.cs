@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace TheKiwiCoder {
+    [System.Serializable]
     public class Failure : DecoratorNode {
         protected override void OnStart() {
         }

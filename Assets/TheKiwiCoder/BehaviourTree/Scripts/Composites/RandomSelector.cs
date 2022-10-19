@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Linq;
 
 namespace TheKiwiCoder {
+    [System.Serializable]
     public class RandomSelector : CompositeNode {
         protected int current;
 

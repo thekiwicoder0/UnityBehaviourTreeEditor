@@ -9,9 +9,15 @@ using UnityEditor;
 namespace TheKiwiCoder {
     [CreateAssetMenu()]
     public class BehaviourTree : ScriptableObject {
+
+        [SerializeReference]
         public Node rootNode;
-        public Node.State treeState = Node.State.Running;
+
+        [SerializeReference]
         public List<Node> nodes = new List<Node>();
+
+        public Node.State treeState = Node.State.Running;
+
         public Blackboard blackboard = new Blackboard();
 
         public Node.State Update() {
@@ -40,7 +46,7 @@ namespace TheKiwiCoder {
         }
 
         public static void Traverse(Node node, System.Action<Node> visiter) {
-            if (node) {
+            if (node != null) {
                 visiter.Invoke(node);
                 var children = GetChildren(node);
                 children.ForEach((n) => Traverse(n, visiter));
@@ -49,12 +55,6 @@ namespace TheKiwiCoder {
 
         public BehaviourTree Clone() {
             BehaviourTree tree = Instantiate(this);
-            tree.rootNode = tree.rootNode.Clone();
-            tree.nodes = new List<Node>();
-            Traverse(tree.rootNode, (n) => {
-                tree.nodes.Add(n);
-            });
-
             return tree;
         }
 
@@ -70,19 +70,13 @@ namespace TheKiwiCoder {
 #if UNITY_EDITOR
 
         public Node CreateNode(System.Type type) {
-            Node node = ScriptableObject.CreateInstance(type) as Node;
-            node.name = type.Name;
-            node.guid = GUID.Generate().ToString();
-
             Undo.RecordObject(this, "Behaviour Tree (CreateNode)");
+
+            Node node = System.Activator.CreateInstance(type) as Node;
+            node.guid = GUID.Generate().ToString();
             nodes.Add(node);
 
-            if (!Application.isPlaying) {
-                AssetDatabase.AddObjectToAsset(node, this);
-            }
-
-            Undo.RegisterCreatedObjectUndo(node, "Behaviour Tree (CreateNode)");
-
+            EditorUtility.SetDirty(this);
             AssetDatabase.SaveAssets();
             return node;
         }
@@ -91,50 +85,46 @@ namespace TheKiwiCoder {
             Undo.RecordObject(this, "Behaviour Tree (DeleteNode)");
             nodes.Remove(node);
 
-            //AssetDatabase.RemoveObjectFromAsset(node);
-            Undo.DestroyObjectImmediate(node);
-
+            EditorUtility.SetDirty(this);
             AssetDatabase.SaveAssets();
         }
 
         public void AddChild(Node parent, Node child) {
+            Undo.RecordObject(this, "Behaviour Tree (AddChild)");
+
             if (parent is DecoratorNode decorator) {
-                Undo.RecordObject(decorator, "Behaviour Tree (AddChild)");
                 decorator.child = child;
-                EditorUtility.SetDirty(decorator);
             }
 
             if (parent is RootNode rootNode) {
-                Undo.RecordObject(rootNode, "Behaviour Tree (AddChild)");
                 rootNode.child = child;
-                EditorUtility.SetDirty(rootNode);
             }
 
             if (parent is CompositeNode composite) {
-                Undo.RecordObject(composite, "Behaviour Tree (AddChild)");
                 composite.children.Add(child);
-                EditorUtility.SetDirty(composite);
             }
+
+            EditorUtility.SetDirty(this);
+            AssetDatabase.SaveAssets();
         }
 
         public void RemoveChild(Node parent, Node child) {
+            Undo.RecordObject(this, "Behaviour Tree (RemoveChild)");
+
             if (parent is DecoratorNode decorator) {
-                Undo.RecordObject(decorator, "Behaviour Tree (RemoveChild)");
                 decorator.child = null;
-                EditorUtility.SetDirty(decorator);
             }
 
             if (parent is RootNode rootNode) {
-                Undo.RecordObject(rootNode, "Behaviour Tree (RemoveChild)");
                 rootNode.child = null;
-                EditorUtility.SetDirty(rootNode);
             }
 
             if (parent is CompositeNode composite) {
-                Undo.RecordObject(composite, "Behaviour Tree (RemoveChild)");
                 composite.children.Remove(child);
-                EditorUtility.SetDirty(composite);
             }
+
+            EditorUtility.SetDirty(this);
+            AssetDatabase.SaveAssets();
         }
 #endif
         #endregion Editor Compatibility

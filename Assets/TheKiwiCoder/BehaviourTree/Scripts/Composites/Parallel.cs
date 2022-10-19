@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Linq;
 
 namespace TheKiwiCoder {
+    [System.Serializable]
     public class Parallel : CompositeNode {
         List<State> childrenLeftToExecute = new List<State>();
 

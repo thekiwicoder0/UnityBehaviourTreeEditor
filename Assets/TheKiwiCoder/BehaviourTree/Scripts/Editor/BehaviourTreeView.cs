@@ -46,8 +46,10 @@ namespace TheKiwiCoder {
         }
 
         private void OnUndoRedo() {
-            PopulateView(tree);
-            AssetDatabase.SaveAssets();
+            if (tree) {
+                PopulateView(tree);
+                AssetDatabase.SaveAssets();
+            }
         }
 
         public NodeView FindNodeView(Node node) {
@@ -62,8 +64,8 @@ namespace TheKiwiCoder {
             graphViewChanged += OnGraphViewChanged;
 
             if (tree.rootNode == null) {
+                Undo.RecordObject(tree, "Create Root Node");
                 tree.rootNode = tree.CreateNode(typeof(RootNode)) as RootNode;
-                EditorUtility.SetDirty(tree);
                 AssetDatabase.SaveAssets();
             }
 
@@ -90,11 +92,13 @@ namespace TheKiwiCoder {
         }
 
         private GraphViewChange OnGraphViewChanged(GraphViewChange graphViewChange) {
+            var so = new SerializedObject(tree);
             if (graphViewChange.elementsToRemove != null) {
                 graphViewChange.elementsToRemove.ForEach(elem => {
                     NodeView nodeView = elem as NodeView;
                     if (nodeView != null) {
                         tree.DeleteNode(nodeView.node);
+                        OnNodeSelected(null);
                     }
 
                     Edge edge = elem as Edge;
@@ -118,6 +122,11 @@ namespace TheKiwiCoder {
                 NodeView view = n as NodeView;
                 view.SortChildren();
             });
+
+            so.ApplyModifiedProperties();
+
+            EditorUtility.SetDirty(tree);
+            AssetDatabase.SaveAssets();
 
             return graphViewChange;
         }
@@ -188,7 +197,7 @@ namespace TheKiwiCoder {
         }
 
         void CreateNodeView(Node node) {
-            NodeView nodeView = new NodeView(node);
+            NodeView nodeView = new NodeView(tree, node);
             nodeView.OnNodeSelected = OnNodeSelected;
             AddElement(nodeView);
         }

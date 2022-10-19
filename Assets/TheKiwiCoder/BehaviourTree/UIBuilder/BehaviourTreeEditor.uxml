@@ -11,18 +11,26 @@
                 </ui:VisualElement>
                 <ui:VisualElement name="blackboard-container">
                     <ui:Label text="Blackboard" display-tooltip-when-elided="true" style="background-color: rgb(37, 37, 37);" />
-                    <ui:IMGUIContainer />
+                    <TheKiwiCoder.BlackboardView style="flex-grow: 1;">
+                        <ui:VisualElement name="Header" />
+                        <ui:ListView focusable="true" name="ListView" show-border="true" show-alternating-row-backgrounds="All" reorderable="true" show-foldout-header="true" header-title="Keys" show-add-remove-footer="false" reorder-mode="Animated" style="flex-grow: 1;" />
+                        <ui:VisualElement name="Footer" style="flex-grow: 0; flex-direction: column; border-top-width: 1px; border-top-color: rgb(0, 0, 0);">
+                            <ui:TextField picking-mode="Ignore" label="Name" text="NewKey" name="NewKeyTextField" style="flex-grow: 1;" />
+                            <ui:EnumField label="Type" type="TheKiwiCoder.BlackboardItem+Type, Assembly-CSharp" name="NewKeyType" />
+                            <ui:Button tabindex="-1" text="Create" display-tooltip-when-elided="true" name="NewKeyButton" />
+                        </ui:VisualElement>
+                    </TheKiwiCoder.BlackboardView>
                 </ui:VisualElement>
             </TheKiwiCoder.SplitView>
         </ui:VisualElement>
         <ui:VisualElement name="right-panel">
             <ui:Label text="Tree View" display-tooltip-when-elided="true" style="background-color: rgb(37, 37, 37);" />
-            <TheKiwiCoder.BehaviourTreeView focusable="true" style="flex-grow: 1;" />
+            <TheKiwiCoder.BehaviourTreeView focusable="true" style="flex-grow: 1; border-top-width: 0;" />
         </ui:VisualElement>
     </TheKiwiCoder.SplitView>
-    <ui:VisualElement name="Overlay" style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.5); align-items: center; justify-content: center;">
+    <ui:VisualElement name="Overlay" style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.5); align-items: center; justify-content: center; display: none;">
         <ui:VisualElement style="flex-grow: 1; background-color: rgb(56, 56, 56); border-top-left-radius: 10px; border-bottom-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; max-height: 250px; min-height: 250px; min-width: 533px; max-width: 533px;">
-            <ui:VisualElement style="flex-grow: 1; margin-left: 10px; margin-right: 10px; margin-top: 10px; margin-bottom: 10px; background-color: rgba(56, 56, 56, 255);">
+            <ui:VisualElement style="flex-grow: 1; margin-left: 10px; margin-right: 10px; margin-top: 10px; margin-bottom: 10px; background-color: rgb(56, 56, 56);">
                 <ui:Label text="Create New Tree" display-tooltip-when-elided="true" style="-unity-text-align: upper-left; font-size: 25px; color: rgb(210, 210, 210); -unity-font-style: bold;" />
                 <ui:TextField picking-mode="Ignore" label="Name" value="New Behaviour Tree" text="New Behaviour Tree" name="TreeName" style="margin-top: 20px;" />
                 <ui:TextField picking-mode="Ignore" label="Location" value="Assets/" text="Assets/" name="LocationPath" readonly="false" style="margin-top: 10px;" />

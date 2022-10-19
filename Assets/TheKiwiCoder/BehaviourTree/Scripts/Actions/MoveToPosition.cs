@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using TheKiwiCoder;
 
-public class MoveToPosition : ActionNode
-{
+[System.Serializable]
+public class MoveToPosition : ActionNode {
     public float speed = 5;
     public float stoppingDistance = 0.1f;
     public bool updateRotation = true;
@@ -14,7 +14,7 @@ public class MoveToPosition : ActionNode
     protected override void OnStart() {
         context.agent.stoppingDistance = stoppingDistance;
         context.agent.speed = speed;
-        context.agent.destination = blackboard.moveToPosition;
+        //context.agent.destination = blackboard.GetVector3("playerPosition");
         context.agent.updateRotation = updateRotation;
         context.agent.acceleration = acceleration;
     }

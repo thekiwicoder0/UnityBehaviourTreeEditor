@@ -11,14 +11,15 @@ namespace TheKiwiCoder {
 
     public class NodeView : UnityEditor.Experimental.GraphView.Node {
         public Action<NodeView> OnNodeSelected;
+        public BehaviourTree tree;
         public Node node;
         public Port input;
         public Port output;
 
-        public NodeView(Node node) : base(AssetDatabase.GetAssetPath(BehaviourTreeSettings.GetOrCreateSettings().nodeXml)) {
+        public NodeView(BehaviourTree tree, Node node) : base(AssetDatabase.GetAssetPath(BehaviourTreeSettings.GetOrCreateSettings().nodeXml)) {
+            this.tree = tree;
             this.node = node;
-            this.node.name = node.GetType().Name;
-            this.title = node.name.Replace("(Clone)", "").Replace("Node", "");
+            this.title = node.GetType().Name;
             this.viewDataKey = node.guid;
 
             style.left = node.position.x;
@@ -33,7 +34,7 @@ namespace TheKiwiCoder {
         private void SetupDataBinding() {
             Label descriptionLabel = this.Q<Label>("description");
             descriptionLabel.bindingPath = "description";
-            descriptionLabel.Bind(new SerializedObject(node));
+            //descriptionLabel.Bind(new SerializedObject(node));
         }
 
         private void SetupClasses() {
@@ -86,10 +87,9 @@ namespace TheKiwiCoder {
 
         public override void SetPosition(Rect newPos) {
             base.SetPosition(newPos);
-            Undo.RecordObject(node, "Behaviour Tree (Set Position");
+            Undo.RecordObject(tree, "Behaviour Tree (Set Position");
             node.position.x = newPos.xMin;
             node.position.y = newPos.yMin;
-            EditorUtility.SetDirty(node);
         }
 
         public override void OnSelected() {

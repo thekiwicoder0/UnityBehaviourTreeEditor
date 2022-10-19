@@ -3,29 +3,58 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UIElements;
 using UnityEditor;
+using UnityEditor.UIElements;
 
 namespace TheKiwiCoder {
     public class InspectorView : VisualElement {
         public new class UxmlFactory : UxmlFactory<InspectorView, VisualElement.UxmlTraits> { }
 
-        Editor editor;
-
         public InspectorView() {
 
         }
 
-        internal void UpdateSelection(NodeView nodeView) {
+        internal void UpdateSelection(BehaviourTree tree, NodeView nodeView) {
             Clear();
 
-            UnityEngine.Object.DestroyImmediate(editor);
+            if (nodeView == null) {
+                return;
+            }
 
-            editor = Editor.CreateEditor(nodeView.node);
-            IMGUIContainer container = new IMGUIContainer(() => {
-                if (editor && editor.target) {
-                    editor.OnInspectorGUI();
-                }
-            });
-            Add(container);
+            SerializedBehaviourTree serializedBehaviourTree = new SerializedBehaviourTree(tree);
+            var nodeProp = serializedBehaviourTree.FindNode(nodeView.node.guid);
+            if (nodeProp == null) {
+                return;
+            }
+
+            //var root = new InspectorElement(nodeView.node);
+
+            
+
+            var root = new VisualElement();
+            root.style.flexGrow = 1.0f;
+
+            //PropertyField propField = new PropertyField(nodeProp);
+            //propField.style.flexGrow = 1.0f;
+            //propField.BindProperty(nodeProp);
+            //root.Add(propField);
+
+            var iter = nodeProp.GetEnumerator();
+
+            while (iter.MoveNext()) {
+               
+                var property = iter.Current as SerializedProperty;
+                var propertyField = new PropertyField();
+                propertyField.BindProperty(iter.Current as SerializedProperty);
+
+                root.Add(propertyField);
+                    //if (prop.name == "m_Script") {
+                    //field.SetEnabled(false);
+                    //}
+
+                
+            }
+
+            Add(root);
         }
     }
 }

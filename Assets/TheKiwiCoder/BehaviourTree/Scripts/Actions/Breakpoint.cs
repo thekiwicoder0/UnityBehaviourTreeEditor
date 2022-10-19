@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TheKiwiCoder;
 
+[System.Serializable]
 public class Breakpoint : ActionNode
 {
     protected override void OnStart() {

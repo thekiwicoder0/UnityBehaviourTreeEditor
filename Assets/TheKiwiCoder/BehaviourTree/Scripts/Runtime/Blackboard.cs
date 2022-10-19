@@ -9,6 +9,14 @@ namespace TheKiwiCoder {
     // Add other properties here that make sense for your specific use case.
     [System.Serializable]
     public class Blackboard {
-        public Vector3 moveToPosition;
+
+        [SerializeReference]
+        public List<BlackboardItem> items = new List<BlackboardItem>();
+
+        public BlackboardItem Find(string key) {
+            return items.Find((item) => {
+                return item.key == key;
+            });
+        }
     }
 }

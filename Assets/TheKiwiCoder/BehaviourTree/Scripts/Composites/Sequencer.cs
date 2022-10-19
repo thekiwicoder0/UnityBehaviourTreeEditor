@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace TheKiwiCoder {
+    [System.Serializable]
     public class Sequencer : CompositeNode {
         protected int current;
 

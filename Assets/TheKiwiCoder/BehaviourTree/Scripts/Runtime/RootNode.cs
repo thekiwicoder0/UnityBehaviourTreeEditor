@@ -4,8 +4,11 @@ using UnityEngine;
 
 namespace TheKiwiCoder {
 
+    [System.Serializable]
     public class RootNode : Node {
-        public Node child;
+
+        [SerializeReference]
+        [HideInInspector] public Node child;
 
         protected override void OnStart() {
 
@@ -16,13 +19,8 @@ namespace TheKiwiCoder {
         }
 
         protected override State OnUpdate() {
-            return child.Update();
-        }
 
-        public override Node Clone() {
-            RootNode node = Instantiate(this);
-            node.child = child.Clone();
-            return node;
+            return child.Update();
         }
     }
 }

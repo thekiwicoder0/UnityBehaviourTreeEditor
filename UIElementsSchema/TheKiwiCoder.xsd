@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xs:schema xmlns:editor="UnityEditor.UIElements" xmlns:engine="UnityEngine.UIElements" xmlns="UnityEditor.PackageManager.UI.Internal" elementFormDefault="qualified" targetNamespace="TheKiwiCoder" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:schema xmlns:editor="UnityEditor.UIElements" xmlns:engine="UnityEngine.UIElements" xmlns="UnityEditor.Overlays" elementFormDefault="qualified" targetNamespace="TheKiwiCoder" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import schemaLocation="UnityEngine.UIElements.xsd" namespace="UnityEngine.UIElements" />
   <xs:complexType name="BehaviourTreeViewType">
     <xs:complexContent mixed="false">
@@ -22,6 +22,27 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="BehaviourTreeView" substitutionGroup="engine:VisualElement" xmlns:q1="TheKiwiCoder" type="q1:BehaviourTreeViewType" />
+  <xs:complexType name="BlackboardViewType">
+    <xs:complexContent mixed="false">
+      <xs:restriction base="engine:VisualElementType">
+        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+          <xs:element ref="engine:VisualElement" />
+        </xs:sequence>
+        <xs:attribute default="" name="name" type="xs:string" use="optional" />
+        <xs:attribute default="" name="view-data-key" type="xs:string" use="optional" />
+        <xs:attribute default="Position" name="picking-mode" type="engine:VisualElement_picking-mode_Type" use="optional" />
+        <xs:attribute default="" name="tooltip" type="xs:string" use="optional" />
+        <xs:attribute default="None" name="usage-hints" type="engine:VisualElement_usage-hints_Type" use="optional" />
+        <xs:attribute default="0" name="tabindex" type="xs:int" use="optional" />
+        <xs:attribute default="false" name="focusable" type="xs:boolean" use="optional" />
+        <xs:attribute default="" name="class" type="xs:string" use="optional" />
+        <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
+        <xs:attribute default="" name="style" type="xs:string" use="optional" />
+        <xs:anyAttribute processContents="lax" />
+      </xs:restriction>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="BlackboardView" substitutionGroup="engine:VisualElement" xmlns:q2="TheKiwiCoder" type="q2:BlackboardViewType" />
   <xs:complexType name="InspectorViewType">
     <xs:complexContent mixed="false">
       <xs:restriction base="engine:VisualElementType">
@@ -42,7 +63,7 @@
       </xs:restriction>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="InspectorView" substitutionGroup="engine:VisualElement" xmlns:q2="TheKiwiCoder" type="q2:InspectorViewType" />
+  <xs:element name="InspectorView" substitutionGroup="engine:VisualElement" xmlns:q3="TheKiwiCoder" type="q3:InspectorViewType" />
   <xs:simpleType name="SplitView_orientation_Type">
     <xs:restriction base="xs:string">
       <xs:enumeration value="Horizontal" />
@@ -64,10 +85,10 @@
         <xs:attribute default="" name="style" type="xs:string" use="optional" />
         <xs:attribute default="0" name="fixed-pane-index" type="xs:int" use="optional" />
         <xs:attribute default="100" name="fixed-pane-initial-dimension" type="xs:int" use="optional" />
-        <xs:attribute default="Horizontal" name="orientation" xmlns:q3="TheKiwiCoder" type="q3:SplitView_orientation_Type" use="optional" />
+        <xs:attribute default="Horizontal" name="orientation" xmlns:q4="TheKiwiCoder" type="q4:SplitView_orientation_Type" use="optional" />
         <xs:anyAttribute processContents="lax" />
       </xs:restriction>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="SplitView" substitutionGroup="engine:VisualElement" xmlns:q4="TheKiwiCoder" type="q4:SplitViewType" />
+  <xs:element name="SplitView" substitutionGroup="engine:VisualElement" xmlns:q5="TheKiwiCoder" type="q5:SplitViewType" />
 </xs:schema>

@@ -11,10 +11,13 @@ namespace TheKiwiCoder {
 
     public class BehaviourTreeEditor : EditorWindow {
 
+        [SerializeField]
+        VisualTreeAsset blackboardItemAsset;
+
         BehaviourTreeView treeView;
         BehaviourTree tree;
         InspectorView inspectorView;
-        IMGUIContainer blackboardView;
+        BlackboardView blackboardView;
         ToolbarMenu toolbarMenu;
         TextField treeNameField;
         TextField locationPathField;
@@ -76,14 +79,7 @@ namespace TheKiwiCoder {
             inspectorView = root.Q<InspectorView>();
 
             // Blackboard view
-            blackboardView = root.Q<IMGUIContainer>();
-            blackboardView.onGUIHandler = () => {
-                if (treeObject != null && treeObject.targetObject != null) {
-                    treeObject.Update();
-                    EditorGUILayout.PropertyField(blackboardProperty);
-                    treeObject.ApplyModifiedProperties();
-                }
-            };
+            blackboardView = root.Q<BlackboardView>();
 
             // Toolbar assets menu
             toolbarMenu = root.Q<ToolbarMenu>();
@@ -170,9 +166,11 @@ namespace TheKiwiCoder {
                 treeView.PopulateView(tree);
             }
 
-            
+
             treeObject = new SerializedObject(tree);
+
             blackboardProperty = treeObject.FindProperty("blackboard");
+            blackboardView.Bind(blackboardProperty);
 
             EditorApplication.delayCall += () => {
                 treeView.FrameAll();
@@ -180,7 +178,7 @@ namespace TheKiwiCoder {
         }
 
         void OnNodeSelectionChanged(NodeView node) {
-            inspectorView.UpdateSelection(node);
+            inspectorView.UpdateSelection(tree, node);
         }
 
         private void OnInspectorUpdate() {

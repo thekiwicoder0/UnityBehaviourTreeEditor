@@ -3,7 +3,9 @@ guid: 30f27e776c88e27458a220f32156c7c7
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - m_ViewDataDictionary: {instanceID: 0}
+  - blackboardItemAsset: {fileID: 9197481963319205126, guid: 55b49e35c2e3ca243bb9b11bb1c67707, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
