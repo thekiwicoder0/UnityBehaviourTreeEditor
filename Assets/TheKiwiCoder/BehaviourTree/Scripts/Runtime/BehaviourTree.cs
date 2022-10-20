@@ -20,6 +20,11 @@ namespace TheKiwiCoder {
 
         public Blackboard blackboard = new Blackboard();
 
+#region  EditorProperties 
+        public Vector3 viewPosition = new Vector3(600, 300);
+        public Vector3 viewScale = Vector3.one;
+#endregion
+
         public BehaviourTree() {
             rootNode = new RootNode();
             nodes.Add(rootNode);

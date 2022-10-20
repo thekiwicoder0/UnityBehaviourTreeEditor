@@ -17,10 +17,13 @@ namespace TheKiwiCoder {
         // Property names. These correspond to the variable names on the behaviour tree
         const string sPropRootNode = "rootNode";
         const string sPropNodes = "nodes";
+        const string sPropBlackboard = "blackboard";
         const string sPropGuid = "guid";
         const string sPropChild = "child";
         const string sPropChildren = "children";
         const string sPropPosition = "position";
+        const string sViewTransformPosition = "viewPosition";
+        const string sViewTransformScale = "viewScale";
 
         public SerializedProperty RootNode {
             get {
@@ -31,6 +34,12 @@ namespace TheKiwiCoder {
         public SerializedProperty Nodes {
             get {
                 return serializedObject.FindProperty(sPropNodes);
+            }
+        }
+
+        public SerializedProperty Blackboard {
+            get {
+                return serializedObject.FindProperty(sPropBlackboard);
             }
         }
 
@@ -52,6 +61,12 @@ namespace TheKiwiCoder {
                 }
             }
             return null;
+        }
+
+        public void SetViewTransform(Vector3 position, Vector3 scale) {
+            serializedObject.FindProperty(sViewTransformPosition).vector3Value = position;
+            serializedObject.FindProperty(sViewTransformScale).vector3Value = scale;
+            serializedObject.ApplyModifiedPropertiesWithoutUndo();
         }
 
         public void SetNodePosition(Node node, Vector2 position) {

@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2d285eb63c2cdd74180de7cfceaa96ad, type: 3}
-  m_Name: TestTree
+  m_Name: BehaviourTree_RandomWalk
   m_EditorClassIdentifier: 
   rootNode:
     rid: 4200190926137589867
@@ -24,6 +24,8 @@ MonoBehaviour:
   treeState: 0
   blackboard:
     moveToPosition: {x: 100, y: 0, z: 0}
+  viewPosition: {x: 652, y: 269, z: 0}
+  viewScale: {x: 0.8695652, y: 0.8695652, z: 1}
   references:
     version: 2
     RefIds:
@@ -89,7 +91,7 @@ MonoBehaviour:
         state: 0
         started: 0
         guid: 6d43e0274b9a6b647a32a83ae71f5c62
-        position: {x: -25, y: 511}
+        position: {x: -25.000011, y: 511.00006}
         blackboard:
           moveToPosition: {x: 0, y: 0, z: 0}
         description: Move to the random position in the blackboard

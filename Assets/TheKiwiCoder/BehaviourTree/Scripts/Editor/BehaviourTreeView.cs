@@ -9,9 +9,10 @@ using System.Linq;
 
 namespace TheKiwiCoder {
     public class BehaviourTreeView : GraphView {
+        public new class UxmlFactory : UxmlFactory<BehaviourTreeView, GraphView.UxmlTraits> { }
 
         public Action<NodeView> OnNodeSelected;
-        public new class UxmlFactory : UxmlFactory<BehaviourTreeView, GraphView.UxmlTraits> { }
+
         BehaviourTree tree;
         SerializedBehaviourTree serializer;
         BehaviourTreeSettings settings;
@@ -44,6 +45,13 @@ namespace TheKiwiCoder {
             styleSheets.Add(styleSheet);
 
             Undo.undoRedoPerformed += OnUndoRedo;
+            viewTransformChanged += OnViewTransformChanged;
+        }
+
+        void OnViewTransformChanged(GraphView graphView) {
+            Vector3 position = contentViewContainer.transform.position;
+            Vector3 scale = contentViewContainer.transform.scale;
+            serializer.SetViewTransform(position, scale);
         }
 
         private void OnUndoRedo() {
@@ -56,13 +64,17 @@ namespace TheKiwiCoder {
             return GetNodeByGuid(node.guid) as NodeView;
         }
 
-        internal void PopulateView(BehaviourTree tree) {
-            this.tree = tree;
-            serializer = new SerializedBehaviourTree(this.tree);
-
+        public void ClearView() {
             graphViewChanged -= OnGraphViewChanged;
             DeleteElements(graphElements.ToList());
             graphViewChanged += OnGraphViewChanged;
+        }
+
+        public void PopulateView(BehaviourTree tree) {
+            this.tree = tree;
+            serializer = new SerializedBehaviourTree(this.tree);
+            
+            ClearView();
 
             Debug.Assert(tree.rootNode != null);
 
@@ -80,6 +92,10 @@ namespace TheKiwiCoder {
                     AddElement(edge);
                 });
             });
+
+            // Set view
+            contentViewContainer.transform.position = tree.viewPosition;
+            contentViewContainer.transform.scale = tree.viewScale;
         }
 
         public override List<Port> GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter) {

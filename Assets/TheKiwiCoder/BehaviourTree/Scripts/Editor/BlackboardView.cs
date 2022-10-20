@@ -8,20 +8,17 @@ using UnityEngine;
 
 namespace TheKiwiCoder {
     public class BlackboardView : VisualElement {
-
-        [SerializeField]
-        VisualTreeAsset m_ItemAsset;
-
         public new class UxmlFactory : UxmlFactory<BlackboardView, VisualElement.UxmlTraits> { }
 
         public BlackboardView() {
 
         }
 
-        internal void Bind(SerializedProperty blackboard) {
+        internal void Bind(BehaviourTree tree) {
             Clear();
 
-            EditorUtility.CreatePropertyInspector(this, blackboard);
+            var blackboardProperty = new SerializedBehaviourTree(tree).Blackboard;
+            EditorUtility.CreatePropertyInspector(this, blackboardProperty);
         }
     }
 }
