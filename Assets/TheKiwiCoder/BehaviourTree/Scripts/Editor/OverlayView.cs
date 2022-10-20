@@ -4,10 +4,8 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEditor;
 
-namespace TheKiwiCoder
-{
-    public class OverlayView : VisualElement
-    {
+namespace TheKiwiCoder {
+    public class OverlayView : VisualElement {
         public new class UxmlFactory : UxmlFactory<OverlayView, UxmlTraits> { }
 
         public System.Action<BehaviourTree> OnTreeSelected;
@@ -30,11 +28,10 @@ namespace TheKiwiCoder
             locationPathField = this.Q<TextField>("LocationPath");
 
             // Configure asset selection dropdown menu
-            assetSelector.formatListItemCallback = FormatItem;
             var behaviourTrees = EditorUtility.GetAssetPaths<BehaviourTree>();
-            assetSelector.choices.Clear();
+            assetSelector.choices = new List<string>();
             behaviourTrees.ForEach(treePath => {
-                assetSelector.choices.Add(treePath);
+                assetSelector.choices.Add(ToMenuFormat(treePath));
             });
 
             // Configure open asset button
@@ -46,13 +43,21 @@ namespace TheKiwiCoder
             createButton.clicked += OnCreateAsset;
         }
 
-        public string FormatItem(string one) {
+        public string ToMenuFormat(string one) {
             // Using the slash creates submenus...
-            return one.Replace("/", ".");
+            return one.Replace("/", "|");
         }
 
+        public string ToAssetFormat(string one) {
+            // Using the slash creates submenus...
+            return one.Replace("|", "/");
+        }
+
+
+
         void OnOpenAsset() {
-            BehaviourTree tree = AssetDatabase.LoadAssetAtPath<BehaviourTree>(assetSelector.text);
+            string path = ToAssetFormat(assetSelector.text);
+            BehaviourTree tree = AssetDatabase.LoadAssetAtPath<BehaviourTree>(path);
             if (tree) {
                 TreeSelected(tree);
                 style.visibility = Visibility.Hidden;
