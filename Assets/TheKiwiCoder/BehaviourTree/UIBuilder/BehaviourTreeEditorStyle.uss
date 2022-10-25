@@ -4,3 +4,7 @@ GridBackground {
     --thick-line-color: rgba(193, 196, 192, 0.1);
     --spacing: 15;
 }
+
+Label {
+    color: rgb(196, 196, 196);
+}

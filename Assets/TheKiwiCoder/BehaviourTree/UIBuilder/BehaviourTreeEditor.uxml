@@ -1,15 +1,16 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <Style src="project://database/Assets/TheKiwiCoder/BehaviourTree/UIBuilder/BehaviourTreeEditorStyle.uss?fileID=7433441132597879392&amp;guid=8781ca2a6e79ccf4da2e234c8c123d2f&amp;type=3#BehaviourTreeEditorStyle" />
     <uie:Toolbar>
         <uie:ToolbarMenu display-tooltip-when-elided="true" text="Assets " />
     </uie:Toolbar>
     <TheKiwiCoder.SplitView fixed-pane-initial-dimension="300">
         <ui:VisualElement name="left-panel">
             <TheKiwiCoder.SplitView orientation="Vertical" fixed-pane-initial-dimension="400">
-                <ui:VisualElement name="inspector-container">
+                <ui:VisualElement name="inspector-container" style="background-color: rgba(56, 56, 56, 255);">
                     <ui:Label text="Inspector" display-tooltip-when-elided="true" style="background-color: rgb(37, 37, 37);" />
-                    <TheKiwiCoder.InspectorView />
+                    <TheKiwiCoder.InspectorView style="background-color: rgba(56, 56, 56, 255);" />
                 </ui:VisualElement>
-                <ui:VisualElement name="blackboard-container">
+                <ui:VisualElement name="blackboard-container" style="background-color: rgba(56, 56, 56, 255);">
                     <ui:Label text="Blackboard" display-tooltip-when-elided="true" style="background-color: rgb(37, 37, 37);" />
                     <TheKiwiCoder.BlackboardView style="flex-grow: 1;">
                         <uie:PropertyField />
@@ -22,7 +23,7 @@
             <TheKiwiCoder.BehaviourTreeView focusable="true" style="flex-grow: 1; border-top-width: 0;" />
         </ui:VisualElement>
     </TheKiwiCoder.SplitView>
-    <TheKiwiCoder.OverlayView name="OverlayView" style="position: absolute; left: 3px; top: 0; right: -1px; bottom: 0; align-items: center; justify-content: center; background-color: rgba(0, 0, 0, 0.5); visibility: hidden;">
+    <TheKiwiCoder.OverlayView name="OverlayView" style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; align-items: center; justify-content: center; background-color: rgba(0, 0, 0, 0.5); visibility: hidden;">
         <ui:VisualElement style="flex-grow: 0; background-color: rgb(56, 56, 56); border-top-left-radius: 10px; border-bottom-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; flex-shrink: 0; width: 500px;">
             <ui:Label tabindex="-1" text="Open Behaviour Tree" display-tooltip-when-elided="true" style="font-size: 25px; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; -unity-font-style: bold;" />
             <ui:VisualElement style="flex-grow: 0; margin-left: 10px; margin-right: 10px; margin-top: 10px; margin-bottom: 10px; background-color: rgb(56, 56, 56);">
