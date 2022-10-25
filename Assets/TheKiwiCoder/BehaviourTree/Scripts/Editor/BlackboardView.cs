@@ -18,7 +18,13 @@ namespace TheKiwiCoder {
             Clear();
 
             var blackboardProperty = new SerializedBehaviourTree(tree).Blackboard;
-            EditorUtility.CreatePropertyInspector(this, blackboardProperty);
+
+            blackboardProperty.isExpanded = true;
+
+            // Property field
+            PropertyField field = new PropertyField();
+            field.BindProperty(blackboardProperty);
+            Add(field);
         }
     }
 }

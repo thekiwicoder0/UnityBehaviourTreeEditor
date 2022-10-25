@@ -59,7 +59,7 @@ namespace TheKiwiCoder {
             var connectorListener = new DefaultEdgeConnectorListener();
             m_EdgeConnector = new EdgeConnector<Edge>(connectorListener);
             this.AddManipulator(m_EdgeConnector);
-            style.width = 100;
+            style.width = 30;
         }
 
         public override bool ContainsPoint(Vector2 localPoint) {

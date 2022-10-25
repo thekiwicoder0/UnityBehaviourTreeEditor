@@ -21,13 +21,19 @@ namespace TheKiwiCoder {
             }
 
             SerializedBehaviourTree serializedBehaviourTree = new SerializedBehaviourTree(tree);
-            var nodeProp = serializedBehaviourTree.FindNode(serializedBehaviourTree.Nodes, nodeView.node);
-            if (nodeProp == null) {
+            var nodeProperty = serializedBehaviourTree.FindNode(serializedBehaviourTree.Nodes, nodeView.node);
+            if (nodeProperty == null) {
                 return;
             }
 
+            // Auto-expand the property
+            nodeProperty.isExpanded = true;
 
-            EditorUtility.CreatePropertyInspector(this, nodeProp);
+            // Property field
+            PropertyField field = new PropertyField();
+            field.label = nodeProperty.managedReferenceValue.GetType().ToString();
+            field.BindProperty(nodeProperty);
+            Add(field);
             
         }
     }

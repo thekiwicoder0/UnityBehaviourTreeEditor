@@ -9,16 +9,6 @@ namespace TheKiwiCoder
 {
     public static class EditorUtility
     {
-        public static void CreatePropertyInspector(VisualElement root, SerializedProperty property) {
-
-            // Auto-expand the property
-            property.isExpanded = true;
-
-            // Property field
-            PropertyField field = new PropertyField();
-            field.BindProperty(property);
-            root.Add(field);
-        }
         public static BehaviourTree CreateNewTree(string assetName, string folder) {
             
             string path = System.IO.Path.Join(folder, $"{assetName}.asset");

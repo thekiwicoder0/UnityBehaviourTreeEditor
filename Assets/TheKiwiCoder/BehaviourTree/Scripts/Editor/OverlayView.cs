@@ -43,6 +43,10 @@ namespace TheKiwiCoder {
             createButton.clicked += OnCreateAsset;
         }
 
+        public void Hide() {
+            style.visibility = Visibility.Hidden;
+        }
+
         public string ToMenuFormat(string one) {
             // Using the slash creates submenus...
             return one.Replace("/", "|");
