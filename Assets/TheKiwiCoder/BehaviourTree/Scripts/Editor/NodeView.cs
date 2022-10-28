@@ -11,13 +11,13 @@ namespace TheKiwiCoder {
 
     public class NodeView : UnityEditor.Experimental.GraphView.Node {
         public Action<NodeView> OnNodeSelected;
-        public BehaviourTree tree;
+        public SerializedBehaviourTree serializer;
         public Node node;
         public Port input;
         public Port output;
 
-        public NodeView(BehaviourTree tree, Node node) : base(AssetDatabase.GetAssetPath(BehaviourTreeSettings.GetOrCreateSettings().nodeXml)) {
-            this.tree = tree;
+        public NodeView(SerializedBehaviourTree tree, Node node) : base(AssetDatabase.GetAssetPath(BehaviourTreeSettings.GetOrCreateSettings().nodeXml)) {
+            this.serializer = tree;
             this.node = node;
             this.title = node.GetType().Name;
             this.viewDataKey = node.guid;
@@ -32,7 +32,6 @@ namespace TheKiwiCoder {
         }
         
         private void SetupDataBinding() {
-            SerializedBehaviourTree serializer = new SerializedBehaviourTree(tree);
             var nodeProp = serializer.FindNode(serializer.Nodes, node);
 
             var descriptionProp = nodeProp.FindPropertyRelative("description");
@@ -93,7 +92,6 @@ namespace TheKiwiCoder {
             base.SetPosition(newPos);
 
             Vector2 position = new Vector2(newPos.xMin, newPos.yMin);
-            SerializedBehaviourTree serializer = new SerializedBehaviourTree(tree);
             serializer.SetNodePosition(node, position);
         }
 

@@ -13,15 +13,14 @@ namespace TheKiwiCoder {
 
         }
 
-        internal void UpdateSelection(BehaviourTree tree, NodeView nodeView) {
+        internal void UpdateSelection(SerializedBehaviourTree serializer, NodeView nodeView) {
             Clear();
 
             if (nodeView == null) {
                 return;
             }
 
-            SerializedBehaviourTree serializedBehaviourTree = new SerializedBehaviourTree(tree);
-            var nodeProperty = serializedBehaviourTree.FindNode(serializedBehaviourTree.Nodes, nodeView.node);
+            var nodeProperty = serializer.FindNode(serializer.Nodes, nodeView.node);
             if (nodeProperty == null) {
                 return;
             }

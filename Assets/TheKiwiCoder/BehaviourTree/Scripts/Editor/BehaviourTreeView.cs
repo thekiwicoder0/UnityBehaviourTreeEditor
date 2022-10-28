@@ -13,7 +13,6 @@ namespace TheKiwiCoder {
 
         public Action<NodeView> OnNodeSelected;
 
-        BehaviourTree tree;
         SerializedBehaviourTree serializer;
         BehaviourTreeSettings settings;
 
@@ -44,7 +43,6 @@ namespace TheKiwiCoder {
             var styleSheet = settings.behaviourTreeStyle;
             styleSheets.Add(styleSheet);
 
-            Undo.undoRedoPerformed += OnUndoRedo;
             viewTransformChanged += OnViewTransformChanged;
         }
 
@@ -52,12 +50,6 @@ namespace TheKiwiCoder {
             Vector3 position = contentViewContainer.transform.position;
             Vector3 scale = contentViewContainer.transform.scale;
             serializer.SetViewTransform(position, scale);
-        }
-
-        private void OnUndoRedo() {
-            if (tree) {
-                PopulateView(tree);
-            }
         }
 
         public NodeView FindNodeView(Node node) {
@@ -70,19 +62,18 @@ namespace TheKiwiCoder {
             graphViewChanged += OnGraphViewChanged;
         }
 
-        public void PopulateView(BehaviourTree tree) {
-            this.tree = tree;
-            serializer = new SerializedBehaviourTree(this.tree);
+        public void PopulateView(SerializedBehaviourTree tree) {
+            serializer = tree;
             
             ClearView();
 
-            Debug.Assert(tree.rootNode != null);
+            Debug.Assert(serializer.tree.rootNode != null);
 
             // Creates node view
-            tree.nodes.ForEach(n => CreateNodeView(n));
+            serializer.tree.nodes.ForEach(n => CreateNodeView(n));
 
             // Create edges
-            tree.nodes.ForEach(n => {
+            serializer.tree.nodes.ForEach(n => {
                 var children = BehaviourTree.GetChildren(n);
                 children.ForEach(c => {
                     NodeView parentView = FindNodeView(n);
@@ -94,8 +85,8 @@ namespace TheKiwiCoder {
             });
 
             // Set view
-            contentViewContainer.transform.position = tree.viewPosition;
-            contentViewContainer.transform.scale = tree.viewScale;
+            contentViewContainer.transform.position = serializer.tree.viewPosition;
+            contentViewContainer.transform.scale = serializer.tree.viewScale;
         }
 
         public override List<Port> GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter) {
@@ -204,7 +195,7 @@ namespace TheKiwiCoder {
         }
 
         void CreateNodeView(Node node) {
-            NodeView nodeView = new NodeView(tree, node);
+            NodeView nodeView = new NodeView(serializer, node);
             nodeView.OnNodeSelected = OnNodeSelected;
             AddElement(nodeView);
         }

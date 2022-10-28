@@ -12,7 +12,8 @@ namespace TheKiwiCoder {
     public class SerializedBehaviourTree {
 
         // Wrapper serialized object for writing changes to the behaviour tree
-        public SerializedObject serializedObject;
+        readonly public SerializedObject serializedObject;
+        readonly public BehaviourTree tree;
 
         // Property names. These correspond to the variable names on the behaviour tree
         const string sPropRootNode = "rootNode";
@@ -47,6 +48,7 @@ namespace TheKiwiCoder {
         public SerializedBehaviourTree(BehaviourTree tree)
         {
             serializedObject = new SerializedObject(tree);
+            this.tree = tree;
         }
 
         public void Save() {

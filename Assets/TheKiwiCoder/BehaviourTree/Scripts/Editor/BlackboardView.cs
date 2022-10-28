@@ -14,10 +14,10 @@ namespace TheKiwiCoder {
 
         }
 
-        internal void Bind(BehaviourTree tree) {
+        internal void Bind(SerializedBehaviourTree serializer) {
             Clear();
 
-            var blackboardProperty = new SerializedBehaviourTree(tree).Blackboard;
+            var blackboardProperty = serializer.Blackboard;
 
             blackboardProperty.isExpanded = true;
 

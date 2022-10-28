@@ -57,8 +57,6 @@ namespace TheKiwiCoder {
             return one.Replace("|", "/");
         }
 
-
-
         void OnOpenAsset() {
             string path = ToAssetFormat(assetSelector.text);
             BehaviourTree tree = AssetDatabase.LoadAssetAtPath<BehaviourTree>(path);

@@ -9,19 +9,18 @@ using UnityEditor.Callbacks;
 
 namespace TheKiwiCoder {
 
-    public class BehaviourTreeEditor : EditorWindow {
-
-        public static Action<string> OnWillDeleteAsset;
+    public class BehaviourTreeEditorWindow : EditorWindow {
 
         public class Test : UnityEditor.AssetModificationProcessor {
  
             static AssetDeleteResult OnWillDeleteAsset(string path, RemoveAssetOptions opt) {
-                BehaviourTreeEditor.OnWillDeleteAsset.Invoke(path);
+                BehaviourTreeEditorWindow wnd = GetWindow<BehaviourTreeEditorWindow>();
+                wnd.ClearIfSelected(path);
                 return AssetDeleteResult.DidNotDelete;
             }
         }
 
-        BehaviourTree tree;
+        SerializedBehaviourTree serializer;
         BehaviourTreeSettings settings;
 
         BehaviourTreeView treeView;
@@ -33,13 +32,13 @@ namespace TheKiwiCoder {
 
         [MenuItem("TheKiwiCoder/BehaviourTreeEditor ...")]
         public static void OpenWindow() {
-            BehaviourTreeEditor wnd = GetWindow<BehaviourTreeEditor>();
+            BehaviourTreeEditorWindow wnd = GetWindow<BehaviourTreeEditorWindow>();
             wnd.titleContent = new GUIContent("BehaviourTreeEditor");
             wnd.minSize = new Vector2(800, 600);
         }
 
         public static void OpenWindow(BehaviourTree tree) {
-            BehaviourTreeEditor wnd = GetWindow<BehaviourTreeEditor>();
+            BehaviourTreeEditorWindow wnd = GetWindow<BehaviourTreeEditorWindow>();
             wnd.titleContent = new GUIContent("BehaviourTreeEditor");
             wnd.minSize = new Vector2(800, 600);
             wnd.SelectTree(tree);
@@ -83,9 +82,11 @@ namespace TheKiwiCoder {
 
                 // Refresh the menu options just before it's opened (on mouse enter)
                 toolbarMenu.menu.MenuItems().Clear();
-                var behaviourTrees = EditorUtility.LoadAssets<BehaviourTree>();
-                behaviourTrees.ForEach(tree => {
-                    toolbarMenu.menu.AppendAction($"{tree.name}", (a) => {
+                var behaviourTrees = EditorUtility.GetAssetPaths<BehaviourTree>();
+                behaviourTrees.ForEach(path => {
+                    var fileName = System.IO.Path.GetFileName(path);
+                    toolbarMenu.menu.AppendAction($"{fileName}", (a) => {
+                        var tree = AssetDatabase.LoadAssetAtPath<BehaviourTree>(path);
                         SelectTree(tree);
                     });
                 });
@@ -96,14 +97,18 @@ namespace TheKiwiCoder {
             // Overlay view
             treeView.OnNodeSelected = OnNodeSelectionChanged;
             overlayView.OnTreeSelected += SelectTree;
+            Undo.undoRedoPerformed += OnUndoRedo;
 
-
-            OnWillDeleteAsset += ClearIfSelected;
-
-            if (tree == null) {
+            if (serializer == null) {
                 overlayView.Show();
             } else {
-                SelectTree(tree);
+                SelectTree(serializer.tree);
+            }
+        }
+
+        void OnUndoRedo() {
+            if (serializer != null) {
+                treeView.PopulateView(serializer);
             }
         }
 
@@ -146,33 +151,29 @@ namespace TheKiwiCoder {
                 return;
             }
 
-            this.tree = newTree;
+            serializer = new SerializedBehaviourTree(newTree);
 
             if (titleLabel != null) {
-                string path = AssetDatabase.GetAssetPath(tree);
+                string path = AssetDatabase.GetAssetPath(serializer.tree);
                 if (path == "") {
-                    path = tree.name;
+                    path = serializer.tree.name;
                 }
                 titleLabel.text = $"TreeView ({path})";
             }
 
-            if (Application.isPlaying) {
-                treeView.PopulateView(tree);
-            } else {
-                treeView.PopulateView(tree);
-            }
-
-            blackboardView.Bind(tree);
+            overlayView.Hide();
+            treeView.PopulateView(serializer);
+            blackboardView.Bind(serializer);
         }
 
         void ClearSelection() {
-            tree = null;
+            serializer = null;
             overlayView.Show();
             treeView.ClearView();
         }
 
         void ClearIfSelected(string path) {
-            if (AssetDatabase.GetAssetPath(tree) == path) {
+            if (AssetDatabase.GetAssetPath(serializer.tree) == path) {
                 // Need to delay because this is called from a will delete asset callback
                 EditorApplication.delayCall += () => {
                     SelectTree(null);
@@ -181,7 +182,7 @@ namespace TheKiwiCoder {
         }
 
         void OnNodeSelectionChanged(NodeView node) {
-            inspectorView.UpdateSelection(tree, node);
+            inspectorView.UpdateSelection(serializer, node);
         }
 
         private void OnInspectorUpdate() {
