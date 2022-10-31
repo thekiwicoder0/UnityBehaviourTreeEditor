@@ -1,6 +1,6 @@
 {
     "name": "com.thekiwicoder.behaviourtreeditor",
-    "version": "0.0.1",
+    "version": "0.0.11",
     "displayName": "Behaviour Tree Editor",
     "description": "Behaviour tree editor and runtime",
     "unity": "2021.3",
