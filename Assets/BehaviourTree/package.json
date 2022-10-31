@@ -2,12 +2,12 @@
     "name": "com.thekiwicoder.behaviourtreeditor",
     "version": "0.0.11",
     "displayName": "Behaviour Tree Editor",
-    "description": "Behaviour tree editor and runtime",
+    "description": "An Editor and runtime package for a behaviour tree",
     "unity": "2021.3",
     "unityRelease": "0f1",
-    "documentationUrl": "https://github.com/thekiwicoder0/UnityBehaviourTreeEditor/",
-    "changelogUrl": "https://github.com/thekiwicoder0/UnityBehaviourTreeEditor/changelog.html",
-    "licensesUrl": "https://github.com/thekiwicoder0/UnityBehaviourTreeEditor/licensing.html",
+    "documentationUrl": "https://github.com/thekiwicoder0/UnityBehaviourTreeEditor/blob/main/Assets/BehaviourTree/README.md",
+    "changelogUrl": "https://github.com/thekiwicoder0/UnityBehaviourTreeEditor/blob/main/Assets/BehaviourTree/CHANGELOG.md",
+    "licensesUrl": "https://github.com/thekiwicoder0/UnityBehaviourTreeEditor/blob/main/Assets/BehaviourTree/LICENSE.MD",
     "dependencies": {
    },
    "keywords": [
