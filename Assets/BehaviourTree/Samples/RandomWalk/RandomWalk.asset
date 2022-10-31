@@ -1,0 +1,99 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d285eb63c2cdd74180de7cfceaa96ad, type: 3}
+  m_Name: RandomWalk
+  m_EditorClassIdentifier: 
+  rootNode:
+    rid: 4200191146766106652
+  nodes:
+  - rid: 4200191146766106652
+  - rid: 4200191146766106653
+  - rid: 4200191146766106655
+  - rid: 4200191146766106656
+  - rid: 4200191146766106657
+  treeState: 0
+  blackboard:
+    moveToPosition: {x: 0, y: 0, z: 0}
+  viewPosition: {x: 482, y: 264, z: 0}
+  viewScale: {x: 0.7561437, y: 0.7561437, z: 1}
+  references:
+    version: 2
+    RefIds:
+    - rid: 4200191146766106652
+      type: {class: RootNode, ns: TheKiwiCoder, asm: thekiwicoder.behaviourtreeeditor}
+      data:
+        state: 0
+        started: 0
+        guid: b2b31214-b33d-4e28-ac98-32d0c7fdc2d0
+        position: {x: -1.0000141, y: -149.35008}
+        blackboard:
+          moveToPosition: {x: 0, y: 0, z: 0}
+        description: 
+        drawGizmos: 0
+        child:
+          rid: 4200191146766106653
+    - rid: 4200191146766106653
+      type: {class: Sequencer, ns: TheKiwiCoder, asm: thekiwicoder.behaviourtreeeditor}
+      data:
+        state: 0
+        started: 0
+        guid: 1615b3f2f06bab049afa879b334e879e
+        position: {x: -1.0000141, y: 60.149994}
+        blackboard:
+          moveToPosition: {x: 0, y: 0, z: 0}
+        description: 
+        drawGizmos: 0
+        children:
+        - rid: 4200191146766106656
+        - rid: 4200191146766106655
+        - rid: 4200191146766106657
+    - rid: 4200191146766106655
+      type: {class: MoveToPosition, ns: TheKiwiCoder, asm: thekiwicoder.behaviourtreeeditor}
+      data:
+        state: 0
+        started: 0
+        guid: 7673fc4544d42ec4bb7a90604f08a296
+        position: {x: -1, y: 376}
+        blackboard:
+          moveToPosition: {x: 0, y: 0, z: 0}
+        description: 
+        drawGizmos: 0
+        speed: 5
+        stoppingDistance: 0.1
+        updateRotation: 1
+        acceleration: 40
+        tolerance: 1
+    - rid: 4200191146766106656
+      type: {class: RandomPosition, ns: TheKiwiCoder, asm: thekiwicoder.behaviourtreeeditor}
+      data:
+        state: 0
+        started: 0
+        guid: f29edd453e5e44b46855da5b317637f3
+        position: {x: -301.35004, y: 385.19998}
+        blackboard:
+          moveToPosition: {x: 0, y: 0, z: 0}
+        description: 
+        drawGizmos: 0
+        min: {x: -10, y: -10}
+        max: {x: 10, y: 10}
+    - rid: 4200191146766106657
+      type: {class: Wait, ns: TheKiwiCoder, asm: thekiwicoder.behaviourtreeeditor}
+      data:
+        state: 0
+        started: 0
+        guid: 52175761a6a2b624e892ee84780a2240
+        position: {x: 301.10004, y: 385}
+        blackboard:
+          moveToPosition: {x: 0, y: 0, z: 0}
+        description: 
+        drawGizmos: 0
+        duration: 1

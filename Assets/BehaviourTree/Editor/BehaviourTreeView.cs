@@ -59,7 +59,7 @@ namespace TheKiwiCoder {
         public void ClearView() {
             graphViewChanged -= OnGraphViewChanged;
             DeleteElements(graphElements.ToList());
-            graphViewChanged += OnGraphViewChanged;
+            graphViewChanged += OnGraphViewChanged; 
         }
 
         public void PopulateView(SerializedBehaviourTree tree) {
