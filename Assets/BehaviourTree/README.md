@@ -8,7 +8,7 @@
 <br>
 <br>
     <h1>Behaviour Tree Editor</h1>
-    <img src="Assets/TheKiwiCoder/BehaviourTree/Documentation/Images/thekiwicoder_profile_square_noborder_512_512.png" width = "64" />
+    <img src="Documentation/Images/thekiwicoder_profile_square_noborder_512_512.png" width = "64" />
     <br>
     Created by TheKiwiCoder
 </div>
@@ -44,7 +44,7 @@ This concept combined with a custom editor in Unity provides a powerful toolset 
 
 To install the editor into your project, import the package contained in the zip file into your Unity project from the assets menu: ```Assets->Import Package->Custom Package```
 
-<img src="Assets/TheKiwiCoder/BehaviourTree/Documentation/Images/install_package.png" width = "250" />
+<img src="Documentation/Images/install_package.png" width = "250" />
 
 All files will be installed to `Assets/TheKiwiCoder/BehaviourTree`
 
@@ -108,16 +108,16 @@ The Decorator node types included in the package are:
 
 The main window can be accessed via the menu ```TheKiwiCoder->BehaviourTreeEditor...```
 
-<img src="Assets/TheKiwiCoder/BehaviourTree/Documentation/Images/menu_command.png" width = "200" />
+<img src="Documentation/Images/menu_command.png" width = "200" />
 
 The editor has three main panels, ```Inspector```, ```Blackboard```, and ```TreeView``` in addition to the ```Assets``` Menu.
 
-<img src="Assets/TheKiwiCoder/BehaviourTree/Documentation/Images/editor.png" width = "500" />
+<img src="Documentation/Images/editor.png" width = "500" />
 
 The first time opening up the behaviour tree editor a prompt will appear to create a new behaviour tree. Pick a name
 for the tree and select a location, then press Create.
 
-<img src="Assets/TheKiwiCoder/BehaviourTree/Documentation/Images/new_tree.png" width = "200" />
+<img src="Documentation/Images/new_tree.png" width = "200" />
 
 ### Tree View
 
@@ -127,13 +127,13 @@ The tree view is where you'll spend most of the time creating and organising nod
 
 New nodes can be added to the tree via the context menu by right clicking anywhere in the canvas and selecting which type of node to add. The nodes are grouped into three sub menus, Actions, Composites, and Decorators.
 
-<img src="Assets/TheKiwiCoder/BehaviourTree/Documentation/Images/new_node.png" width = "200" />
+<img src="Documentation/Images/new_node.png" width = "200" />
 
 #### Creating New Nodes
 
 The built in node types will only get you so far. The real power of behaviour trees comes when you design and create your own node types. Nodes are standard C# scripts which inherit from one of three base types, `ActionNode`, `CompositeNode`, or `DecoratorNode`. These scripts can be created by hand, or by using the context menu which will fill out the boilerplate automatically for you.
 
-<img src="Assets/TheKiwiCoder/BehaviourTree/Documentation/Images/new_script.png" width = "200" />
+<img src="Documentation/Images/new_script.png" width = "200" />
 
 The script templates used to create the boilerplate are located here: `Assets/TheKiwiCoder/BehaviourTree/ScriptTemplates`
 
@@ -180,4 +180,4 @@ While in playmode, a game object can be selected to analyse which state it's in.
 
 There are various 'hardcoded' settings for the behaviour tree editor. These can be accessed via the standard project settings menu under the 'Behaviour Tree' category.
 
-<img src="Assets/TheKiwiCoder/BehaviourTree/Documentation/Images/settings.png" width = "400" />
+<img src="Documentation/Images/settings.png" width = "400" />

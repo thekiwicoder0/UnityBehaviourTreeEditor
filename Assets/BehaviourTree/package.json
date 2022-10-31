@@ -1,0 +1,24 @@
+{
+    "name": "com.thekiwicoder.behaviourtreeditor",
+    "version": "0.0.1",
+    "displayName": "Behaviour Tree Editor",
+    "description": "Behaviour tree editor and runtime",
+    "unity": "2021.3",
+    "unityRelease": "0f1",
+    "documentationUrl": "https://github.com/thekiwicoder0/UnityBehaviourTreeEditor/",
+    "changelogUrl": "https://github.com/thekiwicoder0/UnityBehaviourTreeEditor/changelog.html",
+    "licensesUrl": "https://github.com/thekiwicoder0/UnityBehaviourTreeEditor/licensing.html",
+    "dependencies": {
+   },
+   "keywords": [
+      "behaviour tree",
+      "behaviour tree editor",
+      "thekiwicoder",
+      "ai behaviour"
+    ],
+    "author": {
+      "name": "TheKiwiCoder",
+      "email": "thekiwicoder@gmail.com",
+      "url": "https://www.thekiwicoder.com"
+    }
+  }

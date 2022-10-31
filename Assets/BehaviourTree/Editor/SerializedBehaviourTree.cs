@@ -9,11 +9,14 @@ namespace TheKiwiCoder {
     // It's best to modify the behaviour tree via SerializedObjects and SerializedProperty interfaces
     // to keep the UI in sync, and undo/redo
     // It's a hodge podge mix of various functions that will evolve over time. It's not exhaustive by any means.
+    [System.Serializable]
     public class SerializedBehaviourTree {
 
         // Wrapper serialized object for writing changes to the behaviour tree
-        readonly public SerializedObject serializedObject;
-        readonly public BehaviourTree tree;
+        public SerializedObject serializedObject;
+
+        [SerializeReference]
+        public BehaviourTree tree;
 
         // Property names. These correspond to the variable names on the behaviour tree
         const string sPropRootNode = "rootNode";

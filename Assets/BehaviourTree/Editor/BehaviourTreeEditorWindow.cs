@@ -11,15 +11,18 @@ namespace TheKiwiCoder {
 
     public class BehaviourTreeEditorWindow : EditorWindow {
 
-        public class Test : UnityEditor.AssetModificationProcessor {
+        public class BehaviourTreeEditorAssetModificationProcessor : UnityEditor.AssetModificationProcessor {
  
             static AssetDeleteResult OnWillDeleteAsset(string path, RemoveAssetOptions opt) {
-                BehaviourTreeEditorWindow wnd = GetWindow<BehaviourTreeEditorWindow>();
-                wnd.ClearIfSelected(path);
+                if (EditorWindow.HasOpenInstances<BehaviourTreeEditorWindow>()) {
+                    BehaviourTreeEditorWindow wnd = GetWindow<BehaviourTreeEditorWindow>();
+                    wnd.ClearIfSelected(path);
+                }
                 return AssetDeleteResult.DidNotDelete;
             }
         }
 
+        [SerializeField]
         SerializedBehaviourTree serializer;
         BehaviourTreeSettings settings;
 
@@ -173,6 +176,10 @@ namespace TheKiwiCoder {
         }
 
         void ClearIfSelected(string path) {
+            if (serializer == null) {
+                return;
+            }
+
             if (AssetDatabase.GetAssetPath(serializer.tree) == path) {
                 // Need to delay because this is called from a will delete asset callback
                 EditorApplication.delayCall += () => {
