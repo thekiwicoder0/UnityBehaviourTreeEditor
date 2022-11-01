@@ -42,13 +42,9 @@ This concept combined with a custom editor in Unity provides a powerful toolset 
 
 ## Getting Started
 
-
-The first time opening up the behaviour tree editor a prompt will appear to create a new behaviour tree. Pick a name
-for the tree and select a location, then press Create.
+The first time opening up the behaviour tree editor a prompt will appear where you can either select an existing tree to open, or create a new one:
 
 <img src="Documentation/Images/new_tree.png" width = "200" />
-
-> **_NOTE:_**  The minimum version supported is 2021.3 at time of writing.
 
 ## Nodes
 
