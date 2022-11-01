@@ -16,11 +16,11 @@
 ## Table of Contents
 1. [Overview](#overview)
 2. [Getting Started](#getting-started)
-3. [Nodes](#nodes)
+4. [Nodes](#nodes)
     1. [Action Nodes](#action-nodes)
     2. [Composite Nodes](#composite-nodes)
     3. [Decorator Nodes](#decorator-nodes)
-6. [The Editor](#the-editor)
+5. [The Editor](#the-editor)
     1. [TreeView](#tree-view)
         1. [Adding Nodes](#adding-nodes)
         2. [Creating New Nodes](#creating-new-nodes)
@@ -29,8 +29,8 @@
     2. [Inspector View](#inspector-view)
     3. [Blackboard View](#blackboard-view)
     4. [Assets Menu](#assets-menu)
-7. [Runtime Debugging](#runtime-debugging)
-8. [Settings](#settings-menu)
+6. [Runtime Debugging](#runtime-debugging)
+7. [Settings](#settings-menu)
 
 <div style="page-break-after: always;"></div>
 
@@ -42,15 +42,13 @@ This concept combined with a custom editor in Unity provides a powerful toolset 
 
 ## Getting Started
 
-To install the editor into your project, import the package contained in the zip file into your Unity project from the assets menu: ```Assets->Import Package->Custom Package```
 
-<img src="Documentation/Images/install_package.png" width = "250" />
+The first time opening up the behaviour tree editor a prompt will appear to create a new behaviour tree. Pick a name
+for the tree and select a location, then press Create.
 
-All files will be installed to `Assets/TheKiwiCoder/BehaviourTree`
+<img src="Documentation/Images/new_tree.png" width = "200" />
 
-An example scene and behaviour tree can be found at `Assets/TheKiwiCoder/BehaviourTree/Example`
-
-> **_NOTE:_**  The version used for testing at time of writing is Unity 2020.3.13f1 LTS.
+> **_NOTE:_**  The minimum version supported is 2021.3 at time of writing.
 
 ## Nodes
 
@@ -113,11 +111,6 @@ The main window can be accessed via the menu ```TheKiwiCoder->BehaviourTreeEdito
 The editor has three main panels, ```Inspector```, ```Blackboard```, and ```TreeView``` in addition to the ```Assets``` Menu.
 
 <img src="Documentation/Images/editor.png" width = "500" />
-
-The first time opening up the behaviour tree editor a prompt will appear to create a new behaviour tree. Pick a name
-for the tree and select a location, then press Create.
-
-<img src="Documentation/Images/new_tree.png" width = "200" />
 
 ### Tree View
 

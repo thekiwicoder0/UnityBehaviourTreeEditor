@@ -13,7 +13,16 @@ This repository is a Unity project which contains the Behaviour Tree Editor pack
 
 The package and documentation is located in this repository here: https://github.com/thekiwicoder0/UnityBehaviourTreeEditor/tree/main/Assets/BehaviourTree
 
+## Requirements
+
+The minimum version currently supported is Unity 2021.3. This is due to the need for this feature:
+https://docs.unity3d.com/ScriptReference/SerializedProperty-managedReferenceValue.html
+
 ## Installation
+
+To install the editor in your project, you can either install directly from the Package Manager via a giturl, or by manually cloning this repository and creating a custom package. 
+
+(Or just copy the files if you know what you're doing)
 
 ### Package Manager
 
@@ -25,6 +34,8 @@ https://github.com/thekiwicoder0/UnityBehaviourTreeEditor.git?path=/Assets/Behav
 
 This has the added benefit of being able to easily update the package from within your project.
 
+All files will be installed to `Packages/Behaviour Tree Editor`
+
 See https://docs.unity3d.com/Manual/upm-ui-giturl.html for Unity's official documentation on installing packages from Git using the Package Manager.
 
 ### Custom Package
@@ -32,5 +43,7 @@ See https://docs.unity3d.com/Manual/upm-ui-giturl.html for Unity's official docu
 Alternatively, you can clone this repository and create a .unitypackage file manually by running the `Export Package` command on the `Behaviour Tree` folder within Unity.
 
 The exported package can then be installed into your project using the `Assets->Import Package->Custom Package` command.
+
+All files will be installed to `Assets/BehaviourTree`
 
 See https://docs.unity3d.com/Manual/AssetPackages.html for Unity's official documentation on creating custom packages.
