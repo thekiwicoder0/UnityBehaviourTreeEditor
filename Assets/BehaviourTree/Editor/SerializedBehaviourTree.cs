@@ -28,6 +28,7 @@ namespace TheKiwiCoder {
         const string sPropPosition = "position";
         const string sViewTransformPosition = "viewPosition";
         const string sViewTransformScale = "viewScale";
+        const string sBlackboardKeys = "keys";
 
         public SerializedProperty RootNode {
             get {
@@ -44,6 +45,12 @@ namespace TheKiwiCoder {
         public SerializedProperty Blackboard {
             get {
                 return serializedObject.FindProperty(sPropBlackboard);
+            }
+        }
+
+        public SerializedProperty BlackboardKeys {
+            get {
+                return serializedObject.FindProperty(sPropBlackboard).FindPropertyRelative(sBlackboardKeys);
             }
         }
 
@@ -170,6 +177,32 @@ namespace TheKiwiCoder {
                 DeleteNode(childrenProperty, child);
                 serializedObject.ApplyModifiedProperties();
                 return;
+            }
+        }
+
+        public void CreateBlackboardKey(string keyName, BlackboardKey.Type keyType) {
+            SerializedProperty keysArray = BlackboardKeys;
+            keysArray.InsertArrayElementAtIndex(keysArray.arraySize);
+            SerializedProperty newKey = keysArray.GetArrayElementAtIndex(keysArray.arraySize - 1);
+
+            BlackboardKey key = new BlackboardKey();
+            key.name = keyName;
+            key.type = keyType;
+            newKey.managedReferenceValue = key;
+
+            serializedObject.ApplyModifiedProperties();
+        }
+
+        public void DeleteBlackboardKey(string keyName) {
+            SerializedProperty keysArray = BlackboardKeys;
+            for(int i = 0; i < keysArray.arraySize; ++i) {
+                var key = keysArray.GetArrayElementAtIndex(i);
+                BlackboardKey itemKey = key.managedReferenceValue as BlackboardKey;
+                if (itemKey.name == keyName) {
+                    keysArray.DeleteArrayElementAtIndex(i);
+                    serializedObject.ApplyModifiedProperties();
+                    return;
+                }
             }
         }
     }

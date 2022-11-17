@@ -10,6 +10,13 @@ namespace TheKiwiCoder {
     [System.Serializable]
     public class Blackboard {
 
-        public Vector3 moveToPosition;
+        [SerializeReference]
+        public List<BlackboardKey> keys;
+
+        public BlackboardKey Find(string keyName) {
+            return keys.Find((key) => {
+                return key.name == keyName;
+            });
+        }
     }
 }

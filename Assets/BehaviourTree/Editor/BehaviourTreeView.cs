@@ -131,9 +131,6 @@ namespace TheKiwiCoder {
         }
 
         public override void BuildContextualMenu(ContextualMenuPopulateEvent evt) {
-
-            //base.BuildContextualMenu(evt);
-
             // New script functions
             evt.menu.AppendAction($"Create Script.../New Action Node", (a) => CreateNewScript(scriptFileAssets[0]));
             evt.menu.AppendAction($"Create Script.../New Composite Node", (a) => CreateNewScript(scriptFileAssets[1]));

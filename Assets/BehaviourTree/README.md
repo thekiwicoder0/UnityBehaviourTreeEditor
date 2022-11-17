@@ -154,8 +154,34 @@ The inspector view displays all public properties of the currently selected node
 
 ### Blackboard View
 
-The blackboard view displays all public properties of the blackboard. These values can be read and written to by individual nodes from any level of the tree. Note this blackboard is not generic, and it is expected to be modified to include the properties that make sense for your game. An example property exists as an example how data can be passed between nodes.
-- MoveToPosition - Vector3 written to by the `RandomPosition` node, and read from by the `MoveToPosition` node
+The blackboard view contains a list of keys that can be read and written to from action nodes. These are useful when designing generic nodes and passing data between different parts of the tree.
+
+Keys can be added in the blackboard view:
+
+<img src="Documentation/Images/behaviour_tree_view.png" width = "200" />
+
+To read and write to a specific blackboard key, add one of the following types as a public property to your action node. This will allow you to bind it to a specific key in the editor via the node inspector
+
+- FloatVar
+- IntVar
+- BoolVar
+- StringVar
+- Vector2Var
+- Vector3Var
+- GameObjectVar
+- TagVar
+- LayerMaskVar
+
+You can then read and write directly to the blackboard key like so:
+
+```
+FloatVar myVar;
+
+...
+
+myVal.Value = 123.0f;
+Debug.Log(myVal.Value);
+```
 
 ### Assets Menu
 
@@ -167,6 +193,6 @@ While in playmode, a game object can be selected to analyse which state it's in.
 
 ### Settings Menu
 
-There are various 'hardcoded' settings for the behaviour tree editor. These can be accessed via the standard project settings menu under the 'Behaviour Tree' category.
+There are various settings for the behaviour tree editor. These can be accessed via the standard project settings menu under the 'Behaviour Tree' category.
 
 <img src="Documentation/Images/settings.png" width = "400" />

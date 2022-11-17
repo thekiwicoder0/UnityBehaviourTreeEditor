@@ -8,23 +8,105 @@ using UnityEngine;
 
 namespace TheKiwiCoder {
     public class BlackboardView : VisualElement {
+
         public new class UxmlFactory : UxmlFactory<BlackboardView, VisualElement.UxmlTraits> { }
 
-        public BlackboardView() {
+        private SerializedBehaviourTree behaviourTree;
 
+        private ListView listView;
+        private TextField newKeyTextField;
+        private EnumField newKeyEnumField;
+
+        private Button createButton;
+
+        internal void Bind(SerializedBehaviourTree behaviourTree) {
+            
+            this.behaviourTree = behaviourTree;
+
+            listView = this.Q<ListView>("ListView_Keys");
+            newKeyTextField = this.Q<TextField>("TextField_KeyName");
+            newKeyEnumField = this.Q<EnumField>("EnumField_KeyType");
+            createButton = this.Q<Button>("Button_KeyCreate");
+
+            // ListView
+            listView.makeItem = MakeItem;
+            listView.bindItem = BindItem;
+            listView.BindProperty(behaviourTree.BlackboardKeys);
+
+            // TextField
+            newKeyTextField.RegisterCallback<ChangeEvent<string>>((evt) => {
+                ValidateButton();
+            });
+
+            // EnumField
+            newKeyEnumField.Init(BlackboardKey.Type.Float);
+
+            // Button
+            createButton.clicked -= CreateNewKey;
+            createButton.clicked += CreateNewKey;
+
+            ValidateButton();
         }
 
-        internal void Bind(SerializedBehaviourTree serializer) {
-            Clear();
+        private void ValidateButton() {
+            // Disable the create button if trying to create a non-unique key
+            bool isValidKeyText = ValidateKeyText(newKeyTextField.text);
+            createButton.SetEnabled(isValidKeyText);
+        }
 
-            var blackboardProperty = serializer.Blackboard;
+        bool ValidateKeyText(string text) {
+            if (text == "") {
+                return false;
+            }
 
-            blackboardProperty.isExpanded = true;
+            BehaviourTree tree = behaviourTree.Blackboard.serializedObject.targetObject as BehaviourTree;
+            bool keyExists = tree.blackboard.Find(newKeyTextField.text) != null;
+            return !keyExists;
+        }
 
-            // Property field
-            PropertyField field = new PropertyField();
-            field.BindProperty(blackboardProperty);
-            Add(field);
+        void BindItem(VisualElement item, int index) {
+            Label label = item.Q<Label>();
+            var blackboardKeys = behaviourTree.BlackboardKeys;
+            var keyProp = blackboardKeys.GetArrayElementAtIndex(index);
+            var keyName = keyProp.FindPropertyRelative("name");
+            label.BindProperty(keyName);
+
+            BlackboardValueField valueField = item.Q<BlackboardValueField>();
+            valueField.BindProperty(keyProp);
+        }
+
+        VisualElement MakeItem() {
+
+            VisualElement container = new VisualElement();
+            container.style.flexGrow = 1.0f;
+            container.style.flexDirection = FlexDirection.Row;
+
+            Label keyField = new Label();
+            keyField.style.width = 100.0f;
+
+            BlackboardValueField valueField = new BlackboardValueField();
+            valueField.style.flexGrow = 1.0f;
+
+            container.Add(keyField);
+            container.Add(valueField);
+
+            container.AddManipulator(new ContextualMenuManipulator((ContextualMenuPopulateEvent evt) => {
+                evt.menu.AppendAction($"Delete Key", (a) => {
+                    Label label = container.Q<Label>();
+                    DeleteKey(label.text);
+                });
+            }));
+
+            return container;
+        }
+
+        void CreateNewKey() {
+            behaviourTree.CreateBlackboardKey(newKeyTextField.text, (BlackboardKey.Type)newKeyEnumField.value);
+            ValidateButton();
+        }
+
+        void DeleteKey(string keyName) {
+            behaviourTree.DeleteBlackboardKey(keyName);
         }
     }
 }

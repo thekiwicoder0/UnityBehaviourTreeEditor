@@ -12,11 +12,12 @@ namespace TheKiwiCoder {
         public bool updateRotation = true;
         public float acceleration = 40.0f;
         public float tolerance = 1.0f;
+        public Vector3Var moveKey;
 
         protected override void OnStart() {
             context.agent.stoppingDistance = stoppingDistance;
             context.agent.speed = speed;
-            context.agent.destination = blackboard.moveToPosition;
+            context.agent.destination = moveKey.Value;
             context.agent.updateRotation = updateRotation;
             context.agent.acceleration = acceleration;
         }

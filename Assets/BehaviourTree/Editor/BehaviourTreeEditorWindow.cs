@@ -135,6 +135,7 @@ namespace TheKiwiCoder {
                     EditorApplication.delayCall += OnSelectionChange;
                     break;
                 case PlayModeStateChange.ExitingPlayMode:
+                    inspectorView.Clear();
                     break;
             }
         }
@@ -193,7 +194,9 @@ namespace TheKiwiCoder {
         }
 
         private void OnInspectorUpdate() {
-            treeView?.UpdateNodeStates();
+            if (Application.isPlaying) {
+                treeView?.UpdateNodeStates();
+            }
         }
 
         void OnToolbarNewAsset() {
