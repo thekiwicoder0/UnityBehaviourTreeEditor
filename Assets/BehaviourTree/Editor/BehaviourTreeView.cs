@@ -14,7 +14,6 @@ namespace TheKiwiCoder {
         public Action<NodeView> OnNodeSelected;
 
         SerializedBehaviourTree serializer;
-        BehaviourTreeSettings settings;
 
         public struct ScriptTemplate {
             public TextAsset templateFile;
@@ -24,13 +23,12 @@ namespace TheKiwiCoder {
 
         public ScriptTemplate[] scriptFileAssets = {
             
-            new ScriptTemplate{ templateFile=BehaviourTreeSettings.GetOrCreateSettings().scriptTemplateActionNode, defaultFileName="NewActionNode.cs", subFolder="Actions" },
-            new ScriptTemplate{ templateFile=BehaviourTreeSettings.GetOrCreateSettings().scriptTemplateCompositeNode, defaultFileName="NewCompositeNode.cs", subFolder="Composites" },
-            new ScriptTemplate{ templateFile=BehaviourTreeSettings.GetOrCreateSettings().scriptTemplateDecoratorNode, defaultFileName="NewDecoratorNode.cs", subFolder="Decorators" },
+            new ScriptTemplate{ templateFile=BehaviourTreeEditorWindow.Instance.scriptTemplateActionNode, defaultFileName="NewActionNode.cs", subFolder="Actions" },
+            new ScriptTemplate{ templateFile=BehaviourTreeEditorWindow.Instance.scriptTemplateCompositeNode, defaultFileName="NewCompositeNode.cs", subFolder="Composites" },
+            new ScriptTemplate{ templateFile=BehaviourTreeEditorWindow.Instance.scriptTemplateDecoratorNode, defaultFileName="NewDecoratorNode.cs", subFolder="Decorators" },
         };
 
         public BehaviourTreeView() {
-            settings = BehaviourTreeSettings.GetOrCreateSettings();
 
             Insert(0, new GridBackground());
 
@@ -40,10 +38,9 @@ namespace TheKiwiCoder {
             this.AddManipulator(new SelectionDragger());
             this.AddManipulator(new RectangleSelector());
 
-            var styleSheet = settings.behaviourTreeStyle;
-            styleSheets.Add(styleSheet);
-
             viewTransformChanged += OnViewTransformChanged;
+
+            nodeCreationRequest += (NodeCreationContext) => Debug.Log("Creating node");
         }
 
         void OnViewTransformChanged(GraphView graphView) {
@@ -181,7 +178,7 @@ namespace TheKiwiCoder {
         }
 
         void CreateNewScript(ScriptTemplate template) {
-            SelectFolder($"{settings.newNodeBasePath}/{template.subFolder}");
+            SelectFolder($"{BehaviourTreeEditorWindow.Instance.settings.newNodePath}/{template.subFolder}");
             var templatePath = AssetDatabase.GetAssetPath(template.templateFile);
             ProjectWindowUtil.CreateScriptAssetFromTemplateFile(templatePath, template.defaultFileName);
         }
@@ -192,7 +189,7 @@ namespace TheKiwiCoder {
         }
 
         void CreateNodeView(Node node) {
-            NodeView nodeView = new NodeView(serializer, node);
+            NodeView nodeView = new NodeView(serializer, node, BehaviourTreeEditorWindow.Instance.nodeXml);
             nodeView.OnNodeSelected = OnNodeSelected;
             AddElement(nodeView);
         }

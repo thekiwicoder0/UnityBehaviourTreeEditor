@@ -16,7 +16,7 @@ namespace TheKiwiCoder {
         public Port input;
         public Port output;
 
-        public NodeView(SerializedBehaviourTree tree, Node node) : base(AssetDatabase.GetAssetPath(BehaviourTreeSettings.GetOrCreateSettings().nodeXml)) {
+        public NodeView(SerializedBehaviourTree tree, Node node, VisualTreeAsset nodeXml) : base(AssetDatabase.GetAssetPath(nodeXml)) {
             this.serializer = tree;
             this.node = node;
             this.title = node.GetType().Name;

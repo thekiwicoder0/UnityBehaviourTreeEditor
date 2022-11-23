@@ -30,7 +30,7 @@ namespace TheKiwiCoder {
             treeNameField = this.Q<TextField>("TreeName");
             locationPathField = this.Q<TextField>("LocationPath");
 
-            locationPathField.BindProperty(settings.FindProperty("newNodeBasePath"));
+            locationPathField.BindProperty(settings.FindProperty("newTreePath"));
             locationPathField.RegisterCallback<ChangeEvent<string>>(ValidatePath);
 
             // Configure asset selection dropdown menu

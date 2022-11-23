@@ -7,14 +7,10 @@ using UnityEngine.UIElements;
 using UnityEditor.UIElements;
 
 // Create a new type of Settings Asset.
-class BehaviourTreeSettings : ScriptableObject {
-    public VisualTreeAsset behaviourTreeXml;
-    public StyleSheet behaviourTreeStyle;
-    public VisualTreeAsset nodeXml;
-    public TextAsset scriptTemplateActionNode;
-    public TextAsset scriptTemplateCompositeNode;
-    public TextAsset scriptTemplateDecoratorNode;
-    public string newNodeBasePath = "Assets/";
+public class BehaviourTreeSettings : ScriptableObject {
+
+    public string newTreePath = "Assets/";
+    public string newNodePath = "Assets/";
 
     static BehaviourTreeSettings FindSettings(){
         var guids = AssetDatabase.FindAssets("t:BehaviourTreeSettings");

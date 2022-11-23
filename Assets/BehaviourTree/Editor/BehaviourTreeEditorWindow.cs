@@ -12,7 +12,7 @@ namespace TheKiwiCoder {
     public class BehaviourTreeEditorWindow : EditorWindow {
 
         public class BehaviourTreeEditorAssetModificationProcessor : UnityEditor.AssetModificationProcessor {
- 
+
             static AssetDeleteResult OnWillDeleteAsset(string path, RemoveAssetOptions opt) {
                 if (EditorWindow.HasOpenInstances<BehaviourTreeEditorWindow>()) {
                     BehaviourTreeEditorWindow wnd = GetWindow<BehaviourTreeEditorWindow>();
@@ -21,10 +21,17 @@ namespace TheKiwiCoder {
                 return AssetDeleteResult.DidNotDelete;
             }
         }
+        public static BehaviourTreeEditorWindow Instance;
+        public BehaviourTreeSettings settings;
+        public VisualTreeAsset behaviourTreeXml;
+        public VisualTreeAsset nodeXml;
+        public StyleSheet behaviourTreeStyle;
+        public TextAsset scriptTemplateActionNode;
+        public TextAsset scriptTemplateCompositeNode;
+        public TextAsset scriptTemplateDecoratorNode;
 
         [SerializeField]
         SerializedBehaviourTree serializer;
-        BehaviourTreeSettings settings;
 
         BehaviourTreeView treeView;
         InspectorView inspectorView;
@@ -57,19 +64,19 @@ namespace TheKiwiCoder {
         }
 
         public void CreateGUI() {
-
+            Instance = this;
             settings = BehaviourTreeSettings.GetOrCreateSettings();
 
             // Each editor window contains a root VisualElement object
             VisualElement root = rootVisualElement;
 
             // Import UXML
-            var visualTree = settings.behaviourTreeXml;
+            var visualTree = behaviourTreeXml;
             visualTree.CloneTree(root);
 
             // A stylesheet can be added to a VisualElement.
             // The style will be applied to the VisualElement and all of its children.
-            var styleSheet = settings.behaviourTreeStyle;
+            var styleSheet = behaviourTreeStyle;
             root.styleSheets.Add(styleSheet);
 
             // Main treeview
@@ -79,6 +86,8 @@ namespace TheKiwiCoder {
             toolbarMenu = root.Q<ToolbarMenu>();
             overlayView = root.Q<OverlayView>("OverlayView");
             titleLabel = root.Q<Label>("TitleLabel");
+
+            treeView.styleSheets.Add(behaviourTreeStyle);
 
             // Toolbar assets menu
             toolbarMenu.RegisterCallback<MouseEnterEvent>((evt) => {
@@ -172,8 +181,10 @@ namespace TheKiwiCoder {
 
         void ClearSelection() {
             serializer = null;
-            overlayView.Show();
+            inspectorView.Clear();
             treeView.ClearView();
+            blackboardView.ClearView();
+            overlayView.Show();
         }
 
         void ClearIfSelected(string path) {

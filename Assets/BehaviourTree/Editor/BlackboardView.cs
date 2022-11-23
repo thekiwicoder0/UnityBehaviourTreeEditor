@@ -108,5 +108,13 @@ namespace TheKiwiCoder {
         void DeleteKey(string keyName) {
             behaviourTree.DeleteBlackboardKey(keyName);
         }
+
+        public void ClearView() {
+            this.behaviourTree = null;
+            if (listView != null) {
+                listView.itemsSource = null;
+                listView.Rebuild();
+            }
+        }
     }
 }
