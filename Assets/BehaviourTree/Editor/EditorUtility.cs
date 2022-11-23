@@ -10,7 +10,12 @@ namespace TheKiwiCoder
     public static class EditorUtility
     {
         public static BehaviourTree CreateNewTree(string assetName, string folder) {
-            
+
+            if(!AssetDatabase.IsValidFolder(folder)){
+                Debug.LogError($"Failed to create behaviour tree asset: Invalid folder path:{folder}");
+                return null;
+            }
+
             string path = System.IO.Path.Join(folder, $"{assetName}.asset");
             if (System.IO.File.Exists(path)) {
                 Debug.LogError($"Failed to create behaviour tree asset: Path already exists:{assetName}");

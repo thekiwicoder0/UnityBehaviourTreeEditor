@@ -13,60 +13,75 @@ MonoBehaviour:
   m_Name: RandomWalk
   m_EditorClassIdentifier: 
   rootNode:
-    rid: 4200191146766106652
+    rid: 5043576912280813578
   nodes:
-  - rid: 4200191146766106652
-  - rid: 4200191146766106653
-  - rid: 4200191146766106655
-  - rid: 4200191146766106656
-  - rid: 4200191146766106657
-  - rid: 5043576437381267459
+  - rid: 5043576912280813578
+  - rid: 5043576912280813579
+  - rid: 5043576912280813580
+  - rid: 5043576912280813581
+  - rid: 5043576912280813582
+  - rid: 5043576912280813583
   treeState: 0
   blackboard:
-    items:
-    - rid: 5043576776898117635
-  viewPosition: {x: 518, y: 324, z: 0}
+    keys:
+    - rid: 5043576912280813584
+  viewPosition: {x: 613, y: 126, z: 0}
   viewScale: {x: 1, y: 1, z: 1}
   references:
     version: 2
     RefIds:
-    - rid: 4200191146766106652
+    - rid: 5043576912280813578
       type: {class: RootNode, ns: TheKiwiCoder, asm: thekiwicoder.behaviourtreeeditor}
       data:
         state: 0
         started: 0
-        guid: b2b31214-b33d-4e28-ac98-32d0c7fdc2d0
-        position: {x: -1.0000226, y: -233.65004}
+        guid: 96709b12-9143-4a1e-95cf-23e4fcdab091
+        position: {x: 0, y: 0}
         blackboard:
-          items: []
+          keys: []
         description: 
         drawGizmos: 0
         child:
-          rid: 5043576437381267459
-    - rid: 4200191146766106653
+          rid: 5043576912280813579
+    - rid: 5043576912280813579
+      type: {class: Repeat, ns: TheKiwiCoder, asm: thekiwicoder.behaviourtreeeditor}
+      data:
+        state: 0
+        started: 0
+        guid: 56564b44e68b78945a19e70b51f82220
+        position: {x: 0, y: 144}
+        blackboard:
+          keys: []
+        description: 
+        drawGizmos: 0
+        child:
+          rid: 5043576912280813580
+        restartOnSuccess: 1
+        restartOnFailure: 0
+    - rid: 5043576912280813580
       type: {class: Sequencer, ns: TheKiwiCoder, asm: thekiwicoder.behaviourtreeeditor}
       data:
         state: 0
         started: 0
-        guid: 1615b3f2f06bab049afa879b334e879e
-        position: {x: -1.0000141, y: 60.149994}
+        guid: 378d3c8a0340ede428b346a16eb0fa16
+        position: {x: 0, y: 293}
         blackboard:
-          items: []
+          keys: []
         description: 
         drawGizmos: 0
         children:
-        - rid: 4200191146766106656
-        - rid: 4200191146766106655
-        - rid: 4200191146766106657
-    - rid: 4200191146766106655
+        - rid: 5043576912280813583
+        - rid: 5043576912280813581
+        - rid: 5043576912280813582
+    - rid: 5043576912280813581
       type: {class: MoveToPosition, ns: TheKiwiCoder, asm: thekiwicoder.behaviourtreeeditor}
       data:
         state: 0
         started: 0
-        guid: 7673fc4544d42ec4bb7a90604f08a296
-        position: {x: -1, y: 368}
+        guid: 20de8f79758377647b276383d7531c0b
+        position: {x: 10, y: 512}
         blackboard:
-          items: []
+          keys: []
         description: 
         drawGizmos: 0
         speed: 5
@@ -74,57 +89,42 @@ MonoBehaviour:
         updateRotation: 1
         acceleration: 40
         tolerance: 1
-        key:
-          item:
-            rid: 5043576437381267470
-    - rid: 4200191146766106656
-      type: {class: RandomPosition, ns: TheKiwiCoder, asm: thekiwicoder.behaviourtreeeditor}
-      data:
-        state: 0
-        started: 0
-        guid: f29edd453e5e44b46855da5b317637f3
-        position: {x: -280.79138, y: 368.27036}
-        blackboard:
-          items: []
-        description: 
-        drawGizmos: 0
-        min: {x: -10, y: -10}
-        max: {x: 10, y: 9.72}
-        key:
-          item:
-            rid: 5043576437381267470
-    - rid: 4200191146766106657
+        moveKey:
+          key:
+            rid: 5043576912280813584
+    - rid: 5043576912280813582
       type: {class: Wait, ns: TheKiwiCoder, asm: thekiwicoder.behaviourtreeeditor}
       data:
         state: 0
         started: 0
-        guid: 52175761a6a2b624e892ee84780a2240
-        position: {x: 293, y: 368}
+        guid: ad9a14cca578cf9418fdf9e3e453ad5b
+        position: {x: 232, y: 512}
         blackboard:
-          items: []
+          keys: []
         description: 
         drawGizmos: 0
         duration: 1
-    - rid: 5043576437381267459
-      type: {class: Repeat, ns: TheKiwiCoder, asm: thekiwicoder.behaviourtreeeditor}
+    - rid: 5043576912280813583
+      type: {class: RandomPosition, ns: TheKiwiCoder, asm: thekiwicoder.behaviourtreeeditor}
       data:
         state: 0
         started: 0
-        guid: 3caea310930285040b85df6341927d39
-        position: {x: -1.0000226, y: -96.00002}
+        guid: c7e6e805db813e24d8b16445019e869d
+        position: {x: -246, y: 501}
         blackboard:
-          items: []
+          keys: []
         description: 
         drawGizmos: 0
-        child:
-          rid: 4200191146766106653
-        restartOnSuccess: 1
-        restartOnFailure: 0
-    - rid: 5043576437381267470
-      type: {class: BlackboardItem, ns: TheKiwiCoder, asm: thekiwicoder.behaviourtreeeditor}
+        min: {x: -10, y: -10}
+        max: {x: 10, y: 10}
+        target:
+          key:
+            rid: 5043576912280813584
+    - rid: 5043576912280813584
+      type: {class: BlackboardKey, ns: TheKiwiCoder, asm: thekiwicoder.behaviourtreeeditor}
       data:
-        key: Vector4
-        type: 3
+        name: position
+        type: 5
         floatValue: 0
         intValue: 0
         booleanValue: 0
@@ -132,15 +132,6 @@ MonoBehaviour:
         vector2Value: {x: 0, y: 0}
         vector3Value: {x: 0, y: 0, z: 0}
         gameObjectValue: {fileID: 0}
-    - rid: 5043576776898117635
-      type: {class: BlackboardItem, ns: TheKiwiCoder, asm: thekiwicoder.behaviourtreeeditor}
-      data:
-        key: OneFloat
-        type: 0
-        floatValue: 0
-        intValue: 0
-        booleanValue: 0
-        stringValue: 
-        vector2Value: {x: 0, y: 0}
-        vector3Value: {x: 0, y: 0, z: 0}
-        gameObjectValue: {fileID: 0}
+        layerMaskValue:
+          serializedVersion: 2
+          m_Bits: 0

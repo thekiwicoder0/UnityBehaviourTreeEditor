@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEditor;
+using UnityEditor.UIElements;
 
 namespace TheKiwiCoder {
     public class OverlayView : VisualElement {
@@ -17,6 +18,8 @@ namespace TheKiwiCoder {
         TextField locationPathField;
 
         public void Show() {
+            var settings = new SerializedObject(BehaviourTreeSettings.GetOrCreateSettings());
+
             // Hidden in UIBuilder while editing..
             style.visibility = Visibility.Visible;
 
@@ -26,6 +29,9 @@ namespace TheKiwiCoder {
             createButton = this.Q<Button>("CreateButton");
             treeNameField = this.Q<TextField>("TreeName");
             locationPathField = this.Q<TextField>("LocationPath");
+
+            locationPathField.BindProperty(settings.FindProperty("newNodeBasePath"));
+            locationPathField.RegisterCallback<ChangeEvent<string>>(ValidatePath);
 
             // Configure asset selection dropdown menu
             var behaviourTrees = EditorUtility.GetAssetPaths<BehaviourTree>();
@@ -76,6 +82,11 @@ namespace TheKiwiCoder {
 
         void TreeSelected(BehaviourTree tree) {
             OnTreeSelected.Invoke(tree);
+        }
+
+        void ValidatePath(ChangeEvent<string> evt) {
+            bool validPath = AssetDatabase.IsValidFolder(evt.newValue);
+            createButton.SetEnabled(validPath);
         }
     }
 }
