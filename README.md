@@ -29,7 +29,7 @@ To install the editor in your project, you can either install directly from the 
 The easiest way to install the package is directly from Package Manager in Unity via the `Add Package From git URL` using the following url:
 
 ```
-https://github.com/thekiwicoder0/UnityBehaviourTreeEditor.git?path=/Assets/BehaviourTree 
+https://github.com/thekiwicoder0/UnityBehaviourTreeEditor.git?path=/Assets/BehaviourTree/
 ```
 
 This has the added benefit of being able to easily update the package from within your project.
