@@ -29,9 +29,9 @@ namespace TheKiwiCoder {
             createButton = this.Q<Button>("Button_KeyCreate");
 
             // ListView
+            listView.BindProperty(behaviourTree.BlackboardKeys);
             listView.makeItem = MakeItem;
             listView.bindItem = BindItem;
-            listView.BindProperty(behaviourTree.BlackboardKeys);
 
             // TextField
             newKeyTextField.RegisterCallback<ChangeEvent<string>>((evt) => {
