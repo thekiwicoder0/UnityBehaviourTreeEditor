@@ -18,7 +18,7 @@ namespace TheKiwiCoder {
         TextField locationPathField;
 
         public void Show() {
-            var settings = new SerializedObject(BehaviourTreeSettings.GetOrCreateSettings());
+            var settings = new SerializedObject(BehaviourTreeEditorWindow.Instance.settings);
 
             // Hidden in UIBuilder while editing..
             style.visibility = Visibility.Visible;

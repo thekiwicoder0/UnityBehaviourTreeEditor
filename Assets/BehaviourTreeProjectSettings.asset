@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 32dcde829cc493549a6e405cd4fc8179, type: 3}
-  m_Name: EditorSettings
+  m_Name: BehaviourTreeProjectSettings
   m_EditorClassIdentifier: 
   newTreePath: Assets/
   newNodePath: Assets/

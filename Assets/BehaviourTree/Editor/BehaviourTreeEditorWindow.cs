@@ -22,7 +22,7 @@ namespace TheKiwiCoder {
             }
         }
         public static BehaviourTreeEditorWindow Instance;
-        public BehaviourTreeSettings settings;
+        public BehaviourTreeProjectSettings settings;
         public VisualTreeAsset behaviourTreeXml;
         public VisualTreeAsset nodeXml;
         public StyleSheet behaviourTreeStyle;
@@ -65,7 +65,7 @@ namespace TheKiwiCoder {
 
         public void CreateGUI() {
             Instance = this;
-            settings = BehaviourTreeSettings.GetOrCreateSettings();
+            settings = BehaviourTreeProjectSettings.GetOrCreateSettings();
 
             // Each editor window contains a root VisualElement object
             VisualElement root = rootVisualElement;
