@@ -15,7 +15,6 @@ namespace TheKiwiCoder {
         // Wrapper serialized object for writing changes to the behaviour tree
         public SerializedObject serializedObject;
 
-        [SerializeReference]
         public BehaviourTree tree;
 
         // Property names. These correspond to the variable names on the behaviour tree
@@ -29,6 +28,7 @@ namespace TheKiwiCoder {
         const string sViewTransformPosition = "viewPosition";
         const string sViewTransformScale = "viewScale";
         const string sBlackboardKeys = "keys";
+        bool batchMode = false;
 
         public SerializedProperty RootNode {
             get {
@@ -61,10 +61,6 @@ namespace TheKiwiCoder {
             this.tree = tree;
         }
 
-        public void Save() {
-            serializedObject.ApplyModifiedProperties();
-        }
-
         public SerializedProperty FindNode(SerializedProperty array, Node node) {
             for(int i = 0; i < array.arraySize; ++i) {
                 var current = array.GetArrayElementAtIndex(i);
@@ -84,10 +80,10 @@ namespace TheKiwiCoder {
         public void SetNodePosition(Node node, Vector2 position) {
             var nodeProp = FindNode(Nodes, node);
             nodeProp.FindPropertyRelative(sPropPosition).vector2Value = position;
-            serializedObject.ApplyModifiedProperties();
+            ApplyChanges();
         }
 
-        public void DeleteNode(SerializedProperty array, Node node) {
+        public void RemoveNodeArrayElement(SerializedProperty array, Node node) {
             for (int i = 0; i < array.arraySize; ++i) {
                 var current = array.GetArrayElementAtIndex(i);
                 if (current.FindPropertyRelative(sPropGuid).stringValue == node.guid) {
@@ -110,20 +106,20 @@ namespace TheKiwiCoder {
 
         public Node CreateNode(System.Type type, Vector2 position) {
 
-            Node node = CreateNodeInstance(type);
-            node.position = position;
+            Node child = CreateNodeInstance(type);
+            child.position = position;
 
             SerializedProperty newNode = AppendArrayElement(Nodes);
-            newNode.managedReferenceValue = node;
+            newNode.managedReferenceValue = child;
 
-            serializedObject.ApplyModifiedProperties();
+            ApplyChanges();
 
-            return node;
+            return child;
         }
 
         public void SetRootNode(RootNode node) {
             RootNode.managedReferenceValue = node;
-            serializedObject.ApplyModifiedProperties();
+            ApplyChanges();
         }
 
         public void DeleteNode(Node node) {
@@ -133,9 +129,10 @@ namespace TheKiwiCoder {
             for(int i = 0; i < nodesProperty.arraySize; ++i) {
                 var prop = nodesProperty.GetArrayElementAtIndex(i);
                 var guid = prop.FindPropertyRelative(sPropGuid).stringValue;
-                DeleteNode(Nodes, node);
-                serializedObject.ApplyModifiedProperties();
+                RemoveNodeArrayElement(Nodes, node);
             }
+
+            ApplyChanges();
         }
 
         public void AddChild(Node parent, Node child) {
@@ -146,7 +143,7 @@ namespace TheKiwiCoder {
             var childProperty = parentProperty.FindPropertyRelative(sPropChild);
             if (childProperty != null) {
                 childProperty.managedReferenceValue = child;
-                serializedObject.ApplyModifiedProperties();
+                ApplyChanges();
                 return;
             }
 
@@ -155,7 +152,7 @@ namespace TheKiwiCoder {
             if (childrenProperty != null) {
                 SerializedProperty newChild = AppendArrayElement(childrenProperty);
                 newChild.managedReferenceValue = child;
-                serializedObject.ApplyModifiedProperties();
+                ApplyChanges();
                 return;
             }
         }
@@ -167,15 +164,15 @@ namespace TheKiwiCoder {
             var childProperty = parentProperty.FindPropertyRelative(sPropChild);
             if (childProperty != null) {
                 childProperty.managedReferenceValue = null;
-                serializedObject.ApplyModifiedProperties();
+                ApplyChanges();
                 return;
             }
 
             // Composite nodes
             var childrenProperty = parentProperty.FindPropertyRelative(sPropChildren);
             if (childrenProperty != null) {
-                DeleteNode(childrenProperty, child);
-                serializedObject.ApplyModifiedProperties();
+                RemoveNodeArrayElement(childrenProperty, child);
+                ApplyChanges();
                 return;
             }
         }
@@ -190,7 +187,7 @@ namespace TheKiwiCoder {
             key.type = keyType;
             newKey.managedReferenceValue = key;
 
-            serializedObject.ApplyModifiedProperties();
+            ApplyChanges();
         }
 
         public void DeleteBlackboardKey(string keyName) {
@@ -200,10 +197,25 @@ namespace TheKiwiCoder {
                 BlackboardKey itemKey = key.managedReferenceValue as BlackboardKey;
                 if (itemKey.name == keyName) {
                     keysArray.DeleteArrayElementAtIndex(i);
-                    serializedObject.ApplyModifiedProperties();
+                    ApplyChanges();
                     return;
                 }
             }
+        }
+
+        public void BeginBatch() {
+            batchMode = true;
+        }
+
+        public void ApplyChanges() {
+            if (!batchMode) {
+                serializedObject.ApplyModifiedProperties();
+            }
+        }
+
+        public void EndBatch() {
+            batchMode = false;
+            ApplyChanges();
         }
     }
 }

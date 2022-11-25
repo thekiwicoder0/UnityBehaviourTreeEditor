@@ -11,13 +11,11 @@ namespace TheKiwiCoder {
 
     public class NodeView : UnityEditor.Experimental.GraphView.Node {
         public Action<NodeView> OnNodeSelected;
-        public SerializedBehaviourTree serializer;
         public Node node;
         public Port input;
         public Port output;
 
-        public NodeView(SerializedBehaviourTree tree, Node node, VisualTreeAsset nodeXml) : base(AssetDatabase.GetAssetPath(nodeXml)) {
-            this.serializer = tree;
+        public NodeView(Node node, VisualTreeAsset nodeXml) : base(AssetDatabase.GetAssetPath(nodeXml)) {
             this.node = node;
             this.title = node.GetType().Name;
             this.viewDataKey = node.guid;
@@ -31,13 +29,16 @@ namespace TheKiwiCoder {
             SetupDataBinding();
         }
         
-        private void SetupDataBinding() {
+        public void SetupDataBinding() {
+            SerializedBehaviourTree serializer = BehaviourTreeEditorWindow.Instance.serializer;
             var nodeProp = serializer.FindNode(serializer.Nodes, node);
-
-            var descriptionProp = nodeProp.FindPropertyRelative("description");
-           
-            Label descriptionLabel = this.Q<Label>("description");
-            descriptionLabel.BindProperty(descriptionProp);
+            if (nodeProp != null) {
+                var descriptionProp = nodeProp.FindPropertyRelative("description");
+                if (descriptionProp != null) {
+                    Label descriptionLabel = this.Q<Label>("description");
+                    descriptionLabel.BindProperty(descriptionProp);
+                }
+            }
         }
 
         private void SetupClasses() {
@@ -72,7 +73,7 @@ namespace TheKiwiCoder {
 
         private void CreateOutputPorts() {
             if (node is ActionNode) {
-
+                // Actions have no outputs
             } else if (node is CompositeNode) {
                 output = new NodePort(Direction.Output, Port.Capacity.Multi);
             } else if (node is DecoratorNode) {
@@ -91,6 +92,7 @@ namespace TheKiwiCoder {
         public override void SetPosition(Rect newPos) {
             base.SetPosition(newPos);
 
+            SerializedBehaviourTree serializer = BehaviourTreeEditorWindow.Instance.serializer;
             Vector2 position = new Vector2(newPos.xMin, newPos.yMin);
             serializer.SetNodePosition(node, position);
         }

@@ -29,16 +29,17 @@ namespace TheKiwiCoder {
         public TextAsset scriptTemplateActionNode;
         public TextAsset scriptTemplateCompositeNode;
         public TextAsset scriptTemplateDecoratorNode;
+        
+        public BehaviourTreeView treeView;
+        public InspectorView inspectorView;
+        public BlackboardView blackboardView;
+        public OverlayView overlayView;
+        public ToolbarMenu toolbarMenu;
+        public Label titleLabel;
+        public Label versionLabel;
 
-        [SerializeField]
-        SerializedBehaviourTree serializer;
-
-        BehaviourTreeView treeView;
-        InspectorView inspectorView;
-        BlackboardView blackboardView;
-        OverlayView overlayView;
-        ToolbarMenu toolbarMenu;
-        Label titleLabel;
+        public BehaviourTree tree;
+        public SerializedBehaviourTree serializer;
 
         [MenuItem("TheKiwiCoder/BehaviourTreeEditor ...")]
         public static void OpenWindow() {
@@ -86,6 +87,7 @@ namespace TheKiwiCoder {
             toolbarMenu = root.Q<ToolbarMenu>();
             overlayView = root.Q<OverlayView>("OverlayView");
             titleLabel = root.Q<Label>("TitleLabel");
+            versionLabel = root.Q<Label>("Version");
 
             treeView.styleSheets.Add(behaviourTreeStyle);
 
@@ -105,11 +107,20 @@ namespace TheKiwiCoder {
                 toolbarMenu.menu.AppendSeparator();
                 toolbarMenu.menu.AppendAction("New Tree...", (a) => OnToolbarNewAsset());
             });
-            
+
+            // Version label
+            var result = UnityEditor.PackageManager.Client.Search("com.thekiwicoder.behaviourtreeditor");
+            if (result.Status == UnityEditor.PackageManager.StatusCode.Success) {
+                versionLabel.text = result.Result[0].version;
+            }
+
+
             // Overlay view
-            treeView.OnNodeSelected = OnNodeSelectionChanged;
+            treeView.OnNodeSelected -= OnNodeSelectionChanged;
+            treeView.OnNodeSelected += OnNodeSelectionChanged;
+
+            overlayView.OnTreeSelected -= SelectTree;
             overlayView.OnTreeSelected += SelectTree;
-            Undo.undoRedoPerformed += OnUndoRedo;
 
             if (serializer == null) {
                 overlayView.Show();
@@ -119,12 +130,16 @@ namespace TheKiwiCoder {
         }
 
         void OnUndoRedo() {
-            if (serializer != null) {
+            if (tree != null) {
+                serializer.serializedObject.Update();
                 treeView.PopulateView(serializer);
             }
         }
 
         private void OnEnable() {
+            Undo.undoRedoPerformed -= OnUndoRedo;
+            Undo.undoRedoPerformed += OnUndoRedo;
+
             EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
             EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
         }
@@ -164,6 +179,7 @@ namespace TheKiwiCoder {
                 return;
             }
 
+            tree = newTree;
             serializer = new SerializedBehaviourTree(newTree);
 
             if (titleLabel != null) {
@@ -180,6 +196,7 @@ namespace TheKiwiCoder {
         }
 
         void ClearSelection() {
+            tree = null;
             serializer = null;
             inspectorView.Clear();
             treeView.ClearView();

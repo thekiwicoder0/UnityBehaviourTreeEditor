@@ -14,6 +14,7 @@ namespace TheKiwiCoder {
         public Action<NodeView> OnNodeSelected;
 
         SerializedBehaviourTree serializer;
+        bool dontUpdateModel = false;
 
         public struct ScriptTemplate {
             public TextAsset templateFile;
@@ -29,7 +30,7 @@ namespace TheKiwiCoder {
         };
 
         public BehaviourTreeView() {
-
+            
             Insert(0, new GridBackground());
 
             this.AddManipulator(new ContentZoomer());
@@ -40,7 +41,11 @@ namespace TheKiwiCoder {
 
             viewTransformChanged += OnViewTransformChanged;
 
-            nodeCreationRequest += (NodeCreationContext) => Debug.Log("Creating node");
+            nodeCreationRequest = NodeCreationRequest;
+        }
+
+        void NodeCreationRequest(NodeCreationContext ctx) {
+            Debug.Log("Node Creation Request");
         }
 
         void OnViewTransformChanged(GraphView graphView) {
@@ -75,9 +80,10 @@ namespace TheKiwiCoder {
                 children.ForEach(c => {
                     NodeView parentView = FindNodeView(n);
                     NodeView childView = FindNodeView(c);
-
-                    Edge edge = parentView.output.ConnectTo(childView.input);
-                    AddElement(edge);
+                    Debug.Assert(parentView != null, "Invalid parent after deserialising");
+                    Debug.Assert(childView != null, $"Null child view after deserialising parent{parentView.node.GetType().Name}");
+                    CreateEdgeView(parentView, childView);
+                    
                 });
             });
 
@@ -94,12 +100,26 @@ namespace TheKiwiCoder {
 
         private GraphViewChange OnGraphViewChanged(GraphViewChange graphViewChange) {
 
+            if (dontUpdateModel) {
+                return graphViewChange;
+            }
+
+            List<GraphElement> blockedDeletes = new List<GraphElement>();
+            
+            //serializer.BeginChangeBatch();
+
             if (graphViewChange.elementsToRemove != null) {
                 graphViewChange.elementsToRemove.ForEach(elem => {
                     NodeView nodeView = elem as NodeView;
                     if (nodeView != null) {
-                        serializer.DeleteNode(nodeView.node);
-                        OnNodeSelected(null);
+
+                        // The root node is not deletable
+                        if (nodeView.node is not RootNode) {
+                            OnNodeSelected(null);
+                            serializer.DeleteNode(nodeView.node);
+                        } else {
+                            blockedDeletes.Add(elem);
+                        }
                     }
 
                     Edge edge = elem as Edge;
@@ -121,41 +141,23 @@ namespace TheKiwiCoder {
 
             nodes.ForEach((n) => {
                 NodeView view = n as NodeView;
+                // Need to rebind description labels as the serialized properties will be invalidated after removing from array
+                view.SetupDataBinding();
                 view.SortChildren();
             });
+
+            foreach(var elem in blockedDeletes) {
+                graphViewChange.elementsToRemove.Remove(elem);  
+            }
+
+            //serializer.EndChangeBatch();
 
             return graphViewChange;
         }
 
         public override void BuildContextualMenu(ContextualMenuPopulateEvent evt) {
-            // New script functions
-            evt.menu.AppendAction($"Create Script.../New Action Node", (a) => CreateNewScript(scriptFileAssets[0]));
-            evt.menu.AppendAction($"Create Script.../New Composite Node", (a) => CreateNewScript(scriptFileAssets[1]));
-            evt.menu.AppendAction($"Create Script.../New Decorator Node", (a) => CreateNewScript(scriptFileAssets[2]));
-            evt.menu.AppendSeparator();
-
-            Vector2 nodePosition = this.ChangeCoordinatesTo(contentViewContainer, evt.localMousePosition);
-            {
-
-                var types = TypeCache.GetTypesDerivedFrom<ActionNode>();
-                foreach (var type in types) {
-                    evt.menu.AppendAction($"[Action]/{type.Name}", (a) => CreateNode(type, nodePosition));
-                }
-            }
-
-            {
-                var types = TypeCache.GetTypesDerivedFrom<CompositeNode>();
-                foreach (var type in types) {
-                    evt.menu.AppendAction($"[Composite]/{type.Name}", (a) => CreateNode(type, nodePosition));
-                }
-            }
-
-            {
-                var types = TypeCache.GetTypesDerivedFrom<DecoratorNode>();
-                foreach (var type in types) {
-                    evt.menu.AppendAction($"[Decorator]/{type.Name}", (a) => CreateNode(type, nodePosition));
-                }
-            }
+            // base.BuildContextualMenu(evt); // Disable default cut/copy/paste context menu options.. who uses those anyway?
+            CreateNodeWindow.Show(evt.mousePosition, null);
         }
 
         void SelectFolder(string path) {
@@ -177,21 +179,85 @@ namespace TheKiwiCoder {
             EditorGUIUtility.PingObject(obj);
         }
 
-        void CreateNewScript(ScriptTemplate template) {
+        public void CreateNewScript(ScriptTemplate template) {
             SelectFolder($"{BehaviourTreeEditorWindow.Instance.settings.newNodePath}/{template.subFolder}");
             var templatePath = AssetDatabase.GetAssetPath(template.templateFile);
             ProjectWindowUtil.CreateScriptAssetFromTemplateFile(templatePath, template.defaultFileName);
         }
 
-        void CreateNode(System.Type type, Vector2 position) {
+        public NodeView CreateNode(System.Type type, Vector2 position, NodeView parentView) {
+
+            serializer.BeginBatch();
+
+            // Update model
             Node node = serializer.CreateNode(type, position);
-            CreateNodeView(node);
+            if (parentView != null) {
+                serializer.AddChild(parentView.node, node);
+            }
+
+            // Update View
+            NodeView nodeView = CreateNodeView(node);
+            if (parentView != null) {
+                AddChild(parentView, nodeView);
+            }
+
+            serializer.EndBatch();
+
+            return nodeView;
         }
 
-        void CreateNodeView(Node node) {
-            NodeView nodeView = new NodeView(serializer, node, BehaviourTreeEditorWindow.Instance.nodeXml);
-            nodeView.OnNodeSelected = OnNodeSelected;
+        public NodeView CreateNodeWithChild(System.Type type, Vector2 position, NodeView childView) {
+            serializer.BeginBatch();
+
+            // Update Model
+            Node node = serializer.CreateNode(type, position);
+
+            // Delete the childs previous parent
+            foreach(var connection in childView.input.connections) {
+                var childParent = connection.output.node as NodeView;
+                serializer.RemoveChild(childParent.node, childView.node);
+            }
+            // Add as child of new node.
+            serializer.AddChild(node, childView.node);
+
+            // Update View
+            NodeView nodeView = CreateNodeView(node);
+            if (nodeView != null) {
+                AddChild(nodeView, childView);
+            }
+
+            serializer.EndBatch();
+            return nodeView;
+        }
+
+        NodeView CreateNodeView(Node node) {
+            NodeView nodeView = new NodeView(node, BehaviourTreeEditorWindow.Instance.nodeXml);
             AddElement(nodeView);
+            nodeView.OnNodeSelected = OnNodeSelected;
+            return nodeView;
+        }
+
+        public void AddChild(NodeView parentView, NodeView childView) {
+            
+            // Delete Previous output connections
+            if (parentView.output.capacity == Port.Capacity.Single) {
+                RemoveElements(parentView.output.connections);
+            }
+
+            // Delete previous child's parent
+            RemoveElements(childView.input.connections);
+
+            CreateEdgeView(parentView, childView);
+        }
+
+        void CreateEdgeView(NodeView parentView, NodeView childView) {
+            Edge edge = parentView.output.ConnectTo(childView.input);
+            AddElement(edge);
+        }
+        public void RemoveElements(IEnumerable<GraphElement> elementsToRemove) {
+            dontUpdateModel = true;
+            DeleteElements(elementsToRemove); // Just need to delete the ui elements without causing a graphChangedEvent here.
+            dontUpdateModel = false;
         }
 
         public void UpdateNodeStates() {

@@ -21,7 +21,20 @@ namespace TheKiwiCoder {
                 m_GraphViewChange.edgesToCreate = m_EdgesToCreate;
             }
 
-            public void OnDropOutsidePort(Edge edge, Vector2 position) { }
+            public void OnDropOutsidePort(Edge edge, Vector2 position) {
+                NodeView nodeSource = null;
+                bool isSourceParent = false;
+                if (edge.output != null) {
+                    nodeSource = edge.output.node as NodeView;
+                    isSourceParent = true;
+                }
+                if (edge.input != null) {
+                    nodeSource = edge.input.node as NodeView;
+                    isSourceParent = false;
+                }
+                CreateNodeWindow.Show(position, nodeSource, isSourceParent);
+            }
+
             public void OnDrop(GraphView graphView, Edge edge) {
                 m_EdgesToCreate.Clear();
                 m_EdgesToCreate.Add(edge);
@@ -59,7 +72,11 @@ namespace TheKiwiCoder {
             var connectorListener = new DefaultEdgeConnectorListener();
             m_EdgeConnector = new EdgeConnector<Edge>(connectorListener);
             this.AddManipulator(m_EdgeConnector);
-            style.width = 30;
+            if (direction == Direction.Input) {
+                style.width = 100;
+            } else {
+                style.width = 40;
+            }
         }
 
         public override bool ContainsPoint(Vector2 localPoint) {
