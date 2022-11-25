@@ -14,7 +14,7 @@ namespace TheKiwiCoder {
         BehaviourTreeView treeView;
         NodeView source;
         bool isSourceParent;
-        BehaviourTreeView.ScriptTemplate[] scriptFileAssets;
+        EditorUtility.ScriptTemplate[] scriptFileAssets;
 
         public void Initialise(BehaviourTreeView treeView, NodeView source, bool isSourceParent) {
             this.treeView = treeView;
@@ -25,10 +25,10 @@ namespace TheKiwiCoder {
             icon.SetPixel(0, 0, new Color(0, 0, 0, 0));
             icon.Apply();
 
-            scriptFileAssets = new BehaviourTreeView.ScriptTemplate[] {
-                new BehaviourTreeView.ScriptTemplate { templateFile = BehaviourTreeEditorWindow.Instance.scriptTemplateActionNode, defaultFileName = "NewActionNode.cs", subFolder = "Actions" },
-                new BehaviourTreeView.ScriptTemplate { templateFile = BehaviourTreeEditorWindow.Instance.scriptTemplateCompositeNode, defaultFileName = "NewCompositeNode.cs", subFolder = "Composites" },
-                new BehaviourTreeView.ScriptTemplate { templateFile = BehaviourTreeEditorWindow.Instance.scriptTemplateDecoratorNode, defaultFileName = "NewDecoratorNode.cs", subFolder = "Decorators" },
+            scriptFileAssets = new EditorUtility.ScriptTemplate[] {
+                new EditorUtility.ScriptTemplate { templateFile = BehaviourTreeEditorWindow.Instance.scriptTemplateActionNode, defaultFileName = "NewActionNode.cs", subFolder = "Actions" },
+                new EditorUtility.ScriptTemplate { templateFile = BehaviourTreeEditorWindow.Instance.scriptTemplateCompositeNode, defaultFileName = "NewCompositeNode.cs", subFolder = "Composites" },
+                new EditorUtility.ScriptTemplate { templateFile = BehaviourTreeEditorWindow.Instance.scriptTemplateDecoratorNode, defaultFileName = "NewDecoratorNode.cs", subFolder = "Decorators" },
             };
         }
 
@@ -114,9 +114,8 @@ namespace TheKiwiCoder {
             }
         }
 
-        public void CreateScript(BehaviourTreeView.ScriptTemplate scriptTemplate, SearchWindowContext context) {
-            BehaviourTreeEditorWindow editorWindow = BehaviourTreeEditorWindow.Instance;
-            editorWindow.treeView.CreateNewScript(scriptTemplate);
+        public void CreateScript(EditorUtility.ScriptTemplate scriptTemplate, SearchWindowContext context) {
+            EditorUtility.CreateNewScript(scriptTemplate);
         }
 
         public static void Show(Vector2 mousePosition, NodeView source, bool isSourceParent = false) {

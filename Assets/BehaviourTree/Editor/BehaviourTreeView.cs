@@ -16,19 +16,6 @@ namespace TheKiwiCoder {
         SerializedBehaviourTree serializer;
         bool dontUpdateModel = false;
 
-        public struct ScriptTemplate {
-            public TextAsset templateFile;
-            public string defaultFileName;
-            public string subFolder;
-        }
-
-        public ScriptTemplate[] scriptFileAssets = {
-            
-            new ScriptTemplate{ templateFile=BehaviourTreeEditorWindow.Instance.scriptTemplateActionNode, defaultFileName="NewActionNode.cs", subFolder="Actions" },
-            new ScriptTemplate{ templateFile=BehaviourTreeEditorWindow.Instance.scriptTemplateCompositeNode, defaultFileName="NewCompositeNode.cs", subFolder="Composites" },
-            new ScriptTemplate{ templateFile=BehaviourTreeEditorWindow.Instance.scriptTemplateDecoratorNode, defaultFileName="NewDecoratorNode.cs", subFolder="Decorators" },
-        };
-
         public BehaviourTreeView() {
             
             Insert(0, new GridBackground());
@@ -177,12 +164,6 @@ namespace TheKiwiCoder {
 
             // Also flash the folder yellow to highlight it
             EditorGUIUtility.PingObject(obj);
-        }
-
-        public void CreateNewScript(ScriptTemplate template) {
-            SelectFolder($"{BehaviourTreeEditorWindow.Instance.settings.newNodePath}/{template.subFolder}");
-            var templatePath = AssetDatabase.GetAssetPath(template.templateFile);
-            ProjectWindowUtil.CreateScriptAssetFromTemplateFile(templatePath, template.defaultFileName);
         }
 
         public NodeView CreateNode(System.Type type, Vector2 position, NodeView parentView) {

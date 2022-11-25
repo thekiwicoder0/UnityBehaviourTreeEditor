@@ -6,40 +6,16 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEditor.UIElements;
 using UnityEditor.Callbacks;
-using System.Linq;
+
 
 namespace TheKiwiCoder {
 
     public class BehaviourTreeEditorWindow : EditorWindow {
 
-        [System.Serializable]
-        private class PackageManifest {
-            public string name;
-            public string version;
-        }
-
-        private PackageManifest GetPackageManifest() {
-            // Loop through all package.json files in the project and find this one.. 
-            string[] packageJsons = AssetDatabase.FindAssets("package");
-            string[] packagePaths = packageJsons.Select(AssetDatabase.GUIDToAssetPath).ToArray();
-            foreach(var path in packagePaths){
-                var asset = AssetDatabase.LoadAssetAtPath<TextAsset>(path);
-                if (asset) {
-                    PackageManifest manifest = JsonUtility.FromJson<PackageManifest>(asset.text);
-                    if (manifest.name == "com.thekiwicoder.behaviourtreeditor") {
-                        return manifest;
-                    }
-                }
-            }
-            return null;
-
-        }
-
-
-        public class BehaviourTreeEditorAssetModificationProcessor : UnityEditor.AssetModificationProcessor {
+        public class BehaviourTreeEditorAssetModificationProcessor : AssetModificationProcessor {
 
             static AssetDeleteResult OnWillDeleteAsset(string path, RemoveAssetOptions opt) {
-                if (EditorWindow.HasOpenInstances<BehaviourTreeEditorWindow>()) {
+                if (HasOpenInstances<BehaviourTreeEditorWindow>()) {
                     BehaviourTreeEditorWindow wnd = GetWindow<BehaviourTreeEditorWindow>();
                     wnd.ClearIfSelected(path);
                 }
@@ -135,7 +111,7 @@ namespace TheKiwiCoder {
             });
 
             // Version label
-            var packageManifest = GetPackageManifest();
+            var packageManifest = EditorUtility.GetPackageManifest();
             if (packageManifest != null) {
                 versionLabel.text = $"v {packageManifest.version}";
             }

@@ -5,11 +5,24 @@ using UnityEngine.UIElements;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEditor.Search;
+using System.Linq;
 
 namespace TheKiwiCoder
 {
     public static class EditorUtility
     {
+        public struct ScriptTemplate {
+            public TextAsset templateFile;
+            public string defaultFileName;
+            public string subFolder;
+        }
+
+        [System.Serializable]
+        public class PackageManifest {
+            public string name;
+            public string version;
+        }
+
         public static BehaviourTree CreateNewTree(string assetName, string folder) {
 
             if(!AssetDatabase.IsValidFolder(folder)){
@@ -29,6 +42,21 @@ namespace TheKiwiCoder
             EditorGUIUtility.PingObject(tree);
             return tree;
         }
+
+        public static void CreateNewScript(ScriptTemplate scriptTemplate) {
+            var templatePath = AssetDatabase.GetAssetPath(scriptTemplate.templateFile);
+            var destinationFolder = $"{BehaviourTreeEditorWindow.Instance.settings.newNodePath}";
+            if (AssetDatabase.IsValidFolder(destinationFolder)) {
+                if (!AssetDatabase.IsValidFolder($"{destinationFolder}/{scriptTemplate.subFolder}")) {
+                    AssetDatabase.CreateFolder(destinationFolder, scriptTemplate.subFolder);
+                }
+                var destinationPath = $"{destinationFolder}/{scriptTemplate.subFolder}/{scriptTemplate.defaultFileName}";
+                ProjectWindowUtil.CreateScriptAssetFromTemplateFile(templatePath, destinationPath);
+            } else {
+                Debug.LogError($"Invalid folder path:{destinationFolder}. Check your project configuration settings 'newNodePath' is configured to a valid folder");
+            }
+        }
+
 
         public static List<T> LoadAssets<T>() where T : UnityEngine.Object {
             string[] assetIds = AssetDatabase.FindAssets($"t:{typeof(T).Name}");
@@ -50,5 +78,23 @@ namespace TheKiwiCoder
             }
             return paths;
         }
+
+        public static PackageManifest GetPackageManifest() {
+            // Loop through all package.json files in the project and find this one.. 
+            string[] packageJsons = AssetDatabase.FindAssets("package");
+            string[] packagePaths = packageJsons.Select(AssetDatabase.GUIDToAssetPath).ToArray();
+            foreach (var path in packagePaths) {
+                var asset = AssetDatabase.LoadAssetAtPath<TextAsset>(path);
+                if (asset) {
+                    PackageManifest manifest = JsonUtility.FromJson<PackageManifest>(asset.text);
+                    if (manifest.name == "com.thekiwicoder.behaviourtreeditor") {
+                        return manifest;
+                    }
+                }
+            }
+            return null;
+
+        }
+
     }
 }
