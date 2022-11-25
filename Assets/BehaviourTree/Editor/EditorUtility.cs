@@ -23,6 +23,7 @@ namespace TheKiwiCoder
             public string version;
         }
 
+
         public static BehaviourTree CreateNewTree(string assetName, string folder) {
 
             if(!AssetDatabase.IsValidFolder(folder)){
@@ -44,17 +45,7 @@ namespace TheKiwiCoder
         }
 
         public static void CreateNewScript(ScriptTemplate scriptTemplate) {
-            var templatePath = AssetDatabase.GetAssetPath(scriptTemplate.templateFile);
-            var destinationFolder = $"{BehaviourTreeEditorWindow.Instance.settings.newNodePath}";
-            if (AssetDatabase.IsValidFolder(destinationFolder)) {
-                if (!AssetDatabase.IsValidFolder($"{destinationFolder}/{scriptTemplate.subFolder}")) {
-                    AssetDatabase.CreateFolder(destinationFolder, scriptTemplate.subFolder);
-                }
-                var destinationPath = $"{destinationFolder}/{scriptTemplate.subFolder}/{scriptTemplate.defaultFileName}";
-                ProjectWindowUtil.CreateScriptAssetFromTemplateFile(templatePath, destinationPath);
-            } else {
-                Debug.LogError($"Invalid folder path:{destinationFolder}. Check your project configuration settings 'newNodePath' is configured to a valid folder");
-            }
+            BehaviourTreeEditorWindow.Instance.newScriptDialog.CreateScript(scriptTemplate);
         }
 
 

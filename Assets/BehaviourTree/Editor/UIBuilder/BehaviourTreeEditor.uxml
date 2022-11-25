@@ -49,4 +49,12 @@
             </ui:VisualElement>
         </ui:VisualElement>
     </TheKiwiCoder.OverlayView>
+    <TheKiwiCoder.NewScriptDialogView name="NewScriptDialogView" focusable="true" style="visibility: visible; position: absolute; left: 0; top: 0; right: 0; bottom: 0; justify-content: center; align-items: center;">
+        <ui:VisualElement name="Background" style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.5);" />
+        <ui:VisualElement focusable="true" style="flex-grow: 0; background-color: rgb(56, 56, 56); border-top-left-radius: 10px; border-bottom-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; flex-shrink: 0; width: 250px; height: 115px;">
+            <ui:Label tabindex="-1" text="New Script" display-tooltip-when-elided="true" name="Title" style="font-size: 20px; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; -unity-font-style: bold; justify-content: flex-end; -unity-text-align: upper-left;" />
+            <ui:TextField picking-mode="Ignore" value="asd" text="Enter name..." name="FileName" style="font-size: 15px; -unity-text-align: upper-center; align-items: auto; justify-content: center; padding-left: 10px; padding-right: 10px; padding-top: 10px; padding-bottom: 10px;" />
+            <ui:Button text="OK" display-tooltip-when-elided="true" style="padding-left: 0; padding-right: 0; margin-left: 60px; margin-right: 60px;" />
+        </ui:VisualElement>
+    </TheKiwiCoder.NewScriptDialogView>
 </ui:UXML>

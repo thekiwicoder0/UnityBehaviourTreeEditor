@@ -26,9 +26,9 @@ namespace TheKiwiCoder {
             icon.Apply();
 
             scriptFileAssets = new EditorUtility.ScriptTemplate[] {
-                new EditorUtility.ScriptTemplate { templateFile = BehaviourTreeEditorWindow.Instance.scriptTemplateActionNode, defaultFileName = "NewActionNode.cs", subFolder = "Actions" },
-                new EditorUtility.ScriptTemplate { templateFile = BehaviourTreeEditorWindow.Instance.scriptTemplateCompositeNode, defaultFileName = "NewCompositeNode.cs", subFolder = "Composites" },
-                new EditorUtility.ScriptTemplate { templateFile = BehaviourTreeEditorWindow.Instance.scriptTemplateDecoratorNode, defaultFileName = "NewDecoratorNode.cs", subFolder = "Decorators" },
+                new EditorUtility.ScriptTemplate { templateFile = BehaviourTreeEditorWindow.Instance.scriptTemplateActionNode, defaultFileName = "NewActionNode", subFolder = "Actions" },
+                new EditorUtility.ScriptTemplate { templateFile = BehaviourTreeEditorWindow.Instance.scriptTemplateCompositeNode, defaultFileName = "NewCompositeNode", subFolder = "Composites" },
+                new EditorUtility.ScriptTemplate { templateFile = BehaviourTreeEditorWindow.Instance.scriptTemplateDecoratorNode, defaultFileName = "NewDecoratorNode", subFolder = "Decorators" },
             };
         }
 

@@ -38,6 +38,7 @@ namespace TheKiwiCoder {
         public ToolbarMenu toolbarMenu;
         public Label titleLabel;
         public Label versionLabel;
+        public NewScriptDialogView newScriptDialog;
 
         [HideInInspector]
         public BehaviourTree tree;
@@ -88,6 +89,7 @@ namespace TheKiwiCoder {
             blackboardView = root.Q<BlackboardView>();
             toolbarMenu = root.Q<ToolbarMenu>();
             overlayView = root.Q<OverlayView>("OverlayView");
+            newScriptDialog = root.Q<NewScriptDialogView>("NewScriptDialogView");
             titleLabel = root.Q<Label>("TitleLabel");
             versionLabel = root.Q<Label>("Version");
 
@@ -116,12 +118,15 @@ namespace TheKiwiCoder {
                 versionLabel.text = $"v {packageManifest.version}";
             }
 
-            // Overlay view
             treeView.OnNodeSelected -= OnNodeSelectionChanged;
             treeView.OnNodeSelected += OnNodeSelectionChanged;
 
+            // Overlay view
             overlayView.OnTreeSelected -= SelectTree;
             overlayView.OnTreeSelected += SelectTree;
+
+            // New Script Dialog
+            newScriptDialog.style.visibility = Visibility.Hidden;
 
             if (serializer == null) {
                 overlayView.Show();
