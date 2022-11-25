@@ -12,6 +12,8 @@ MonoImporter:
   - scriptTemplateActionNode: {fileID: 4900000, guid: 39908033e6333954ab068f9cd4335cab, type: 3}
   - scriptTemplateCompositeNode: {fileID: 4900000, guid: 50af0744759a6f148891a0302871668f, type: 3}
   - scriptTemplateDecoratorNode: {fileID: 4900000, guid: 68ec90eda70221843b347ce647ce661a, type: 3}
+  - packageManifest: {fileID: 4900000, guid: e0f059376cc256c40bc05e5df6fcea03, type: 3}
+  - tree: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

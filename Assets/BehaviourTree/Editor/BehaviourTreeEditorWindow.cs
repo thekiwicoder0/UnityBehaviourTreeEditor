@@ -11,6 +11,11 @@ namespace TheKiwiCoder {
 
     public class BehaviourTreeEditorWindow : EditorWindow {
 
+        [System.Serializable]
+        private class PackageManifest {
+            public string version;
+        }
+
         public class BehaviourTreeEditorAssetModificationProcessor : UnityEditor.AssetModificationProcessor {
 
             static AssetDeleteResult OnWillDeleteAsset(string path, RemoveAssetOptions opt) {
@@ -29,6 +34,7 @@ namespace TheKiwiCoder {
         public TextAsset scriptTemplateActionNode;
         public TextAsset scriptTemplateCompositeNode;
         public TextAsset scriptTemplateDecoratorNode;
+        public TextAsset packageManifest;
         
         public BehaviourTreeView treeView;
         public InspectorView inspectorView;
@@ -38,6 +44,7 @@ namespace TheKiwiCoder {
         public Label titleLabel;
         public Label versionLabel;
 
+        [HideInInspector]
         public BehaviourTree tree;
         public SerializedBehaviourTree serializer;
 
@@ -109,11 +116,8 @@ namespace TheKiwiCoder {
             });
 
             // Version label
-            var result = UnityEditor.PackageManager.Client.Search("com.thekiwicoder.behaviourtreeditor");
-            if (result.Status == UnityEditor.PackageManager.StatusCode.Success) {
-                versionLabel.text = result.Result[0].version;
-            }
-
+            PackageManifest packageInfo = JsonUtility.FromJson<PackageManifest>(packageManifest.text);
+            versionLabel.text = $"v {packageInfo.version}";
 
             // Overlay view
             treeView.OnNodeSelected -= OnNodeSelectionChanged;
