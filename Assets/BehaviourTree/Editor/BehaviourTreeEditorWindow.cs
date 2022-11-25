@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEditor.UIElements;
 using UnityEditor.Callbacks;
+using System.Linq;
 
 namespace TheKiwiCoder {
 
@@ -13,8 +14,27 @@ namespace TheKiwiCoder {
 
         [System.Serializable]
         private class PackageManifest {
+            public string name;
             public string version;
         }
+
+        private PackageManifest GetPackageManifest() {
+            // Loop through all package.json files in the project and find this one.. 
+            string[] packageJsons = AssetDatabase.FindAssets("package");
+            string[] packagePaths = packageJsons.Select(AssetDatabase.GUIDToAssetPath).ToArray();
+            foreach(var path in packagePaths){
+                var asset = AssetDatabase.LoadAssetAtPath<TextAsset>(path);
+                if (asset) {
+                    PackageManifest manifest = JsonUtility.FromJson<PackageManifest>(asset.text);
+                    if (manifest.name == "com.thekiwicoder.behaviourtreeditor") {
+                        return manifest;
+                    }
+                }
+            }
+            return null;
+
+        }
+
 
         public class BehaviourTreeEditorAssetModificationProcessor : UnityEditor.AssetModificationProcessor {
 
@@ -34,7 +54,6 @@ namespace TheKiwiCoder {
         public TextAsset scriptTemplateActionNode;
         public TextAsset scriptTemplateCompositeNode;
         public TextAsset scriptTemplateDecoratorNode;
-        public TextAsset packageManifest;
         
         public BehaviourTreeView treeView;
         public InspectorView inspectorView;
@@ -116,8 +135,10 @@ namespace TheKiwiCoder {
             });
 
             // Version label
-            PackageManifest packageInfo = JsonUtility.FromJson<PackageManifest>(packageManifest.text);
-            versionLabel.text = $"v {packageInfo.version}";
+            var packageManifest = GetPackageManifest();
+            if (packageManifest != null) {
+                versionLabel.text = $"v {packageManifest.version}";
+            }
 
             // Overlay view
             treeView.OnNodeSelected -= OnNodeSelectionChanged;
