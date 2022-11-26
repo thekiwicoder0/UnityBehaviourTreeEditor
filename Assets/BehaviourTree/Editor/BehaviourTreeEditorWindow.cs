@@ -234,7 +234,7 @@ namespace TheKiwiCoder {
         }
 
         void OnToolbarNewAsset() {
-            BehaviourTree tree = EditorUtility.CreateNewTree("New Behaviour Tree", "Assets/");
+            BehaviourTree tree = EditorUtility.CreateNewTree("New Behaviour Tree", settings.newTreePath);
             if (tree) {
                 SelectTree(tree);
             }

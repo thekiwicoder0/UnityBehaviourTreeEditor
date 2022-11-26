@@ -31,7 +31,6 @@ namespace TheKiwiCoder {
             locationPathField = this.Q<TextField>("LocationPath");
 
             locationPathField.BindProperty(settings.FindProperty("newTreePath"));
-            locationPathField.RegisterCallback<ChangeEvent<string>>(ValidatePath);
 
             // Configure asset selection dropdown menu
             var behaviourTrees = EditorUtility.GetAssetPaths<BehaviourTree>();
@@ -82,11 +81,6 @@ namespace TheKiwiCoder {
 
         void TreeSelected(BehaviourTree tree) {
             OnTreeSelected.Invoke(tree);
-        }
-
-        void ValidatePath(ChangeEvent<string> evt) {
-            bool validPath = AssetDatabase.IsValidFolder(evt.newValue);
-            createButton.SetEnabled(validPath);
         }
     }
 }

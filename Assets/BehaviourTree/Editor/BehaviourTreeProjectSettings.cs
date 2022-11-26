@@ -10,7 +10,10 @@ namespace TheKiwiCoder {
     // Create a new type of Settings Asset.
     public class BehaviourTreeProjectSettings : ScriptableObject {
 
+        [Tooltip("Folder where new tree assets will be created. (Must begin with 'Assets')")]
         public string newTreePath = "Assets/";
+
+        [Tooltip("Folder where new node scripts will be created. (Must begin with 'Assets')")]
         public string newNodePath = "Assets/";
 
         static BehaviourTreeProjectSettings FindSettings(){

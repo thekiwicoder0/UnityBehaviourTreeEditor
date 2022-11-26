@@ -53,27 +53,30 @@ namespace TheKiwiCoder {
         void OnConfirm() {
             string scriptName = textField.text;
 
-            var destinationFolder = $"{BehaviourTreeEditorWindow.Instance.settings.newNodePath}";
-            if (AssetDatabase.IsValidFolder(destinationFolder)) {
-                if (!AssetDatabase.IsValidFolder($"{destinationFolder}/{scriptTemplate.subFolder}")) {
-                    AssetDatabase.CreateFolder(destinationFolder, scriptTemplate.subFolder);
-                }
-                var destinationPath = $"{destinationFolder}/{scriptTemplate.subFolder}/{scriptName}.cs";
-               
+            var newNodePath = $"{BehaviourTreeEditorWindow.Instance.settings.newNodePath}";
+            if (AssetDatabase.IsValidFolder(newNodePath)) {
+
+                var destinationFolder = System.IO.Path.Combine(newNodePath, scriptTemplate.subFolder);
+                var destinationPath = System.IO.Path.Combine(destinationFolder, $"{scriptName}.cs");
+
+                System.IO.Directory.CreateDirectory(destinationFolder);
+
                 var parentPath = System.IO.Directory.GetParent(Application.dataPath);
 
                 string templateString = scriptTemplate.templateFile.text;
                 templateString = templateString.Replace("#SCRIPTNAME#", scriptName);
-                string scriptPath = $"{parentPath}/{destinationPath}";
+                string scriptPath = System.IO.Path.Combine(parentPath.ToString(), destinationPath);
+
                 if (!System.IO.File.Exists(scriptPath)) {
-                    System.IO.File.WriteAllText($"{parentPath}/{destinationPath}", templateString);
+                    System.IO.File.WriteAllText(scriptPath, templateString);
                     AssetDatabase.Refresh();
+                    Close();
                 } else {
                     Debug.LogError($"Script with that name already exists:{scriptPath}");
                     Close();
                 }
             } else {
-                Debug.LogError($"Invalid folder path:{destinationFolder}. Check your project configuration settings 'newNodePath' is configured to a valid folder");
+                Debug.LogError($"Invalid folder path:{newNodePath}. Check the project configuration settings 'newNodePath' is configured to a valid folder");
             }
         }
     }
