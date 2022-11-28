@@ -165,7 +165,7 @@ namespace TheKiwiCoder {
                     EditorApplication.delayCall += OnSelectionChange;
                     break;
                 case PlayModeStateChange.ExitingPlayMode:
-                    inspectorView.Clear();
+                    inspectorView?.Clear();
                     break;
             }
         }
@@ -196,9 +196,9 @@ namespace TheKiwiCoder {
                 titleLabel.text = $"TreeView ({path})";
             }
 
-            overlayView.Hide();
-            treeView.PopulateView(serializer);
-            blackboardView.Bind(serializer);
+            overlayView?.Hide();
+            treeView?.PopulateView(serializer);
+            blackboardView?.Bind(serializer);
         }
 
         void ClearSelection() {
