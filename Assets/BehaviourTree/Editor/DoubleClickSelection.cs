@@ -54,6 +54,19 @@ namespace TheKiwiCoder {
                     return;
             }
 
+            // Open script in the editor:
+            var nodeName = clickedElement.node.GetType().Name;
+            var assetGuids = AssetDatabase.FindAssets($"t:TextAsset {nodeName}");
+            for(int i = 0; i < assetGuids.Length; ++i) {
+                var path = AssetDatabase.GUIDToAssetPath(assetGuids[i]);
+                var filename = System.IO.Path.GetFileName(path);
+                if (filename == $"{nodeName}.cs") {
+                    var script = AssetDatabase.LoadAssetAtPath<TextAsset>(path);
+                    AssetDatabase.OpenAsset(script);
+                    break;
+                }
+            }
+
             // Add children to selection so the root element can be moved
             BehaviourTree.Traverse(clickedElement.node, node => {
                 var view = graphView.FindNodeView(node);
