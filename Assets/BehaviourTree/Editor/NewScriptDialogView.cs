@@ -70,7 +70,8 @@ namespace TheKiwiCoder {
                 if (!System.IO.File.Exists(scriptPath)) {
                     System.IO.File.WriteAllText(scriptPath, templateString);
                     AssetDatabase.Refresh();
-                    Close();
+                    confirmButton.SetEnabled(false);
+                    EditorApplication.delayCall += WaitForCompilation;
                 } else {
                     Debug.LogError($"Script with that name already exists:{scriptPath}");
                     Close();
@@ -78,6 +79,16 @@ namespace TheKiwiCoder {
             } else {
                 Debug.LogError($"Invalid folder path:{newNodePath}. Check the project configuration settings 'newNodePath' is configured to a valid folder");
             }
+        }
+
+        void WaitForCompilation() {
+            if (EditorApplication.isCompiling) {
+                EditorApplication.delayCall += WaitForCompilation;
+                return;
+            }
+
+            confirmButton.SetEnabled(true);
+            Close();
         }
     }
 }
