@@ -1,6 +1,6 @@
 {
     "name": "com.thekiwicoder.behaviourtreeditor",
-    "version": "0.0.12",
+    "version": "0.0.13",
     "displayName": "Behaviour Tree Editor",
     "description": "The Behaviour Tree Editor package provides a runtime and custom editor for authoring AI behaviour trees.",
     "unity": "2021.3",

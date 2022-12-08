@@ -7,11 +7,12 @@ using UnityEngine.UIElements;
 using UnityEditor.Experimental.GraphView;
 
 namespace TheKiwiCoder {
-    public class DoubleClickSelection : MouseManipulator {
+    public class  OpenNodeScript : MouseManipulator {
+
         double time;
         double doubleClickDuration = 0.3;
 
-        public DoubleClickSelection() {
+        public OpenNodeScript() {
             time = EditorApplication.timeSinceStartup;
         }
 
@@ -20,31 +21,12 @@ namespace TheKiwiCoder {
         }
 
         protected override void UnregisterCallbacksFromTarget() {
-
             target.UnregisterCallback<MouseDownEvent>(OnMouseDown);
         }
 
         private void OnMouseDown(MouseDownEvent evt) {
-            var graphView = target as BehaviourTreeView;
-            if (graphView == null)
-                return;
-
-            double duration = EditorApplication.timeSinceStartup - time;
-            if (duration < doubleClickDuration) {
-                SelectChildren(evt);
-            }
-
-            time = EditorApplication.timeSinceStartup;
-        }
-
-        void SelectChildren(MouseDownEvent evt) {
-
-            var graphView = target as BehaviourTreeView;
-            if (graphView == null)
-                return;
-
             if (!CanStopManipulation(evt))
-                return;
+                return; 
 
             NodeView clickedElement = evt.target as NodeView;
             if (clickedElement == null) {
@@ -54,10 +36,19 @@ namespace TheKiwiCoder {
                     return;
             }
 
+            double duration = EditorApplication.timeSinceStartup - time;
+            if (duration < doubleClickDuration) {
+                OpenScriptForNode(evt, clickedElement);
+            }
+
+            time = EditorApplication.timeSinceStartup;
+        }
+
+        void OpenScriptForNode(MouseDownEvent evt, NodeView clickedElement) {
             // Open script in the editor:
             var nodeName = clickedElement.node.GetType().Name;
             var assetGuids = AssetDatabase.FindAssets($"t:TextAsset {nodeName}");
-            for(int i = 0; i < assetGuids.Length; ++i) {
+            for (int i = 0; i < assetGuids.Length; ++i) {
                 var path = AssetDatabase.GUIDToAssetPath(assetGuids[i]);
                 var filename = System.IO.Path.GetFileName(path);
                 if (filename == $"{nodeName}.cs") {
@@ -67,11 +58,8 @@ namespace TheKiwiCoder {
                 }
             }
 
-            // Add children to selection so the root element can be moved
-            BehaviourTree.Traverse(clickedElement.node, node => {
-                var view = graphView.FindNodeView(node);
-                graphView.AddToSelection(view);
-            });
+            // Remove the node from selection to prevent dragging it around when returning to the editor.
+            BehaviourTreeEditorWindow.Instance.treeView.RemoveFromSelection(clickedElement);
         }
     }
 }

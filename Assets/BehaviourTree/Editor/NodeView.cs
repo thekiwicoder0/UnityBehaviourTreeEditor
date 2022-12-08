@@ -27,6 +27,8 @@ namespace TheKiwiCoder {
             CreateOutputPorts();
             SetupClasses();
             SetupDataBinding();
+
+            this.AddManipulator(new OpenNodeScript());
         }
         
         public void SetupDataBinding() {

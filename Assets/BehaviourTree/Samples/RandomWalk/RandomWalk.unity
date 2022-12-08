@@ -156,7 +156,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58c6f9b140a52a14881ec09eaebb66eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tree: {fileID: 11400000, guid: b4b644392f507e4409ee457fefb063e5, type: 2}
+  tree: {fileID: 11400000, guid: dcb922119a6ecf649b7d7a39351e9c78, type: 2}
 --- !u!195 &73805060
 NavMeshAgent:
   m_ObjectHideFlags: 0

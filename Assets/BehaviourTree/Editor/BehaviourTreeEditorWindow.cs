@@ -12,6 +12,23 @@ namespace TheKiwiCoder {
 
     public class BehaviourTreeEditorWindow : EditorWindow {
 
+        [System.Serializable]
+        public class PendingScriptCreate {
+            public bool pendingCreate = false;
+            public string scriptName = "";
+            public string sourceGuid = "";
+            public bool isSourceParent = false;
+            public Vector2 nodePosition;
+
+            public void Reset() {
+                pendingCreate = false;
+                scriptName = "";
+                sourceGuid = "";
+                isSourceParent = false;
+                nodePosition = Vector2.zero;
+            }
+        }
+
         public class BehaviourTreeEditorAssetModificationProcessor : AssetModificationProcessor {
 
             static AssetDeleteResult OnWillDeleteAsset(string path, RemoveAssetOptions opt) {
@@ -39,6 +56,9 @@ namespace TheKiwiCoder {
         public Label titleLabel;
         public Label versionLabel;
         public NewScriptDialogView newScriptDialog;
+
+        [SerializeField]
+        public PendingScriptCreate pendingScriptCreate;
 
         [HideInInspector]
         public BehaviourTree tree;
@@ -68,7 +88,7 @@ namespace TheKiwiCoder {
         }
 
         public void CreateGUI() {
-            Instance = this;
+            Instance = this; 
             settings = BehaviourTreeProjectSettings.GetOrCreateSettings();
 
             // Each editor window contains a root VisualElement object
@@ -133,6 +153,29 @@ namespace TheKiwiCoder {
             } else {
                 SelectTree(serializer.tree);
             }
+
+            // Create new node for any scripts just created coming back from a compile.
+            if (pendingScriptCreate.pendingCreate) {
+                CreatePendingScriptNode();
+            }
+        }
+
+        void CreatePendingScriptNode() {
+            NodeView source = treeView.GetNodeByGuid(pendingScriptCreate.sourceGuid) as NodeView;
+            var nodeType = Type.GetType($"{pendingScriptCreate.scriptName}, Assembly-CSharp");
+            if (nodeType != null) {
+                if (source != null) {
+                    if (pendingScriptCreate.isSourceParent) {
+                        treeView.CreateNode(nodeType, pendingScriptCreate.nodePosition, source);
+                    } else {
+                        treeView.CreateNodeWithChild(nodeType, pendingScriptCreate.nodePosition, source);
+                    }
+                } else {
+                    treeView.CreateNode(nodeType, pendingScriptCreate.nodePosition, null);
+                }
+            }
+
+            pendingScriptCreate.Reset();
         }
 
         void OnUndoRedo() {

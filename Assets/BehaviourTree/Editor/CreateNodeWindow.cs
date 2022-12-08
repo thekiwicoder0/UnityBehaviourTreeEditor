@@ -115,7 +115,14 @@ namespace TheKiwiCoder {
         }
 
         public void CreateScript(EditorUtility.ScriptTemplate scriptTemplate, SearchWindowContext context) {
-            EditorUtility.CreateNewScript(scriptTemplate);
+            BehaviourTreeEditorWindow editorWindow = BehaviourTreeEditorWindow.Instance;
+
+            var windowMousePosition = editorWindow.rootVisualElement.ChangeCoordinatesTo(editorWindow.rootVisualElement.parent, context.screenMousePosition - editorWindow.position.position);
+            var graphMousePosition = editorWindow.treeView.contentViewContainer.WorldToLocal(windowMousePosition);
+            var nodeOffset = new Vector2(-75, -20);
+            var nodePosition = graphMousePosition + nodeOffset;
+
+            EditorUtility.CreateNewScript(scriptTemplate, source, isSourceParent, nodePosition);
         }
 
         public static void Show(Vector2 mousePosition, NodeView source, bool isSourceParent = false) {

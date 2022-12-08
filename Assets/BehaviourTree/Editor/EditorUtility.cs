@@ -39,8 +39,8 @@ namespace TheKiwiCoder
             return tree;
         }
 
-        public static void CreateNewScript(ScriptTemplate scriptTemplate) {
-            BehaviourTreeEditorWindow.Instance.newScriptDialog.CreateScript(scriptTemplate);
+        public static void CreateNewScript(ScriptTemplate scriptTemplate, NodeView source, bool isSourceParent, Vector2 position) {
+            BehaviourTreeEditorWindow.Instance.newScriptDialog.CreateScript(scriptTemplate, source, isSourceParent, position);
         }
 
 

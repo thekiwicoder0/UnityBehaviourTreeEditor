@@ -12,10 +12,15 @@ namespace TheKiwiCoder {
         EditorUtility.ScriptTemplate scriptTemplate;
         TextField textField;
         Button confirmButton;
+        NodeView source;
+        bool isSourceParent;
+        Vector2 nodePosition;
 
-        public void CreateScript(EditorUtility.ScriptTemplate scriptTemplate) {
-
+        public void CreateScript(EditorUtility.ScriptTemplate scriptTemplate, NodeView source, bool isSourceParent, Vector2 position) {
             this.scriptTemplate = scriptTemplate;
+            this.source = source;
+            this.isSourceParent = isSourceParent;
+            this.nodePosition = position;
 
             style.visibility = Visibility.Visible;
 
@@ -69,6 +74,16 @@ namespace TheKiwiCoder {
 
                 if (!System.IO.File.Exists(scriptPath)) {
                     System.IO.File.WriteAllText(scriptPath, templateString);
+
+                    // TODO: There must be a better way to survive domain reloads after script compiling than this
+                    BehaviourTreeEditorWindow.Instance.pendingScriptCreate.pendingCreate = true;
+                    BehaviourTreeEditorWindow.Instance.pendingScriptCreate.scriptName = scriptName;
+                    BehaviourTreeEditorWindow.Instance.pendingScriptCreate.nodePosition = nodePosition;
+                    if (source != null) {
+                        BehaviourTreeEditorWindow.Instance.pendingScriptCreate.sourceGuid = source.node.guid;
+                        BehaviourTreeEditorWindow.Instance.pendingScriptCreate.isSourceParent = isSourceParent;
+                    }
+
                     AssetDatabase.Refresh();
                     confirmButton.SetEnabled(false);
                     EditorApplication.delayCall += WaitForCompilation;

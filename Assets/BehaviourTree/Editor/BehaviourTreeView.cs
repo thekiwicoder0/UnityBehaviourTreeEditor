@@ -22,7 +22,7 @@ namespace TheKiwiCoder {
 
             this.AddManipulator(new ContentZoomer());
             this.AddManipulator(new ContentDragger());
-            this.AddManipulator(new DoubleClickSelection());
+            this.AddManipulator(new HierarchySelector());
             this.AddManipulator(new SelectionDragger());
             this.AddManipulator(new RectangleSelector());
 
