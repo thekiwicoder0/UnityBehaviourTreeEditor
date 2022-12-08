@@ -58,7 +58,7 @@ namespace TheKiwiCoder {
         public NewScriptDialogView newScriptDialog;
 
         [SerializeField]
-        public PendingScriptCreate pendingScriptCreate;
+        public PendingScriptCreate pendingScriptCreate = new PendingScriptCreate();
 
         [HideInInspector]
         public BehaviourTree tree;
@@ -155,7 +155,7 @@ namespace TheKiwiCoder {
             }
 
             // Create new node for any scripts just created coming back from a compile.
-            if (pendingScriptCreate.pendingCreate) {
+            if (pendingScriptCreate != null && pendingScriptCreate.pendingCreate) {
                 CreatePendingScriptNode();
             }
         }

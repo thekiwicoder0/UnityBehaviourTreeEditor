@@ -26,6 +26,16 @@ namespace TheKiwiCoder {
             nodes.Add(rootNode);
         }
 
+        private void OnEnable() {
+            // Validate the behaviour tree on load, removing all null children
+            nodes.RemoveAll(node => node == null);
+            Traverse(rootNode, node => {
+                if (node is CompositeNode composite) {
+                    composite.children.RemoveAll(child => child == null); 
+                }
+            });
+        } 
+
         public Node.State Update() {
             if (rootNode.state == Node.State.Running) {
                 treeState = rootNode.Update();
