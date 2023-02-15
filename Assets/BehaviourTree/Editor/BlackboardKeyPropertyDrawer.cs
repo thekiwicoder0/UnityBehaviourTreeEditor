@@ -29,6 +29,16 @@ namespace TheKiwiCoder {
 
             itemProp = property.FindPropertyRelative("key");
 
+            // If no key is set, try to find the first appropriate key which matches the type
+            if (itemProp.managedReferenceValue == null) {
+                foreach (var key in tree.blackboard.keys) {
+                    if (Matches(key.type, fieldInfo.FieldType)) {
+                        itemProp.managedReferenceValue = key;
+                        break;
+                    }
+                }
+            }
+
             string currentValue = "null";
             foreach (var key in tree.blackboard.keys) {
                 if (key == itemProp.managedReferenceValue) {
