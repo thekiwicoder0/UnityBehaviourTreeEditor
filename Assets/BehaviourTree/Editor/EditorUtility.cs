@@ -72,9 +72,14 @@ namespace TheKiwiCoder
             foreach (var path in packagePaths) {
                 var asset = AssetDatabase.LoadAssetAtPath<TextAsset>(path);
                 if (asset) {
-                    PackageManifest manifest = JsonUtility.FromJson<PackageManifest>(asset.text);
-                    if (manifest.name == "com.thekiwicoder.behaviourtreeditor") {
-                        return manifest;
+                    try{
+                        PackageManifest manifest = JsonUtility.FromJson<PackageManifest>(asset.text);
+                        if (manifest.name == "com.thekiwicoder.behaviourtreeditor") {
+                            return manifest;
+                        }
+                    }
+                    catch {
+                        // Ignore if the manifest file failed to parse
                     }
                 }
             }
