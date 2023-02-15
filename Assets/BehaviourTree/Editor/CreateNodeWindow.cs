@@ -103,15 +103,19 @@ namespace TheKiwiCoder {
             var nodeOffset = new Vector2(-75, -20);
             var nodePosition = graphMousePosition + nodeOffset;
 
+            // #TODO: Unify this with CreatePendingScriptNode
+            NodeView createdNode;
             if (source != null) {
                 if (isSourceParent) {
-                    treeView.CreateNode(type, nodePosition, source);
+                    createdNode = treeView.CreateNode(type, nodePosition, source);
                 } else {
-                    treeView.CreateNodeWithChild(type, nodePosition, source);
+                    createdNode = treeView.CreateNodeWithChild(type, nodePosition, source);
                 }
             } else {
-                treeView.CreateNode(type, nodePosition, null);
+                createdNode = treeView.CreateNode(type, nodePosition, null);
             }
+
+            treeView.SelectNode(createdNode);
         }
 
         public void CreateScript(EditorUtility.ScriptTemplate scriptTemplate, SearchWindowContext context) {

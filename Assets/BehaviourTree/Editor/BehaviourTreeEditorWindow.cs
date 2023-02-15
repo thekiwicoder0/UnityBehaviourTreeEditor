@@ -161,18 +161,24 @@ namespace TheKiwiCoder {
         }
 
         void CreatePendingScriptNode() {
+
+            // #TODO: Unify this with CreateNodeWindow.CreateNode
+
             NodeView source = treeView.GetNodeByGuid(pendingScriptCreate.sourceGuid) as NodeView;
             var nodeType = Type.GetType($"{pendingScriptCreate.scriptName}, Assembly-CSharp");
             if (nodeType != null) {
+                NodeView createdNode;
                 if (source != null) {
                     if (pendingScriptCreate.isSourceParent) {
-                        treeView.CreateNode(nodeType, pendingScriptCreate.nodePosition, source);
+                        createdNode = treeView.CreateNode(nodeType, pendingScriptCreate.nodePosition, source);
                     } else {
-                        treeView.CreateNodeWithChild(nodeType, pendingScriptCreate.nodePosition, source);
+                        createdNode = treeView.CreateNodeWithChild(nodeType, pendingScriptCreate.nodePosition, source);
                     }
                 } else {
-                    treeView.CreateNode(nodeType, pendingScriptCreate.nodePosition, null);
+                    createdNode = treeView.CreateNode(nodeType, pendingScriptCreate.nodePosition, null);
                 }
+
+                treeView.SelectNode(createdNode);
             }
 
             pendingScriptCreate.Reset();

@@ -247,5 +247,12 @@ namespace TheKiwiCoder {
                 view.UpdateState();
             });
         }
+
+        public void SelectNode(NodeView nodeView) {
+            ClearSelection();
+            if (nodeView != null) {
+                AddToSelection(nodeView);
+            }
+        }
     }
 }
