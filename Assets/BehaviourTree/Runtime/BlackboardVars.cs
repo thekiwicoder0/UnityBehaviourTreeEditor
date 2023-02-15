@@ -12,10 +12,12 @@ namespace TheKiwiCoder {
 
         public float Value {
             get {
-                return key.floatValue;
+                return key != null ? key.floatValue : 0.0f;
             }
             set {
-                key.floatValue = value;
+                if (key != null) {
+                    key.floatValue = value;
+                }
             }
         }
     }
@@ -28,10 +30,12 @@ namespace TheKiwiCoder {
 
         public int Value {
             get {
-                return key.intValue;
+                return key != null ? key.intValue : 0;
             }
             set {
-                key.intValue = value;
+                if (key != null) {
+                    key.intValue = value;
+                }
             }
         }
     }
@@ -44,10 +48,12 @@ namespace TheKiwiCoder {
 
         public bool Value {
             get {
-                return key.booleanValue;
+                return key != null ? key.booleanValue : false;
             }
             set {
-                key.booleanValue = value;
+                if (key != null) {
+                    key.booleanValue = value;
+                }
             }
         }
     }
@@ -60,10 +66,12 @@ namespace TheKiwiCoder {
 
         public string Value {
             get {
-                return key.stringValue;
+                return key != null ? key.stringValue : "";
             }
             set {
-                key.stringValue = value;
+                if (key != null) {
+                    key.stringValue = value;
+                }
             }
         }
     }
@@ -76,10 +84,12 @@ namespace TheKiwiCoder {
 
         public Vector2 Value {
             get {
-                return key.vector2Value;
+                return key != null ? key.vector2Value : Vector2.zero;
             }
             set {
-                key.vector2Value = value;
+                if (key != null) {
+                    key.vector2Value = value;
+                }
             }
         }
     }
@@ -92,10 +102,12 @@ namespace TheKiwiCoder {
 
         public Vector3 Value {
             get {
-                return key.vector3Value;
+                return key != null ? key.vector3Value : Vector3.zero;
             }
             set {
-                key.vector3Value = value;
+                if (key != null) {
+                    key.vector3Value = value;
+                }
             }
         }
     }
@@ -108,10 +120,12 @@ namespace TheKiwiCoder {
 
         public GameObject Value {
             get {
-                return key.gameObjectValue;
+                return key != null ? key.gameObjectValue : null;
             }
             set {
-                key.gameObjectValue = value;
+                if (key != null) {
+                    key.gameObjectValue = value;
+                }
             }
         }
     }
@@ -124,10 +138,12 @@ namespace TheKiwiCoder {
 
         public string Value {
             get {
-                return key.stringValue;
+                return key != null ? key.stringValue : "";
             }
             set {
-                key.stringValue = value;
+                if (key != null) {
+                    key.stringValue = value;
+                }
             }
         }
     }
@@ -140,10 +156,12 @@ namespace TheKiwiCoder {
 
         public LayerMask Value {
             get {
-                return key.layerMaskValue;
+                return key != null ? key.layerMaskValue : new LayerMask();
             }
             set {
-                key.layerMaskValue = value;
+                if (key != null) {
+                    key.layerMaskValue = value;
+                }
             }
         }
     }
