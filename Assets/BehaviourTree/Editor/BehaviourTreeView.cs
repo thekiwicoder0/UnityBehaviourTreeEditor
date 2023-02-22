@@ -92,8 +92,6 @@ namespace TheKiwiCoder {
             }
 
             List<GraphElement> blockedDeletes = new List<GraphElement>();
-            
-            //serializer.BeginChangeBatch();
 
             if (graphViewChange.elementsToRemove != null) {
                 graphViewChange.elementsToRemove.ForEach(elem => {
@@ -136,8 +134,6 @@ namespace TheKiwiCoder {
             foreach(var elem in blockedDeletes) {
                 graphViewChange.elementsToRemove.Remove(elem);  
             }
-
-            //serializer.EndChangeBatch();
 
             return graphViewChange;
         }

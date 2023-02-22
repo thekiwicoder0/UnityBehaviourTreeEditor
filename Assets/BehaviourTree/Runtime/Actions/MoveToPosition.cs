@@ -7,11 +7,11 @@ namespace TheKiwiCoder {
 
     [System.Serializable]
     public class MoveToPosition : ActionNode {
-        public float speed = 5;
-        public float stoppingDistance = 0.1f;
-        public bool updateRotation = true;
-        public float acceleration = 40.0f;
-        public float tolerance = 1.0f;
+        [Tooltip("How fast to move")] public float speed = 5;
+        [Tooltip("Stop within this distance of the target")] public float stoppingDistance = 0.1f;
+        [Tooltip("Updates the agents rotation along the path")] public bool updateRotation = true;
+        [Tooltip("Maximum acceleration when following the path")] public float acceleration = 40.0f;
+        [Tooltip("Returns success when the remaining distance is less than this amount")] public float tolerance = 1.0f;
         public Vector3Var moveKey;
 
         protected override void OnStart() {

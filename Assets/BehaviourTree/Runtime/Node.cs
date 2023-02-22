@@ -19,7 +19,11 @@ namespace TheKiwiCoder {
         [HideInInspector] public Context context;
         [HideInInspector] public Blackboard blackboard;
         [TextArea] public string description;
-        public bool drawGizmos = false;
+        [Tooltip("When enabled, the nodes OnDrawGizmos will be invoked")] public bool drawGizmos = false;
+        
+        public virtual void OnInit() { 
+            // Nothing to do here
+        }
 
         public State Update() {
 

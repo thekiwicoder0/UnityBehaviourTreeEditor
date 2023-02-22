@@ -7,7 +7,7 @@ namespace TheKiwiCoder {
     public class RandomFailure : ActionNode {
 
         [Range(0,1)]
-        public float chanceOfFailure = 0.5f;
+        [Tooltip("Percentage chance of failure")] public float chanceOfFailure = 0.5f;
 
         protected override void OnStart() {
         }

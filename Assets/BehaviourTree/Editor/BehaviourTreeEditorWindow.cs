@@ -53,9 +53,9 @@ namespace TheKiwiCoder {
         public BlackboardView blackboardView;
         public OverlayView overlayView;
         public ToolbarMenu toolbarMenu;
-        public Label titleLabel;
         public Label versionLabel;
         public NewScriptDialogView newScriptDialog;
+        public ToolbarBreadcrumbs breadcrumbs;
 
         [SerializeField]
         public PendingScriptCreate pendingScriptCreate = new PendingScriptCreate();
@@ -75,7 +75,7 @@ namespace TheKiwiCoder {
             BehaviourTreeEditorWindow wnd = GetWindow<BehaviourTreeEditorWindow>();
             wnd.titleContent = new GUIContent("BehaviourTreeEditor");
             wnd.minSize = new Vector2(800, 600);
-            wnd.SelectTree(tree);
+            wnd.SelectNewTree(tree);
         }
 
         [OnOpenAsset]
@@ -110,7 +110,7 @@ namespace TheKiwiCoder {
             toolbarMenu = root.Q<ToolbarMenu>();
             overlayView = root.Q<OverlayView>("OverlayView");
             newScriptDialog = root.Q<NewScriptDialogView>("NewScriptDialogView");
-            titleLabel = root.Q<Label>("TitleLabel");
+            breadcrumbs = root.Q<ToolbarBreadcrumbs>("breadcrumbs");
             versionLabel = root.Q<Label>("Version");
 
             treeView.styleSheets.Add(behaviourTreeStyle);
@@ -125,7 +125,7 @@ namespace TheKiwiCoder {
                     var fileName = System.IO.Path.GetFileName(path);
                     toolbarMenu.menu.AppendAction($"{fileName}", (a) => {
                         var tree = AssetDatabase.LoadAssetAtPath<BehaviourTree>(path);
-                        SelectTree(tree);
+                        SelectNewTree(tree);
                     });
                 });
                 toolbarMenu.menu.AppendSeparator();
@@ -223,27 +223,37 @@ namespace TheKiwiCoder {
             if (Selection.activeGameObject) {
                 BehaviourTreeRunner runner = Selection.activeGameObject.GetComponent<BehaviourTreeRunner>();
                 if (runner) {
-                    SelectTree(runner.tree);
+                    SelectNewTree(runner.tree);
                 }
             }
         }
 
+        void SelectNewTree(BehaviourTree tree) {
+            ClearBreadcrumbs();
+            SelectTree(tree);
+        }
+
         void SelectTree(BehaviourTree newTree) {
+            
+            // If tree view is null the window is probably unfocused
+            if (treeView == null) {
+                return;
+            }
+
             if (!newTree) {
                 ClearSelection();
                 return;
             }
 
+            if (newTree != tree) {
+                ClearSelection();
+            }
+
             tree = newTree;
             serializer = new SerializedBehaviourTree(newTree);
 
-            if (titleLabel != null) {
-                string path = AssetDatabase.GetAssetPath(serializer.tree);
-                if (path == "") {
-                    path = serializer.tree.name;
-                }
-                titleLabel.text = $"TreeView ({path})";
-            }
+            int childCount = breadcrumbs.childCount;
+            breadcrumbs.PushItem($"{serializer.tree.name}", () => PopToSubtree(childCount, newTree));
 
             overlayView?.Hide();
             treeView?.PopulateView(serializer);
@@ -253,10 +263,10 @@ namespace TheKiwiCoder {
         void ClearSelection() {
             tree = null;
             serializer = null;
-            inspectorView.Clear();
-            treeView.ClearView();
-            blackboardView.ClearView();
-            overlayView.Show();
+            inspectorView?.Clear();
+            treeView?.ClearView();
+            blackboardView?.ClearView();
+            overlayView?.Show();
         }
 
         void ClearIfSelected(string path) {
@@ -285,8 +295,34 @@ namespace TheKiwiCoder {
         void OnToolbarNewAsset() {
             BehaviourTree tree = EditorUtility.CreateNewTree("New Behaviour Tree", settings.newTreePath);
             if (tree) {
+                SelectNewTree(tree);
+            }
+        }
+
+        public void PushSubTreeView(SubTree subtreeNode) {
+            if (subtreeNode.treeAsset != null) {
+                if (Application.isPlaying) {
+                    SelectTree(subtreeNode.treeInstance);
+                } else {
+                    SelectTree(subtreeNode.treeAsset);
+                }
+            } else {
+                Debug.LogError("Invalid subtree assigned. Assign a a behaviour tree to the tree asset field");
+            }
+        }
+
+        public void PopToSubtree(int depth, BehaviourTree tree) {
+            while (breadcrumbs.childCount > depth) {
+                breadcrumbs.PopItem();
+            }
+            
+            if (tree) {
                 SelectTree(tree);
             }
+        }
+
+        public void ClearBreadcrumbs() {
+            PopToSubtree(0, null);
         }
     }
 }

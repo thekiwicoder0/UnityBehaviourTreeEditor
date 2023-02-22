@@ -21,12 +21,14 @@ MonoBehaviour:
   - rid: 5043576960753598474
   - rid: 5043576960753598475
   - rid: 5043576960753598476
+  - rid: 5062073969390649346
+  - rid: 5062073969390649354
   treeState: 0
   blackboard:
     keys:
     - rid: 5043576960753598477
-  viewPosition: {x: 545, y: 63, z: 0}
-  viewScale: {x: 0.8695652, y: 0.8695652, z: 1}
+  viewPosition: {x: 568, y: 122, z: 0}
+  viewScale: {x: 0.7561437, y: 0.7561437, z: 1}
   references:
     version: 2
     RefIds:
@@ -34,7 +36,7 @@ MonoBehaviour:
       type: {class: RootNode, ns: TheKiwiCoder, asm: thekiwicoder.behaviourtreeeditor}
       data:
         state: 0
-        started: 0
+        started: 1
         guid: c68ec06a-79e3-4ed2-a4d4-40777e908b46
         position: {x: 4.599974, y: -3.4499936}
         blackboard:
@@ -47,7 +49,7 @@ MonoBehaviour:
       type: {class: Repeat, ns: TheKiwiCoder, asm: thekiwicoder.behaviourtreeeditor}
       data:
         state: 0
-        started: 0
+        started: 1
         guid: d554126fde8c72f45aef8561c3771d7c
         position: {x: 5.0000067, y: 175.35007}
         blackboard:
@@ -58,13 +60,14 @@ MonoBehaviour:
           rid: 5043576960753598473
         restartOnSuccess: 1
         restartOnFailure: 0
+        maxRepeats: 0
     - rid: 5043576960753598473
       type: {class: Sequencer, ns: TheKiwiCoder, asm: thekiwicoder.behaviourtreeeditor}
       data:
         state: 0
-        started: 0
+        started: 1
         guid: e5b9f44a21e56cd449ebf3f1352ae4fc
-        position: {x: 5.0000067, y: 356.7501}
+        position: {x: 5.000006, y: 362.70004}
         blackboard:
           keys: []
         description: 
@@ -73,13 +76,15 @@ MonoBehaviour:
         - rid: 5043576960753598474
         - rid: 5043576960753598475
         - rid: 5043576960753598476
+        - rid: 5062073969390649346
+        - rid: 5062073969390649354
     - rid: 5043576960753598474
       type: {class: RandomPosition, ns: TheKiwiCoder, asm: thekiwicoder.behaviourtreeeditor}
       data:
-        state: 0
+        state: 2
         started: 0
         guid: 95ee2319d0436634cb0667ee566e094e
-        position: {x: -195.99998, y: 585.7501}
+        position: {x: -220.14998, y: 586}
         blackboard:
           keys: []
         description: 
@@ -114,7 +119,7 @@ MonoBehaviour:
         state: 0
         started: 0
         guid: 3f40be95e9fa773419340522a7a8a37d
-        position: {x: 221.99998, y: 590.75006}
+        position: {x: 220.84999, y: 586}
         blackboard:
           keys: []
         description: 
@@ -130,8 +135,33 @@ MonoBehaviour:
         booleanValue: 0
         stringValue: 
         vector2Value: {x: 0, y: 0}
-        vector3Value: {x: 0, y: 0, z: 0}
+        vector3Value: {x: -4.815978, y: -5.6313972, z: 0}
         gameObjectValue: {fileID: 0}
         layerMaskValue:
           serializedVersion: 2
           m_Bits: 0
+    - rid: 5062073969390649346
+      type: {class: SubTree, ns: TheKiwiCoder, asm: thekiwicoder.behaviourtreeeditor}
+      data:
+        state: 0
+        started: 0
+        guid: 2c562ff02ed95b8409ea86d4d0d91f38
+        position: {x: 407, y: 586}
+        blackboard:
+          keys: []
+        description: 
+        drawGizmos: 0
+        treeAsset: {fileID: 11400000, guid: 6cf31e41df130234f814720df36fe315, type: 2}
+        treeInstance: {fileID: 0}
+    - rid: 5062073969390649354
+      type: {class: Log, ns: TheKiwiCoder, asm: thekiwicoder.behaviourtreeeditor}
+      data:
+        state: 0
+        started: 0
+        guid: 51192527da61bbb4b88bd9f89f584b6a
+        position: {x: 650, y: 586}
+        blackboard:
+          keys: []
+        description: 
+        drawGizmos: 0
+        message: SubTreeDone

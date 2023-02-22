@@ -37,7 +37,7 @@ namespace TheKiwiCoder {
         } 
 
         public Node.State Update() {
-            if (rootNode.state == Node.State.Running) {
+            if (treeState == Node.State.Running) {
                 treeState = rootNode.Update();
             }
             return treeState;
@@ -78,6 +78,7 @@ namespace TheKiwiCoder {
             Traverse(rootNode, node => {
                 node.context = context;
                 node.blackboard = blackboard;
+                node.OnInit();
             });
         }
     }

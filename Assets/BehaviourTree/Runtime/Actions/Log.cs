@@ -6,7 +6,7 @@ namespace TheKiwiCoder {
     [System.Serializable]
     public class Log : ActionNode
     {
-        public string message;
+        [Tooltip("Message to log to the console")] public string message;
 
         protected override void OnStart() {
         }

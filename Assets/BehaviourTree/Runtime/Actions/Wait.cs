@@ -7,7 +7,7 @@ namespace TheKiwiCoder {
     [System.Serializable]
     public class Wait : ActionNode {
 
-        public float duration = 1;
+        [Tooltip("Amount of time to wait before returning success")] public float duration = 1;
         float startTime;
 
         protected override void OnStart() {

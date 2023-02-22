@@ -27,7 +27,9 @@
             </TheKiwiCoder.SplitView>
         </ui:VisualElement>
         <ui:VisualElement name="right-panel">
-            <ui:Label text="Tree View" display-tooltip-when-elided="true" name="TitleLabel" style="background-color: rgb(37, 37, 37);" />
+            <uie:Toolbar>
+                <uie:ToolbarBreadcrumbs name="breadcrumbs" />
+            </uie:Toolbar>
             <TheKiwiCoder.BehaviourTreeView focusable="true" style="flex-grow: 1; border-top-width: 2px; border-top-color: rgb(0, 0, 0);" />
         </ui:VisualElement>
     </TheKiwiCoder.SplitView>
@@ -49,7 +51,7 @@
             </ui:VisualElement>
         </ui:VisualElement>
     </TheKiwiCoder.OverlayView>
-    <TheKiwiCoder.NewScriptDialogView name="NewScriptDialogView" focusable="true" style="visibility: visible; position: absolute; left: 0; top: 0; right: 0; bottom: 0; justify-content: center; align-items: center;">
+    <TheKiwiCoder.NewScriptDialogView name="NewScriptDialogView" focusable="true" style="visibility: hidden; position: absolute; left: 0; top: 0; right: 0; bottom: 0; justify-content: center; align-items: center;">
         <ui:VisualElement name="Background" style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.5);" />
         <ui:VisualElement focusable="true" style="flex-grow: 0; background-color: rgb(56, 56, 56); border-top-left-radius: 10px; border-bottom-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; flex-shrink: 0; width: 250px; height: 115px;">
             <ui:Label tabindex="-1" text="New Script" display-tooltip-when-elided="true" name="Title" style="font-size: 20px; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; -unity-font-style: bold; justify-content: flex-end; -unity-text-align: upper-left;" />

@@ -20,8 +20,11 @@ namespace TheKiwiCoder {
         }
 
         protected override State OnUpdate() {
-
-            return child.Update();
+            if (child != null) {
+                return child.Update();
+            } else {
+                return State.Failure;
+            }
         }
     }
 }

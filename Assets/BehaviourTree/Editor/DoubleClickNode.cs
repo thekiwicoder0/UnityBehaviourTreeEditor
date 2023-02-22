@@ -7,12 +7,12 @@ using UnityEngine.UIElements;
 using UnityEditor.Experimental.GraphView;
 
 namespace TheKiwiCoder {
-    public class  OpenNodeScript : MouseManipulator {
+    public class  DoubleClickNode : MouseManipulator {
 
         double time;
         double doubleClickDuration = 0.3;
 
-        public OpenNodeScript() {
+        public DoubleClickNode() {
             time = EditorApplication.timeSinceStartup;
         }
 
@@ -38,7 +38,7 @@ namespace TheKiwiCoder {
 
             double duration = EditorApplication.timeSinceStartup - time;
             if (duration < doubleClickDuration) {
-                OpenScriptForNode(evt, clickedElement);
+                OnDoubleClick(evt, clickedElement);
             }
 
             time = EditorApplication.timeSinceStartup;
@@ -60,6 +60,18 @@ namespace TheKiwiCoder {
 
             // Remove the node from selection to prevent dragging it around when returning to the editor.
             BehaviourTreeEditorWindow.Instance.treeView.RemoveFromSelection(clickedElement);
+        }
+
+        void OpenSubtree(NodeView clickedElement) {
+            BehaviourTreeEditorWindow.Instance.PushSubTreeView(clickedElement.node as SubTree);
+        }
+
+        void OnDoubleClick(MouseDownEvent evt, NodeView clickedElement) {
+            if (clickedElement.node is SubTree) {
+                OpenSubtree(clickedElement);
+            } else {
+                OpenScriptForNode(evt, clickedElement);
+            }
         }
     }
 }

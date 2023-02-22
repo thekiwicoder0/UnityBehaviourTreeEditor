@@ -28,7 +28,7 @@ namespace TheKiwiCoder {
             SetupClasses();
             SetupDataBinding();
 
-            this.AddManipulator(new OpenNodeScript());
+            this.AddManipulator(new DoubleClickNode());
         }
         
         public void SetupDataBinding() {

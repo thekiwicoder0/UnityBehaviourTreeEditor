@@ -7,9 +7,9 @@ namespace TheKiwiCoder {
     [System.Serializable]
     public class RandomPosition : ActionNode {
 
-        public Vector2 min = Vector2.one * -10;
-        public Vector2 max = Vector2.one * 10;
-        public Vector3Var target;
+        [Tooltip("Minimum bounds to generate point")] public Vector2 min = Vector2.one * -10;
+        [Tooltip("Maximum bounds to generate point")] public Vector2 max = Vector2.one * 10;
+        [Tooltip("Blackboard key to write the result to")] public Vector3Var target;
 
         protected override void OnStart() {
         }
