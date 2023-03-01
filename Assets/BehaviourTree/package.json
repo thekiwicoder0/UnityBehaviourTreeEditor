@@ -1,6 +1,6 @@
 {
     "name": "com.thekiwicoder.behaviourtreeditor",
-    "version": "0.0.13",
+    "version": "0.0.14",
     "displayName": "Behaviour Tree Editor",
     "description": "The Behaviour Tree Editor package provides a runtime and custom editor for authoring AI behaviour trees.",
     "unity": "2021.3",
@@ -20,5 +20,12 @@
       "name": "TheKiwiCoder",
       "email": "thekiwicoder@gmail.com",
       "url": "https://www.thekiwicoder.com"
-    }
+    },
+    "samples": [
+      {
+          "displayName": "Random Walk",
+          "description": "Simple example behaviour tree which moves a navmeshagent to random locations within a bounding area",
+          "path": "Samples~/RandomWalk"
+      }
+    ]
   }

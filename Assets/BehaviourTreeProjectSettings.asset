@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32dcde829cc493549a6e405cd4fc8179, type: 3}
   m_Name: BehaviourTreeProjectSettings
   m_EditorClassIdentifier: 
-  newTreePath: Assets/BehaviourTree/Samples/RandomWalk
+  newTreePath: Assets/CustomExamples/
   newNodePath: Assets/BehaviourTree/Samples/RandomWalk
