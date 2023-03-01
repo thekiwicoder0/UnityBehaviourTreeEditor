@@ -15,11 +15,11 @@
                 <ui:VisualElement name="blackboard-container" style="background-color: rgb(56, 56, 56);">
                     <ui:Label text="Blackboard" display-tooltip-when-elided="true" style="background-color: rgb(37, 37, 37);" />
                     <TheKiwiCoder.BlackboardView style="flex-grow: 1;">
-                        <ui:ListView focusable="true" name="ListView_Keys" view-data-key="ListView_Keys" show-border="false" show-alternating-row-backgrounds="ContentOnly" show-foldout-header="true" header-title="Keys" reorderable="true" reorder-mode="Animated" show-bound-collection-size="true" style="flex-grow: 1;" />
+                        <ui:ListView focusable="true" name="ListView_Keys" view-data-key="ListView_Keys" show-border="false" show-alternating-row-backgrounds="ContentOnly" show-foldout-header="false" header-title="Keys" reorderable="true" reorder-mode="Animated" show-bound-collection-size="false" virtualization-method="DynamicHeight" binding-path="blackboard.keys" style="flex-grow: 1;" />
                         <ui:VisualElement style="border-top-width: 1px; border-top-color: rgb(89, 89, 89); padding-top: 1px; min-height: 80px;">
                             <ui:Label text="Create New Key..." display-tooltip-when-elided="true" style="-unity-font-style: italic;" />
                             <ui:TextField picking-mode="Ignore" label="Name" name="TextField_KeyName" />
-                            <uie:EnumField label="Type" value="Center" name="EnumField_KeyType" />
+                            <ui:VisualElement name="PopupField_Placeholder" />
                             <ui:Button text="Create" display-tooltip-when-elided="true" name="Button_KeyCreate" />
                         </ui:VisualElement>
                     </TheKiwiCoder.BlackboardView>

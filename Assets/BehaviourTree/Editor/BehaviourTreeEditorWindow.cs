@@ -187,6 +187,7 @@ namespace TheKiwiCoder {
         void OnUndoRedo() {
             if (tree != null) {
                 serializer.serializedObject.Update();
+                //inspectorView.Bind(serializer.serializedObject);
                 treeView.PopulateView(serializer);
             }
         }
@@ -270,7 +271,7 @@ namespace TheKiwiCoder {
         }
 
         void ClearIfSelected(string path) {
-            if (serializer == null) {
+            if (serializer == null) { 
                 return;
             }
 
@@ -289,6 +290,7 @@ namespace TheKiwiCoder {
         private void OnInspectorUpdate() {
             if (Application.isPlaying) {
                 treeView?.UpdateNodeStates();
+                blackboardView.Refresh();
             }
         }
 

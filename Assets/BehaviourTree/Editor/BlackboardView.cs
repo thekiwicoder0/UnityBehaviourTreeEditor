@@ -15,7 +15,7 @@ namespace TheKiwiCoder {
 
         private ListView listView;
         private TextField newKeyTextField;
-        private EnumField newKeyEnumField;
+        private PopupField<Type> newKeyTypeField;
 
         private Button createButton;
 
@@ -25,27 +25,49 @@ namespace TheKiwiCoder {
 
             listView = this.Q<ListView>("ListView_Keys");
             newKeyTextField = this.Q<TextField>("TextField_KeyName");
-            newKeyEnumField = this.Q<EnumField>("EnumField_KeyType");
+            VisualElement popupContainer = this.Q<VisualElement>("PopupField_Placeholder");
+            
             createButton = this.Q<Button>("Button_KeyCreate");
 
             // ListView
-            listView.BindProperty(behaviourTree.BlackboardKeys);
-            listView.makeItem = MakeItem;
-            listView.bindItem = BindItem;
+            listView.Bind(behaviourTree.serializedObject);
+
+            newKeyTypeField = new PopupField<Type>();
+            newKeyTypeField.label = "Type";
+            newKeyTypeField.formatListItemCallback = FormatItem;
+            newKeyTypeField.formatSelectedValueCallback = FormatItem;
+
+            var types = TypeCache.GetTypesDerivedFrom<BlackboardKey>();
+            foreach(var type in types) {
+                if (type.IsGenericType) {
+                    continue;
+                }
+                newKeyTypeField.choices.Add(type);
+                if (newKeyTypeField.value == null) {
+                    newKeyTypeField.value = type;
+                }
+            }
+            popupContainer.Clear();
+            popupContainer.Add(newKeyTypeField);
 
             // TextField
             newKeyTextField.RegisterCallback<ChangeEvent<string>>((evt) => {
                 ValidateButton();
             });
 
-            // EnumField
-            newKeyEnumField.Init(BlackboardKey.Type.Float);
-
             // Button
             createButton.clicked -= CreateNewKey;
             createButton.clicked += CreateNewKey;
 
             ValidateButton();
+        }
+
+        private string FormatItem(Type arg) {
+            if (arg == null) {
+                return "(null)";
+            } else {
+                return arg.Name.Replace("Key", "");
+            }
         }
 
         private void ValidateButton() {
@@ -64,57 +86,26 @@ namespace TheKiwiCoder {
             return !keyExists;
         }
 
-        void BindItem(VisualElement item, int index) {
-            Label label = item.Q<Label>();
-            var blackboardKeys = behaviourTree.BlackboardKeys;
-            var keyProp = blackboardKeys.GetArrayElementAtIndex(index);
-            var keyName = keyProp.FindPropertyRelative("name");
-            label.BindProperty(keyName);
-
-            BlackboardValueField valueField = item.Q<BlackboardValueField>();
-            valueField.BindProperty(keyProp);
-        }
-
-        VisualElement MakeItem() {
-
-            VisualElement container = new VisualElement();
-            container.style.flexGrow = 1.0f;
-            container.style.flexDirection = FlexDirection.Row;
-
-            Label keyField = new Label();
-            keyField.style.width = 100.0f;
-
-            BlackboardValueField valueField = new BlackboardValueField();
-            valueField.style.flexGrow = 1.0f;
-
-            container.Add(keyField);
-            container.Add(valueField);
-
-            container.AddManipulator(new ContextualMenuManipulator((ContextualMenuPopulateEvent evt) => {
-                evt.menu.AppendAction($"Delete Key", (a) => {
-                    Label label = container.Q<Label>();
-                    DeleteKey(label.text);
-                });
-            }));
-
-            return container;
-        }
-
         void CreateNewKey() {
-            behaviourTree.CreateBlackboardKey(newKeyTextField.text, (BlackboardKey.Type)newKeyEnumField.value);
+            Type newKeyType = newKeyTypeField.value;
+            if (newKeyType != null) {
+                behaviourTree.CreateBlackboardKey(newKeyTextField.text, newKeyType);
+            }
             ValidateButton();
-        }
-
-        void DeleteKey(string keyName) {
-            behaviourTree.DeleteBlackboardKey(keyName);
         }
 
         public void ClearView() {
             this.behaviourTree = null;
             if (listView != null) {
-                listView.itemsSource = null;
-                listView.Rebuild();
+                listView.Unbind();
+                //listView.itemsSource = null;
+                //listView.Rebuild();
+                //listView.Unbind();
             }
+        }
+
+        internal void Refresh() {
+            //listView?.Rebuild();
         }
     }
 }

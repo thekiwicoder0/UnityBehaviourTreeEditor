@@ -9,7 +9,7 @@ namespace TheKiwiCoder {
 
         [Tooltip("Minimum bounds to generate point")] public Vector2 min = Vector2.one * -10;
         [Tooltip("Maximum bounds to generate point")] public Vector2 max = Vector2.one * 10;
-        [Tooltip("Blackboard key to write the result to")] public Vector3Var target;
+        [Tooltip("Blackboard key to write the result to")] public BlackboardProperty<Vector3> target;
 
         protected override void OnStart() {
         }

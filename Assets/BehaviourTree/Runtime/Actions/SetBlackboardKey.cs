@@ -1,14 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TheKiwiCoder;
 
 namespace TheKiwiCoder {
-    [System.Serializable]
-    public class Log : ActionNode
-    {
-        [Tooltip("Message to log to the console")] public string message;
 
-        public BlackboardProperty key;
+    [System.Serializable]
+    public class SetBlackboardKey : ActionNode
+    {
+        public BlackboardKeyValuePair pair;
 
         protected override void OnStart() {
         }
@@ -17,7 +17,12 @@ namespace TheKiwiCoder {
         }
 
         protected override State OnUpdate() {
-            Debug.Log($"{message} : {key.reference}");
+            BlackboardKey source = pair.value;
+            BlackboardKey destination = pair.key;
+
+            if (source != null && destination != null) {
+                destination.CopyFrom(source);
+            }
             
             return State.Success;
         }
