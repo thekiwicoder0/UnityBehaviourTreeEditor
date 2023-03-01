@@ -16,10 +16,14 @@ MonoBehaviour:
     rid: 1704181475787145236
   nodes:
   - rid: 1704181475787145236
+  - rid: 1704181475787145237
+  - rid: 1704181475787145238
+  - rid: 1704181475787145239
+  - rid: 1704181475787145240
   treeState: 0
   blackboard:
     keys: []
-  viewPosition: {x: 600, y: 300, z: 0}
+  viewPosition: {x: 600, y: 171, z: 0}
   viewScale: {x: 1, y: 1, z: 1}
   references:
     version: 2
@@ -32,10 +36,70 @@ MonoBehaviour:
         state: 0
         started: 0
         guid: 68215bb6-591c-4733-8adc-19fb3994778c
-        position: {x: 0, y: 0}
+        position: {x: -89, y: -10}
         blackboard:
           keys: []
         description: 
         drawGizmos: 0
         child:
-          rid: -2
+          rid: 1704181475787145237
+    - rid: 1704181475787145237
+      type: {class: Sequencer, ns: TheKiwiCoder, asm: thekiwicoder.behaviourtreeeditor}
+      data:
+        state: 0
+        started: 0
+        guid: e3c358a6dd824c148a2ba72f43d1f997
+        position: {x: -89, y: 182}
+        blackboard:
+          keys: []
+        description: 
+        drawGizmos: 0
+        children:
+        - rid: 1704181475787145238
+        - rid: 1704181475787145239
+        - rid: 1704181475787145240
+    - rid: 1704181475787145238
+      type: {class: Log, ns: TheKiwiCoder, asm: thekiwicoder.behaviourtreeeditor}
+      data:
+        state: 0
+        started: 0
+        guid: fda5e2b8533d9dd42a1c335a7fee854d
+        position: {x: -265, y: 346}
+        blackboard:
+          keys: []
+        description: 
+        drawGizmos: 0
+        message: One
+        key:
+          reference:
+            rid: -2
+    - rid: 1704181475787145239
+      type: {class: Log, ns: TheKiwiCoder, asm: thekiwicoder.behaviourtreeeditor}
+      data:
+        state: 0
+        started: 0
+        guid: e68aaf16090d6db43a6e094504f179f0
+        position: {x: -89, y: 346}
+        blackboard:
+          keys: []
+        description: 
+        drawGizmos: 0
+        message: Two
+        key:
+          reference:
+            rid: -2
+    - rid: 1704181475787145240
+      type: {class: Log, ns: TheKiwiCoder, asm: thekiwicoder.behaviourtreeeditor}
+      data:
+        state: 0
+        started: 0
+        guid: a2af4eed222b8094f97656251418bb39
+        position: {x: 87, y: 346}
+        blackboard:
+          keys: []
+        description: 
+        drawGizmos: 0
+        message: Three
+        key:
+          reference:
+            rid: -2

@@ -166,5 +166,5 @@ MonoBehaviour:
           keys: []
         description: 
         drawGizmos: 0
-        treeAsset: {fileID: 0}
+        treeAsset: {fileID: 11400000, guid: 042c52d6ed50004408eeade682bcf3f1, type: 2}
         treeInstance: {fileID: 0}
