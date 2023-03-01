@@ -39,16 +39,14 @@ namespace TheKiwiCoder {
             
             List<string> treeStack = new List<string>();
             HashSet<BehaviourTree> referencedTrees = new HashSet<BehaviourTree>();
-            
 
             bool cycleFound = false;
             string cyclePath = "";
 
-
             System.Action<Node> traverse = null;
             traverse = (node) => {
                 if (!cycleFound) {
-                    if (node is SubTree subtree) {
+                    if (node is SubTree subtree && subtree.treeAsset != null) {
                         treeStack.Add(subtree.treeAsset.name);
                         if (referencedTrees.Contains(subtree.treeAsset)) {
                             int index = 0;

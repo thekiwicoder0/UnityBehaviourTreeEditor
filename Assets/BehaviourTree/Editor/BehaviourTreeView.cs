@@ -143,25 +143,6 @@ namespace TheKiwiCoder {
             CreateNodeWindow.Show(evt.mousePosition, null);
         }
 
-        void SelectFolder(string path) {
-            // https://forum.unity.com/threads/selecting-a-folder-in-the-project-via-button-in-editor-window.355357/
-            // Check the path has no '/' at the end, if it does remove it,
-            // Obviously in this example it doesn't but it might
-            // if your getting the path some other way.
-
-            if (path[path.Length - 1] == '/')
-                path = path.Substring(0, path.Length - 1);
-
-            // Load object
-            UnityEngine.Object obj = AssetDatabase.LoadAssetAtPath(path, typeof(UnityEngine.Object));
-
-            // Select the object in the project folder
-            Selection.activeObject = obj;
-
-            // Also flash the folder yellow to highlight it
-            EditorGUIUtility.PingObject(obj);
-        }
-
         public NodeView CreateNode(System.Type type, Vector2 position, NodeView parentView) {
 
             serializer.BeginBatch();

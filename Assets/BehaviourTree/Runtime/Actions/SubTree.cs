@@ -20,7 +20,9 @@ namespace TheKiwiCoder {
         }
 
         protected override void OnStart() {
-            treeInstance.treeState = Node.State.Running;
+            if (treeInstance) {
+                treeInstance.treeState = Node.State.Running;
+            }
         }
 
         protected override void OnStop() {

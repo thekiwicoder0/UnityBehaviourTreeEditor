@@ -18,16 +18,16 @@ namespace TheKiwiCoder {
         public BehaviourTree tree;
 
         // Property names. These correspond to the variable names on the behaviour tree
-        const string sPropRootNode = "rootNode";
-        const string sPropNodes = "nodes";
-        const string sPropBlackboard = "blackboard";
-        const string sPropGuid = "guid";
-        const string sPropChild = "child";
-        const string sPropChildren = "children";
-        const string sPropPosition = "position";
-        const string sViewTransformPosition = "viewPosition";
-        const string sViewTransformScale = "viewScale";
-        const string sBlackboardKeys = "keys";
+        const string sPropRootNode = nameof(BehaviourTree.rootNode);
+        const string sPropNodes = nameof(BehaviourTree.nodes);
+        const string sPropBlackboard = nameof(BehaviourTree.blackboard);
+        const string sPropBlackboardKeys = nameof(TheKiwiCoder.Blackboard.keys);
+        const string sPropGuid = nameof(Node.guid);
+        const string sPropChild = nameof(DecoratorNode.child);
+        const string sPropChildren = nameof(CompositeNode.children);
+        const string sPropPosition = nameof(Node.position);
+        const string sViewTransformPosition = nameof(BehaviourTree.viewPosition);
+        const string sViewTransformScale = nameof(BehaviourTree.viewScale);
         bool batchMode = false;
 
         public SerializedProperty RootNode {
@@ -50,7 +50,7 @@ namespace TheKiwiCoder {
 
         public SerializedProperty BlackboardKeys {
             get {
-                return serializedObject.FindProperty(sPropBlackboard).FindPropertyRelative(sBlackboardKeys);
+                return serializedObject.FindProperty($"{sPropBlackboard}.{sPropBlackboardKeys}");
             }
         }
 
@@ -177,17 +177,20 @@ namespace TheKiwiCoder {
             }
         }
 
-        public void CreateBlackboardKey(string keyName, BlackboardKey.Type keyType) {
-            SerializedProperty keysArray = BlackboardKeys;
-            keysArray.InsertArrayElementAtIndex(keysArray.arraySize);
-            SerializedProperty newKey = keysArray.GetArrayElementAtIndex(keysArray.arraySize - 1);
+        public void CreateBlackboardKey(string keyName, System.Type keyType) {
+            BlackboardKey key = BlackboardKey.CreateKey(keyType);
+            if (key != null) {
+                key.name = keyName;
+                SerializedProperty keysArray = BlackboardKeys;
+                keysArray.InsertArrayElementAtIndex(keysArray.arraySize);
+                SerializedProperty newKey = keysArray.GetArrayElementAtIndex(keysArray.arraySize - 1);
 
-            BlackboardKey key = new BlackboardKey();
-            key.name = keyName;
-            key.type = keyType;
-            newKey.managedReferenceValue = key;
+                newKey.managedReferenceValue = key;
 
-            ApplyChanges();
+                ApplyChanges();
+            } else {
+                Debug.LogError($"Failed to create blackboard key, invalid type:{keyType}");
+            }
         }
 
         public void DeleteBlackboardKey(string keyName) {

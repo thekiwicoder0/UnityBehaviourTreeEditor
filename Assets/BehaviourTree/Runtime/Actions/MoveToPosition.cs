@@ -12,7 +12,7 @@ namespace TheKiwiCoder {
         [Tooltip("Updates the agents rotation along the path")] public bool updateRotation = true;
         [Tooltip("Maximum acceleration when following the path")] public float acceleration = 40.0f;
         [Tooltip("Returns success when the remaining distance is less than this amount")] public float tolerance = 1.0f;
-        public Vector3Var moveKey;
+        public BlackboardProperty<Vector3> moveKey;
 
         protected override void OnStart() {
             context.agent.stoppingDistance = stoppingDistance;

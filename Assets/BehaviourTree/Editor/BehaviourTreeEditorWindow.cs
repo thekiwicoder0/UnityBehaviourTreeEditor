@@ -270,7 +270,7 @@ namespace TheKiwiCoder {
         }
 
         void ClearIfSelected(string path) {
-            if (serializer == null) {
+            if (serializer == null) { 
                 return;
             }
 
