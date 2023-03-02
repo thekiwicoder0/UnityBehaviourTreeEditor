@@ -23,9 +23,12 @@ namespace TheKiwiCoder {
             dropdown.value = first.managedReferenceValue as BlackboardKey;
             
             BehaviourTree tree = property.serializedObject.targetObject as BehaviourTree;
-            foreach (var key in tree.blackboard.keys) {
-                dropdown.choices.Add(key);
-            }
+            dropdown.RegisterCallback<MouseEnterEvent>((evt) => {
+                dropdown.choices.Clear();
+                foreach (var key in tree.blackboard.keys) {
+                    dropdown.choices.Add(key);
+                }
+            });
 
             dropdown.RegisterCallback<ChangeEvent<BlackboardKey>>((evt) => {
                 BlackboardKey newKey = evt.newValue;

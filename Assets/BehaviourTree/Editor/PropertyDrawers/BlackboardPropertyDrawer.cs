@@ -25,11 +25,14 @@ namespace TheKiwiCoder {
             dropdown.formatSelectedValueCallback = FormatItem;
             dropdown.value = reference.managedReferenceValue as BlackboardKey;
 
-            foreach (var key in tree.blackboard.keys) {
-                if (propertyType.IsAssignableFrom(key.underlyingType)) {
-                    dropdown.choices.Add(key);
+            dropdown.RegisterCallback<MouseEnterEvent>((evt) => {
+                dropdown.choices.Clear();
+                foreach (var key in tree.blackboard.keys) {
+                    if (propertyType.IsAssignableFrom(key.underlyingType)) {
+                        dropdown.choices.Add(key);
+                    }
                 }
-            }
+            });
 
             dropdown.RegisterCallback<ChangeEvent<BlackboardKey>>((evt) => {
                 BlackboardKey newKey = evt.newValue;
@@ -63,9 +66,12 @@ namespace TheKiwiCoder {
             dropdown.formatSelectedValueCallback = FormatItem;
             dropdown.value = reference.managedReferenceValue as BlackboardKey;
 
-            foreach (var key in tree.blackboard.keys) {
-                dropdown.choices.Add(key);
-            }
+            dropdown.RegisterCallback<MouseEnterEvent>((evt) => {
+                dropdown.choices.Clear();
+                foreach (var key in tree.blackboard.keys) {
+                    dropdown.choices.Add(key);
+                }
+            });
 
             dropdown.RegisterCallback<ChangeEvent<BlackboardKey>>((evt) => {
                 BlackboardKey newKey = evt.newValue;
