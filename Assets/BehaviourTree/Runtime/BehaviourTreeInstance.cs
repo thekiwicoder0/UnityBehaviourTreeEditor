@@ -3,31 +3,36 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace TheKiwiCoder {
-    public class BehaviourTreeRunner : MonoBehaviour {
+
+    [AddComponentMenu("TheKiwiCoder/BehaviourTreeInstance")]
+    public class BehaviourTreeInstance : MonoBehaviour {
 
         // The main behaviour tree asset
-        public BehaviourTree tree;
+        [Tooltip("BehaviourTree asset to instantiate during Awake")] 
+        public BehaviourTree behaviourTree;
+        
+        [Tooltip("Run behaviour tree validation at startup (Can be disabled for release)")] 
+        public bool validate = true;
 
         // Storage container object to hold game object subsystems
         Context context;
 
         // Start is called before the first frame update
-        void Start() {
-            string cyclePath;
-            if (!IsRecursive(tree, out cyclePath)) {
+        void Awake() {
+            bool isValid = ValidateTree();
+            if (isValid) {
                 context = CreateBehaviourTreeContext();
-                tree = tree.Clone();
-                tree.Bind(context);
+                behaviourTree = behaviourTree.Clone();
+                behaviourTree.Bind(context);
             } else {
-                tree = null;
-                Debug.LogError($"Failed to create recursive behaviour tree. Found cycle at: {cyclePath}");
+                behaviourTree = null;
             }
         }
 
         // Update is called once per frame
         void Update() {
-            if (tree) {
-                tree.Update();
+            if (behaviourTree) {
+                behaviourTree.Update();
             }
         }
 
@@ -35,8 +40,23 @@ namespace TheKiwiCoder {
             return Context.CreateFromGameObject(gameObject);
         }
 
+        bool ValidateTree() {
+            bool isValid = true;
+            if (validate) {
+                string cyclePath;
+                isValid = !IsRecursive(behaviourTree, out cyclePath);
+
+                if (!isValid) {
+                    Debug.LogError($"Failed to create recursive behaviour tree. Found cycle at: {cyclePath}");
+                }
+            }
+
+            return isValid;
+        }
+
         bool IsRecursive(BehaviourTree tree, out string cycle) {
             
+            // Check if any of the subtree nodes and their decendents form a circular reference, which will cause a stack overflow.
             List<string> treeStack = new List<string>();
             HashSet<BehaviourTree> referencedTrees = new HashSet<BehaviourTree>();
 
@@ -81,15 +101,35 @@ namespace TheKiwiCoder {
         }
 
         private void OnDrawGizmosSelected() {
-            if (!tree) {
+            if (!behaviourTree) {
                 return;
             }
 
-            BehaviourTree.Traverse(tree.rootNode, (n) => {
+            BehaviourTree.Traverse(behaviourTree.rootNode, (n) => {
                 if (n.drawGizmos) {
                     n.OnDrawGizmos();
                 }
             });
+        }
+
+        public BlackboardKey<T> FindBlackboardKey<T>(string keyName) {
+            if (behaviourTree) {
+                return behaviourTree.blackboard.Find<T>(keyName);
+            }
+            return null;
+        }
+
+        public void SetBlackboardValue<T>(string keyName, T value) {
+            if (behaviourTree) {
+                behaviourTree.blackboard.SetValue(keyName, value);
+            }
+        }
+
+        public T GetBlackboardValue<T>(string keyName) {
+            if (behaviourTree) {
+                return behaviourTree.blackboard.GetValue<T>(keyName);
+            }
+            return default(T);
         }
     }
 }

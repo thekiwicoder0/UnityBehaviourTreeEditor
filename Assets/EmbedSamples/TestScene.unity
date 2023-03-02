@@ -152,7 +152,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58c6f9b140a52a14881ec09eaebb66eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tree: {fileID: 11400000, guid: d1a3546aa3c221c4d947e38ab718574d, type: 2}
+  behaviourTree: {fileID: 11400000, guid: d1a3546aa3c221c4d947e38ab718574d, type: 2}
+  validate: 1
 --- !u!4 &491185836
 Transform:
   m_ObjectHideFlags: 0

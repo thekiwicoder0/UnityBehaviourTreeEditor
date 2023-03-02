@@ -25,6 +25,11 @@ namespace TheKiwiCoder {
     }
 
     [System.Serializable]
+    public class StringKey : BlackboardKey<string> {
+
+    }
+
+    [System.Serializable]
     public class Vector2Key : BlackboardKey<Vector2> {
 
     }
