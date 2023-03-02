@@ -63,8 +63,11 @@ Some sample action node types included in the package are:
 - Wait - Waits for a period of time
 - Breakpoint - Pauses the editor when executed
 - RandomFailure - Returns failure to it's parent with a random chance value between 0 and 1
-- RandomPosition - Generates a random position within a min/max range and assigns the value to the blackboard.
-- MoveToPosition - Reads a position from the blackboard, and sets the navmesh agent destination to this position.
+- RandomPosition - Generates a random position within a min/max range and assigns the value to the blackboard
+- MoveToPosition - Reads a position from the blackboard, and sets the navmesh agent destination to this position
+- SetProperty - Sets a blackboard key to the value specified in the node inspector
+- CompareProperty - Compares a blackboard key to the value specified in the node inspector
+- SubTree - Executes another behaviour tree as a subtree of this node
 
 ## Composite Nodes
 
@@ -147,9 +150,9 @@ O | Frames the canvas origin |
 ] | Frames the child node of the current selection |
 
 
-### Inspector View
+### Node Inspector View
 
-The inspector view displays all public properties of the currently selected node. To display a node's properties in the inspector, be sure to select the middle of the node over the node's title. All nodes have a description field which can be set in the inspector. Just start typing in the description box and the text will appear under the node's title.
+The NodeInspector view displays all public properties of the currently selected node. To display a node's properties in the inspector, be sure to select the middle of the node over the node's title. All nodes have a description field which can be set in the inspector. Just start typing in the description box and the text will appear under the node's title.
 
 
 ### Blackboard View
@@ -160,6 +163,8 @@ In this case the first node would write the position to a blackboard key of type
 Keys can be added in the blackboard view by entering a unique name into the `Name` field, and selecting the type of key to create from the `Type` dropdown:
 
 <img src="Documentation/Images/behaviour_tree_view.png" width = "200" />
+
+Keys can be deleted by rightclicking on the nodes value and selecting delete.
 
 #### Reading and Writing keys from a Node
 
@@ -182,7 +187,7 @@ public class TestNode : ActionNode
 }
 ```
 
-Then select the blackboard key in the dropdown in the node inspector:
+Then select the blackboard key from dropdown in the NodeInspector:
 
 <img src="Documentation/Images/blackboard_key.png" width = "300" />
 
