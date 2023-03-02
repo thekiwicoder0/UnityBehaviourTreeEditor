@@ -5,7 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 Note this package is still in very early development and in high flux. 
-Version numbers don't follow semantic versioning yet, and data format changes may change in future which will be highlighted in this document.
+Version numbers don't follow semantic versioning yet, and data format may change in future which will be highlighted in this document.
+
+## [0.0.16] - 02-03-2023
+
+### Major changes
+
+Added runtime support for reading and writing blackboard values from components.
+
+See BehaviourTreeInstance:
+- SetBlackboardValue<T>
+- GetBlackboardValue<T>
+- FindBlackboardKey<T>
+
+### Changed features
+- Renamed BehaviourTreeRunner to BehaviourTreeInstance
+- Changed behaviour tree initialisation from Start to Awake
+- Added missing string blackboard key type
+- Added SetBlackboardValue<T> method to BehaviourTreeInstance
+- Added GetBlackboardValue<T> method to BehaviourTreeInstance
+- Added FindBlackboardKey<T> method to BehaviourTreeInstance
+- Added custom icon to BehaviourTreeInstance MonoBehaviour
 
 ## [0.0.15] - 01-03-2023
 

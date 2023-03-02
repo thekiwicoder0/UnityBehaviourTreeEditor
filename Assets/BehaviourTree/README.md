@@ -154,33 +154,65 @@ The inspector view displays all public properties of the currently selected node
 
 ### Blackboard View
 
-The blackboard view contains a list of keys that can be read and written to from action nodes. These are useful when designing generic nodes and passing data between different parts of the tree.
+The BlackboardView contains a list of keys that nodes can read and write to. This is useful to allow nodes to communicate with each other. For example, one node could scan the environment looking for a suitable position to move to, and a second node that moves the agent to that position. 
+In this case the first node would write the position to a blackboard key of type `Vector3`. The second node would read this value and set the NavMeshAgents target location to the value of this key.
 
-Keys can be added in the blackboard view:
+Keys can be added in the blackboard view by entering a unique name into the `Name` field, and selecting the type of key to create from the `Type` dropdown:
 
 <img src="Documentation/Images/behaviour_tree_view.png" width = "200" />
 
-To read and write to a specific blackboard key, add one of the following types as a public property to your action node. This will allow you to bind it to a specific key in the editor via the node inspector
+#### Reading and Writing keys from a Node
 
-- FloatVar
-- IntVar
-- BoolVar
-- StringVar
-- Vector2Var
-- Vector3Var
-- GameObjectVar
-- TagVar
-- LayerMaskVar
-
-You can then read and write directly to the blackboard key like so:
+Add a public `BlackboardProperty<T>` variable to your node, and use the `Value` property to read and write:
 
 ```
-FloatVar myVar;
+[System.Serializable]
+public class TestNode : ActionNode
+{
+    public BlackboardProperty<int> myInt;
 
-...
+    ...
 
-myVal.Value = 123.0f;
-Debug.Log(myVal.Value);
+    protected override State OnUpdate() {
+        int value = myInt.Value;
+        Debug.Log("Value:" = value);
+        myInt.Value = value + 1;
+        return State.Success;
+    }
+}
+```
+
+Then select the blackboard key in the dropdown in the node inspector:
+
+<img src="Documentation/Images/blackboard_key.png" width = "300" />
+
+#### Reading and Writing keys from a Monobehaviour
+
+Store a reference to the `BehaviourTreeInstance` you want to write to. Then use the `SetBlackboardValue<T>, GetBlackboardValue<T>` methods on `BehaviourTreeInstance`
+
+```
+public class BlackboardController : MonoBehaviour
+{
+    public BehaviourTreeInstance behaviourTreeInstance; // Assign in the inspector
+
+    BlackboardKey<int> keyReference; // Cache the key reference to avoid lookups each frame
+
+    void Start()
+    {
+        // Simple version. Finds the key on each call to Get/Set
+        int value = behaviourTreeInstance.GetBlackboardValue<int>("MyInt");
+        behaviourTreeInstance.SetBlackboardValue("MyInt", value + 42);
+
+        // Cached version, find the key and store a reference to it.
+        keyReference = behaviourTreeInstance.FindBlackboardKey<int>("MyInt");
+    }
+
+    void Update()
+    {
+        // Avoids key lookup each frame.
+        keyReference.value += 42;
+    }
+}
 ```
 
 ### Assets Menu
