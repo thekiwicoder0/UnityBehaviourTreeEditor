@@ -3,19 +3,20 @@ using UnityEngine;
 namespace TheKiwiCoder {
 
     [System.Serializable]
-    public class BlackboardProperty {
-
+    public class NodeProperty {
         [SerializeReference]
         public BlackboardKey reference; 
     }
 
     [System.Serializable]
-    public class BlackboardProperty<T> : BlackboardProperty {
+    public class NodeProperty<T> : NodeProperty {
 
-        BlackboardKey<T> _typedKey = null;
+        public T defaultValue = default(T);
+        private BlackboardKey<T> _typedKey = null;
+
         private BlackboardKey<T> typedKey {
             get {
-                if (_typedKey == null) {
+                if (_typedKey == null && reference != null) {
                     _typedKey = reference as BlackboardKey<T>;
                 }
                 return _typedKey;
@@ -26,18 +27,17 @@ namespace TheKiwiCoder {
             set {
                 if (typedKey != null) {
                     typedKey.value = value;
+                } else {
+                    defaultValue = value;
                 }
             }
             get {
                 if (typedKey != null) {
                     return typedKey.value;
+                } else {
+                    return defaultValue;
                 }
-                return default(T);
             }
-        }
-
-        public bool IsValid() {
-            return typedKey != null;
         }
     }
 }

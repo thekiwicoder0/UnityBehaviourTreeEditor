@@ -6,34 +6,29 @@ namespace TheKiwiCoder {
     [System.Serializable]
     public class Switch : CompositeNode
     {
-        public BlackboardProperty<int> switchKey;
+        public NodeProperty<int> index;
         public bool interruptable = true;
-        int index = 0;
+        int currentIndex = 0;
 
         protected override void OnStart() {
-            if (switchKey.IsValid()) {
-                index = switchKey.Value;
-            }
+            currentIndex = index.Value;
         }
 
         protected override void OnStop() {
         }
 
         protected override State OnUpdate() {
-            if (!switchKey.IsValid()) { 
-                return State.Failure;
-            }
             
             if (interruptable) {
-                int nextIndex = switchKey.Value;
-                if (nextIndex != index) {
-                    children[index].Abort();
+                int nextIndex = index.Value;
+                if (nextIndex != currentIndex) {
+                    children[currentIndex].Abort();
                 }
-                index = nextIndex;
+                currentIndex = nextIndex;
             }
 
-            if (index < children.Count) {
-                return children[index].Update();
+            if (currentIndex < children.Count) {
+                return children[currentIndex].Update();
             }
             return State.Failure;
         }

@@ -6,9 +6,8 @@ namespace TheKiwiCoder {
     [System.Serializable]
     public class Log : ActionNode
     {
-        [Tooltip("Message to log to the console")] public string message;
-
-        public BlackboardProperty key;
+        [Tooltip("Message to log to the console")] 
+        public NodeProperty<string> message;
 
         protected override void OnStart() {
         }
@@ -17,8 +16,7 @@ namespace TheKiwiCoder {
         }
 
         protected override State OnUpdate() {
-            Debug.Log($"{message} : {key.reference}");
-            
+            Debug.Log($"{message.Value}");
             return State.Success;
         }
     }

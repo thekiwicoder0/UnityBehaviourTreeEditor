@@ -111,17 +111,17 @@ The editor has three main panels, ```Inspector```, ```Blackboard```, and ```Tree
 
 <img src="Documentation/Images/editor.png" width = "500" />
 
-### Tree View
+## Tree View
 
 The tree view is where you'll spend most of the time creating and organising nodes.
 
-#### Adding Nodes
+### Adding Nodes
 
 New nodes can be added to the tree via the context menu by right clicking anywhere in the canvas and selecting which type of node to add. The nodes are grouped into three sub menus, Actions, Composites, and Decorators.
 
 <img src="Documentation/Images/new_node.png" width = "200" />
 
-#### Creating New Nodes
+### Creating New Nodes
 
 The built in node types will only get you so far. The real power of behaviour trees comes when you design and create your own node types. Nodes are standard C# scripts which inherit from one of three base types, `ActionNode`, `CompositeNode`, or `DecoratorNode`. These scripts can be created by hand, or by using the context menu which will fill out the boilerplate automatically for you.
 
@@ -129,11 +129,11 @@ The built in node types will only get you so far. The real power of behaviour tr
 
 The script templates used to create the boilerplate are located here: `Assets/TheKiwiCoder/BehaviourTree/ScriptTemplates`
 
-#### Linking Nodes
+### Linking Nodes
 
 To add a node as a child of another node, drag the `output` of the parent node to the `input` of the child node. Note only `CompositeNode` types can have multiple children. 
 
-#### Navigation
+### Navigation
 
 Nodes can be selected directly and dragged around the canvas. Multiple nodes can be box selected. 
 
@@ -148,6 +148,7 @@ A | Frames all nodes on the canvas |
 O | Frames the canvas origin |
 [ | Frames the parent node of the current selection |
 ] | Frames the child node of the current selection |
+CTRL | Selects the sub hierarchy of this node |
 
 
 ### Node Inspector View
@@ -155,26 +156,44 @@ O | Frames the canvas origin |
 The NodeInspector view displays all public properties of the currently selected node. To display a node's properties in the inspector, be sure to select the middle of the node over the node's title. All nodes have a description field which can be set in the inspector. Just start typing in the description box and the text will appear under the node's title.
 
 
-### Blackboard View
+## Blackboard View
 
-The BlackboardView contains a list of keys that nodes can read and write to. This is useful to allow nodes to communicate with each other. For example, one node could scan the environment looking for a suitable position to move to, and a second node that moves the agent to that position. 
-In this case the first node would write the position to a blackboard key of type `Vector3`. The second node would read this value and set the NavMeshAgents target location to the value of this key.
+The BlackboardView contains a list of keys that Nodes can read and write to. This lets nodes pass data between each other from anywhere in the behaviour tree. 
 
-Keys can be added in the blackboard view by entering a unique name into the `Name` field, and selecting the type of key to create from the `Type` dropdown:
+Example: A `FindCover` action scans the environment looking for a position to safely retreat to and writes the result to the blackboard. A second `MoveTo` action then reads that position from the blackboard and moves to it.  
+
+Blackboard Keys can be added in the blackboard view by entering a unique name into the `Name` field, and selecting the type of key to create from the `Type` dropdown. Each key within the blackboard must have a unique name:
 
 <img src="Documentation/Images/behaviour_tree_view.png" width = "200" />
 
-Keys can be deleted by rightclicking on the nodes value and selecting delete.
+Keys can be deleted by rightclicking on the node's value and selecting delete.
 
-#### Reading and Writing keys from a Node
+### Declaring a new BlackboardKey type
 
-Add a public `BlackboardProperty<T>` variable to your node, and use the `Value` property to read and write:
+All common unity types are built into the blackboard already, but if you have a custom type your project uses that you'd like to store in the blackboard it's very easy to register it. The blackboard looks at all classes that subclass the BlackboardKey<T> type, and uses that list to populate the `Type` dropdown in the BlackboardView.
+
+To register a new type, create a class that inherits from BlackboardKey<T> somewhere in your project:
+
+```
+[System.Serializable]
+public class MyTypeKey : BlackboardKey<MyType> {
+
+}
+```
+
+That's it! The Editor uses PropertyDrawers to render the inspector view for your type. If you've defined a custom property drawer then it will show up as you'd expect.
+
+### The NodeProperty<T> Class
+
+The NodeProperty<T> class makes it extremely simple to write values to the blackboard from Nodes.
+
+To read/write a blackboard key from a node, Add a public `NodeProperty<T>` variable to your node, and use the `Value` property to read and write:
 
 ```
 [System.Serializable]
 public class TestNode : ActionNode
 {
-    public BlackboardProperty<int> myInt;
+    public NodeProperty<int> myInt;
 
     ...
 
@@ -191,9 +210,11 @@ Then select the blackboard key from dropdown in the NodeInspector:
 
 <img src="Documentation/Images/blackboard_key.png" width = "300" />
 
-#### Reading and Writing keys from a Monobehaviour
+It is also possible to set a fixed default value by selecting the `[Value]` from the dropdown. This value can be set directly on the node instead of using a BlackboardKey. This keeps things flexible when adding parameters to your actions as it allows you to decide later if that value should be stored directly on the node or in the blackboard.
 
-Store a reference to the `BehaviourTreeInstance` you want to write to. Then use the `SetBlackboardValue<T>, GetBlackboardValue<T>` methods on `BehaviourTreeInstance`
+### Read and Write to the blackboard from a Monobehaviour
+
+Firstly, it's important to note that values must be written to the blackboard <i>instance</i> the GameObject is executing at runtime, rather than the behaviour tree asset. To do this, store a reference to the `BehaviourTreeInstance` you want to write to. Then use the `SetBlackboardValue<T>` and `GetBlackboardValue<T>` methods on `BehaviourTreeInstance`. Keys can be cached ahead of time to avoid lookups each time if reading/writing values in a tight loop.
 
 ```
 public class BlackboardController : MonoBehaviour

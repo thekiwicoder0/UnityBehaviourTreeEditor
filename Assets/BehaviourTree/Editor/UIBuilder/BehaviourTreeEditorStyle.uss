@@ -8,3 +8,11 @@ GridBackground {
 Label {
     color: rgb(196, 196, 196);
 }
+
+.node-property-field .unity-base-field__input {
+    min-width: 20px;
+}
+
+.node-property-field .unity-base-field {
+    margin-left: 0;
+}
