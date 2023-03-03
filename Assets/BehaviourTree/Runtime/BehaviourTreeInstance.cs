@@ -57,6 +57,11 @@ namespace TheKiwiCoder {
         }
 
         bool ValidateTree() {
+            if (!behaviourTree) {
+                Debug.LogWarning($"No BehaviourTree assigned to {name}, assign a behaviour tree in the inspector");
+                return false;
+            }
+
             bool isValid = true;
             if (validate) {
                 string cyclePath;

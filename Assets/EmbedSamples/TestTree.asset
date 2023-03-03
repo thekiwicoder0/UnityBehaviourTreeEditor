@@ -13,103 +13,29 @@ MonoBehaviour:
   m_Name: TestTree
   m_EditorClassIdentifier: 
   rootNode:
-    rid: 1704181475787145216
+    rid: 1704181521479630905
   nodes:
-  - rid: 1704181475787145216
-  - rid: 1704181475787145223
-  - rid: 1704181475787145224
-  - rid: 1704181475787145233
-  - rid: 1704181497169707049
+  - rid: 1704181521479630905
   treeState: 0
   blackboard:
-    keys:
-    - rid: 1704181475787145219
-    - rid: 1704181521479630883
-  viewPosition: {x: 596, y: 145, z: 0}
-  viewScale: {x: 0.8695652, y: 0.8695652, z: 1}
+    keys: []
+  viewPosition: {x: 600, y: 300, z: 0}
+  viewScale: {x: 1, y: 1, z: 1}
   references:
     version: 2
     RefIds:
-    - rid: 1704181475787145216
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 1704181521479630905
       type: {class: RootNode, ns: TheKiwiCoder, asm: thekiwicoder.behaviourtreeeditor}
       data:
         state: 0
-        started: 1
-        guid: 9529db3d-3aa6-449d-b747-36a8fd9da494
+        started: 0
+        guid: 002419ff-93dc-417f-aeeb-a8cc0444e3b5
         position: {x: 0, y: 0}
         blackboard:
           keys: []
         description: 
         drawGizmos: 0
         child:
-          rid: 1704181475787145233
-    - rid: 1704181475787145219
-      type: {class: Vector3Key, ns: TheKiwiCoder, asm: thekiwicoder.behaviourtreeeditor}
-      data:
-        name: Position
-        typeName: UnityEngine.Vector3, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
-          PublicKeyToken=null
-        value: {x: 2, y: 4, z: 6}
-    - rid: 1704181475787145223
-      type: {class: Sequencer, ns: TheKiwiCoder, asm: thekiwicoder.behaviourtreeeditor}
-      data:
-        state: 0
-        started: 1
-        guid: 15b7a0ed88f387b4e942d849ff67196c
-        position: {x: 0.00020599365, y: 326.96753}
-        blackboard:
-          keys: []
-        description: 
-        drawGizmos: 0
-        children:
-        - rid: 1704181497169707049
-        - rid: 1704181475787145224
-    - rid: 1704181475787145224
-      type: {class: Wait, ns: TheKiwiCoder, asm: thekiwicoder.behaviourtreeeditor}
-      data:
-        state: 2
-        started: 0
-        guid: 44c1a6378572da2498bda32369787c2e
-        position: {x: 214.90012, y: 527.1501}
-        blackboard:
-          keys: []
-        description: 
-        drawGizmos: 0
-        duration: 1
-    - rid: 1704181475787145233
-      type: {class: Repeat, ns: TheKiwiCoder, asm: thekiwicoder.behaviourtreeeditor}
-      data:
-        state: 0
-        started: 1
-        guid: 1b07642be53d82149b510a24aa67e288
-        position: {x: -0.0001296997, y: 150.77501}
-        blackboard:
-          keys: []
-        description: 
-        drawGizmos: 0
-        child:
-          rid: 1704181475787145223
-        restartOnSuccess: 1
-        restartOnFailure: 1
-        maxRepeats: 0
-    - rid: 1704181497169707049
-      type: {class: Log, ns: TheKiwiCoder, asm: thekiwicoder.behaviourtreeeditor}
-      data:
-        state: 0
-        started: 0
-        guid: e9e929ee5b50bf44a9c6cd955d5d14e1
-        position: {x: -150.00003, y: 527.0001}
-        blackboard:
-          keys: []
-        description: 
-        drawGizmos: 0
-        message: 
-        key:
-          reference:
-            rid: 1704181521479630883
-    - rid: 1704181521479630883
-      type: {class: StringKey, ns: TheKiwiCoder, asm: thekiwicoder.behaviourtreeeditor}
-      data:
-        name: MyKey
-        typeName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
-        value: Default Value
+          rid: -2
