@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: BehaviourTreeProjectSettings
   m_EditorClassIdentifier: 
   newTreePath: Assets/EmbedSamples/
-  newNodePath: Assets/BehaviourTree/Samples/RandomWalk
+  newNodePath: Assets/EmbedSamples/

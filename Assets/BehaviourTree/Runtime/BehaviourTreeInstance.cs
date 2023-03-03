@@ -14,6 +14,9 @@ namespace TheKiwiCoder {
         [Tooltip("Run behaviour tree validation at startup (Can be disabled for release)")] 
         public bool validate = true;
 
+        // These values override the keys in the blackboard
+        public List<BlackboardKeyValuePair> blackboardOverrides = new List<BlackboardKeyValuePair>();
+
         // Storage container object to hold game object subsystems
         Context context;
 
@@ -24,8 +27,21 @@ namespace TheKiwiCoder {
                 context = CreateBehaviourTreeContext();
                 behaviourTree = behaviourTree.Clone();
                 behaviourTree.Bind(context);
+
+                ApplyKeyOverrides();
             } else {
                 behaviourTree = null;
+            }
+        }
+
+        void ApplyKeyOverrides() {
+            foreach(var pair in blackboardOverrides) {
+                // Find the key from the new behaviour tree instance
+                var targetKey = behaviourTree.blackboard.Find(pair.key.name);
+                var sourceKey = pair.value;
+                if (targetKey != null && sourceKey != null) {
+                    targetKey.CopyFrom(sourceKey);
+                }
             }
         }
 

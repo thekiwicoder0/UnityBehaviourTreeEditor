@@ -17,12 +17,8 @@ namespace TheKiwiCoder {
         }
 
         protected override State OnUpdate() {
-            BlackboardKey source = pair.value;
-            BlackboardKey destination = pair.key;
-
-            if (source != null && destination != null) {
-                destination.CopyFrom(source);
-            }
+            
+            pair.WriteValue();
             
             return State.Success;
         }

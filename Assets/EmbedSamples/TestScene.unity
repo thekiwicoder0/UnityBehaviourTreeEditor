@@ -154,6 +154,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   behaviourTree: {fileID: 11400000, guid: d1a3546aa3c221c4d947e38ab718574d, type: 2}
   validate: 1
+  keyOverrides:
+  - key:
+      rid: 1704181521479630886
+    value:
+      rid: 1704181521479630887
+  references:
+    version: 2
+    RefIds:
+    - rid: 1704181521479630886
+      type: {class: StringKey, ns: TheKiwiCoder, asm: thekiwicoder.behaviourtreeeditor}
+      data:
+        name: MyKey
+        typeName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+        value: Default Value
+    - rid: 1704181521479630887
+      type: {class: StringKey, ns: TheKiwiCoder, asm: thekiwicoder.behaviourtreeeditor}
+      data:
+        name: 
+        typeName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+        value: TestRunner
 --- !u!4 &491185836
 Transform:
   m_ObjectHideFlags: 0

@@ -18,17 +18,15 @@ MonoBehaviour:
   - rid: 1704181475787145216
   - rid: 1704181475787145223
   - rid: 1704181475787145224
-  - rid: 1704181475787145228
-  - rid: 1704181475787145230
-  - rid: 1704181475787145232
   - rid: 1704181475787145233
-  - rid: 1704181475787145235
+  - rid: 1704181497169707049
   treeState: 0
   blackboard:
     keys:
     - rid: 1704181475787145219
-  viewPosition: {x: 467, y: 218, z: 0}
-  viewScale: {x: 0.57175326, y: 0.57175326, z: 1}
+    - rid: 1704181521479630883
+  viewPosition: {x: 596, y: 145, z: 0}
+  viewScale: {x: 0.8695652, y: 0.8695652, z: 1}
   references:
     version: 2
     RefIds:
@@ -64,76 +62,15 @@ MonoBehaviour:
         description: 
         drawGizmos: 0
         children:
-        - rid: 1704181475787145228
+        - rid: 1704181497169707049
         - rid: 1704181475787145224
-        - rid: 1704181475787145230
-        - rid: 1704181475787145232
-        - rid: 1704181475787145235
     - rid: 1704181475787145224
       type: {class: Wait, ns: TheKiwiCoder, asm: thekiwicoder.behaviourtreeeditor}
       data:
         state: 2
         started: 0
         guid: 44c1a6378572da2498bda32369787c2e
-        position: {x: -22.482708, y: 525.7}
-        blackboard:
-          keys: []
-        description: 
-        drawGizmos: 0
-        duration: 1
-    - rid: 1704181475787145228
-      type: {class: SetProperty, ns: TheKiwiCoder, asm: thekiwicoder.behaviourtreeeditor}
-      data:
-        state: 2
-        started: 0
-        guid: 6246488d46233144593711ff2e26dc47
-        position: {x: -221.48271, y: 525.7}
-        blackboard:
-          keys: []
-        description: 
-        drawGizmos: 0
-        pair:
-          key:
-            rid: 1704181475787145219
-          value:
-            rid: 1704181475787145229
-    - rid: 1704181475787145229
-      type: {class: Vector3Key, ns: TheKiwiCoder, asm: thekiwicoder.behaviourtreeeditor}
-      data:
-        name: 
-        typeName: UnityEngine.Vector3, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
-          PublicKeyToken=null
-        value: {x: 1, y: 2, z: 3}
-    - rid: 1704181475787145230
-      type: {class: SetProperty, ns: TheKiwiCoder, asm: thekiwicoder.behaviourtreeeditor}
-      data:
-        state: 2
-        started: 0
-        guid: df027099de513d34f985aad0a3887ca7
-        position: {x: 158.51727, y: 525.7}
-        blackboard:
-          keys: []
-        description: 
-        drawGizmos: 0
-        pair:
-          key:
-            rid: 1704181475787145219
-          value:
-            rid: 1704181475787145231
-    - rid: 1704181475787145231
-      type: {class: Vector3Key, ns: TheKiwiCoder, asm: thekiwicoder.behaviourtreeeditor}
-      data:
-        name: 
-        typeName: UnityEngine.Vector3, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
-          PublicKeyToken=null
-        value: {x: 2, y: 4, z: 6}
-    - rid: 1704181475787145232
-      type: {class: Wait, ns: TheKiwiCoder, asm: thekiwicoder.behaviourtreeeditor}
-      data:
-        state: 2
-        started: 0
-        guid: 8048853276b26154db5996ce90f0b804
-        position: {x: 354.51727, y: 520.7}
+        position: {x: 214.90012, y: 527.1501}
         blackboard:
           keys: []
         description: 
@@ -155,16 +92,24 @@ MonoBehaviour:
         restartOnSuccess: 1
         restartOnFailure: 1
         maxRepeats: 0
-    - rid: 1704181475787145235
-      type: {class: SubTree, ns: TheKiwiCoder, asm: thekiwicoder.behaviourtreeeditor}
+    - rid: 1704181497169707049
+      type: {class: Log, ns: TheKiwiCoder, asm: thekiwicoder.behaviourtreeeditor}
       data:
         state: 0
         started: 0
-        guid: 094d6542a7bacda499e64d4d72fd9629
-        position: {x: 559.4743, y: 525.99994}
+        guid: e9e929ee5b50bf44a9c6cd955d5d14e1
+        position: {x: -150.00003, y: 527.0001}
         blackboard:
           keys: []
         description: 
         drawGizmos: 0
-        treeAsset: {fileID: 11400000, guid: 042c52d6ed50004408eeade682bcf3f1, type: 2}
-        treeInstance: {fileID: 0}
+        message: 
+        key:
+          reference:
+            rid: 1704181521479630883
+    - rid: 1704181521479630883
+      type: {class: StringKey, ns: TheKiwiCoder, asm: thekiwicoder.behaviourtreeeditor}
+      data:
+        name: MyKey
+        typeName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+        value: Default Value
