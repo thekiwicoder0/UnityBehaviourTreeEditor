@@ -241,6 +241,16 @@ public class BlackboardController : MonoBehaviour
 }
 ```
 
+## BlackboardKey Overrides
+
+Sometimes you want to override blackboard keys values for a specific game object. For example, you may have the agent's speed stored in a blackboard key, and want to create a fast and slow variant of the agent.
+
+BlackboardKey overrides allows specific key values to be override when the game object starts. 
+
+To add an override, select the GameObject with a BehaviourTreeInstance component, and add a new override. Select the key from the dropdown and enter a value into the property field:
+
+<img src="Documentation/Images/blackboard_key_overrides.png" width = "300" />
+
 ### Assets Menu
 
 The assets menu dropdown shows all behaviour trees located in the project. Use this to quickly jump between different trees in your project. There is an additional menu option to create a new behaviour tree from here too.
