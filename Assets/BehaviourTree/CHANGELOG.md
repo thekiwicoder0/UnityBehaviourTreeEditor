@@ -7,6 +7,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 Note this package is still in very early development and in high flux. 
 Version numbers don't follow semantic versioning yet, and data format may change in future which will be highlighted in this document.
 
+# [0.0.18] - 08-03-2023
+
+## Rename Blackboard Keys
+
+Blackboard Keys can now be renamed. Note: any selected nodes referencing the blackboard keys won't update until the node is next selected.
+
 # [0.0.17] - 04-03-2023
 
 ## NodeProperty<T>s, Blackboard Overrides, Switch Node
