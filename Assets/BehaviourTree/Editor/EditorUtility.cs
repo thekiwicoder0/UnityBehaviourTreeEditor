@@ -87,5 +87,9 @@ namespace TheKiwiCoder
 
         }
 
+        public static float RoundTo(float value, int nearestInteger) {
+            return ((int)(value / nearestInteger)) * nearestInteger;
+        }
+
     }
 }

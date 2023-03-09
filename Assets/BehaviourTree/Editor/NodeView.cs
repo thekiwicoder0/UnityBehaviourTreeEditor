@@ -115,6 +115,9 @@ namespace TheKiwiCoder {
         }
 
         public override void SetPosition(Rect newPos) {
+            newPos.x = EditorUtility.RoundTo(newPos.x, BehaviourTreeView.gridSnapSize);
+            newPos.y = EditorUtility.RoundTo(newPos.y, BehaviourTreeView.gridSnapSize);
+
             base.SetPosition(newPos);
 
             SerializedBehaviourTree serializer = BehaviourTreeEditorWindow.Instance.serializer;

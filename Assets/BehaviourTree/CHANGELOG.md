@@ -13,6 +13,7 @@ Version numbers don't follow semantic versioning yet, and data format may change
 
 - Blackboard Keys can now be renamed by double clicking on the blackboard key label
 - Nodes can be copy, pasted, and duplicated in the tree view
+- Nodes snap to 15 pixels to align with the grid background
 
 # [0.0.17] - 04-03-2023
 

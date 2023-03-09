@@ -11,6 +11,9 @@ namespace TheKiwiCoder {
     public class BehaviourTreeView : GraphView {
         public new class UxmlFactory : UxmlFactory<BehaviourTreeView, GraphView.UxmlTraits> { }
 
+        // Node positions snap to 15 pixels
+        public static int gridSnapSize = 15;
+
         public Action<NodeView> OnNodeSelected;
 
         protected override bool canCopySelection => true;
@@ -311,6 +314,7 @@ namespace TheKiwiCoder {
             Edge edge = parentView.output.ConnectTo(childView.input);
             AddElement(edge);
         }
+
         public void RemoveElements(IEnumerable<GraphElement> elementsToRemove) {
             dontUpdateModel = true;
             DeleteElements(elementsToRemove); // Just need to delete the ui elements without causing a graphChangedEvent here.
