@@ -16,6 +16,15 @@ namespace TheKiwiCoder {
         [Tooltip("Folder where new node scripts will be created. (Must begin with 'Assets')")]
         public string newNodePath = "Assets/";
 
+        [Tooltip("Script template to use when creating action nodes")]
+        public TextAsset scriptTemplateActionNode;
+
+        [Tooltip("Script template to use when creating composite nodes")]
+        public TextAsset scriptTemplateCompositeNode;
+
+        [Tooltip("Script template to use when creating decorator nodes")]
+        public TextAsset scriptTemplateDecoratorNode;
+
         static BehaviourTreeProjectSettings FindSettings(){
             var guids = AssetDatabase.FindAssets($"t:{nameof(BehaviourTreeProjectSettings)}");
             if (guids.Length > 1) {

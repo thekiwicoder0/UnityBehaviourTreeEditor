@@ -16,6 +16,30 @@ namespace TheKiwiCoder {
         bool isSourceParent;
         EditorUtility.ScriptTemplate[] scriptFileAssets;
 
+        TextAsset GetScriptTemplate(int type) {
+            var projectSettings = BehaviourTreeProjectSettings.GetOrCreateSettings();
+
+            switch (type) {
+                case 0:
+                    if (projectSettings.scriptTemplateActionNode) {
+                        return projectSettings.scriptTemplateActionNode;
+                    }
+                    return BehaviourTreeEditorWindow.Instance.scriptTemplateActionNode;
+                case 1:
+                    if (projectSettings.scriptTemplateCompositeNode) {
+                        return projectSettings.scriptTemplateCompositeNode;
+                    }
+                    return BehaviourTreeEditorWindow.Instance.scriptTemplateCompositeNode;
+                case 2:
+                    if (projectSettings.scriptTemplateDecoratorNode) {
+                        return projectSettings.scriptTemplateDecoratorNode;
+                    }
+                    return BehaviourTreeEditorWindow.Instance.scriptTemplateDecoratorNode;
+            }
+            Debug.LogError("Unhandled script template type:" + type);
+            return null;
+        }
+
         public void Initialise(BehaviourTreeView treeView, NodeView source, bool isSourceParent) {
             this.treeView = treeView;
             this.source = source;
@@ -26,9 +50,9 @@ namespace TheKiwiCoder {
             icon.Apply();
 
             scriptFileAssets = new EditorUtility.ScriptTemplate[] {
-                new EditorUtility.ScriptTemplate { templateFile = BehaviourTreeEditorWindow.Instance.scriptTemplateActionNode, defaultFileName = "NewActionNode", subFolder = "Actions" },
-                new EditorUtility.ScriptTemplate { templateFile = BehaviourTreeEditorWindow.Instance.scriptTemplateCompositeNode, defaultFileName = "NewCompositeNode", subFolder = "Composites" },
-                new EditorUtility.ScriptTemplate { templateFile = BehaviourTreeEditorWindow.Instance.scriptTemplateDecoratorNode, defaultFileName = "NewDecoratorNode", subFolder = "Decorators" },
+                new EditorUtility.ScriptTemplate { templateFile = GetScriptTemplate(0), defaultFileName = "NewActionNode", subFolder = "Actions" },
+                new EditorUtility.ScriptTemplate { templateFile = GetScriptTemplate(1), defaultFileName = "NewCompositeNode", subFolder = "Composites" },
+                new EditorUtility.ScriptTemplate { templateFile = GetScriptTemplate(2), defaultFileName = "NewDecoratorNode", subFolder = "Decorators" },
             };
         }
 
