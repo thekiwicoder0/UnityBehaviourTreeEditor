@@ -7,7 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 Note this package is still in very early development and in high flux. 
 Version numbers don't follow semantic versioning yet, and data format may change in future which will be highlighted in this document.
 
-# [0.0.18] - 08-03-2023
+# [0.0.18] - 09-03-2023
 
 ## Update 18
 
