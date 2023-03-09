@@ -15,6 +15,29 @@ namespace TheKiwiCoder {
         public Port input;
         public Port output;
 
+        public NodeView NodeParent {
+            get {
+                using (IEnumerator<Edge> iter = input.connections.GetEnumerator()) {
+                    iter.MoveNext();
+                    return iter.Current?.output.node as NodeView;
+                }
+            }
+        }
+
+        public List<NodeView> NodeChildren {
+            get {
+                // This is untested and may not work. Possibly output should be input.
+                List<NodeView> children = new List<NodeView>();
+                foreach(var edge in output.connections) {
+                    NodeView child = edge.output.node as NodeView;
+                    if (child != null) {
+                        children.Add(child);
+                    }
+                }
+                return children;
+            }
+        }
+
         public NodeView(Node node, VisualTreeAsset nodeXml) : base(AssetDatabase.GetAssetPath(nodeXml)) {
             this.node = node;
             this.title = node.GetType().Name;

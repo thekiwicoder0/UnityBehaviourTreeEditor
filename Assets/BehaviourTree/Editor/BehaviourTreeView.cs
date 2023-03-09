@@ -13,8 +13,38 @@ namespace TheKiwiCoder {
 
         public Action<NodeView> OnNodeSelected;
 
+        protected override bool canCopySelection => true;
+
+        protected override bool canCutSelection => false; // Cut not supported right now
+
+        protected override bool canPaste => true;
+
+        protected override bool canDuplicateSelection => true;
+
+        protected override bool canDeleteSelection => true;
+
         SerializedBehaviourTree serializer;
+        
         bool dontUpdateModel = false;
+
+        [Serializable]
+        class CopyPasteData {
+            public List<string> nodeGuids = new List<string>();
+
+            public void AddGraphElements(IEnumerable<GraphElement> elementsToCopy) {
+                foreach (var element in elementsToCopy) {
+                    NodeView nodeView = element as NodeView;
+                    if (nodeView != null && nodeView.node is not RootNode) {
+                        nodeGuids.Add(nodeView.node.guid);
+                    }
+                }
+            }
+        }
+
+        class EdgeToCreate {
+            public NodeView parent;
+            public NodeView child;
+        };
 
         public BehaviourTreeView() {
             
@@ -26,13 +56,77 @@ namespace TheKiwiCoder {
             this.AddManipulator(new SelectionDragger());
             this.AddManipulator(new RectangleSelector());
 
+            // Perform Copy
+            serializeGraphElements = (items) => {
+                CopyPasteData copyPasteData = new CopyPasteData();
+                copyPasteData.AddGraphElements(items);
+                string data = JsonUtility.ToJson(copyPasteData);
+                return data;
+            };
+
+            // Perform Paste
+            unserializeAndPaste = (operationName, data) => {
+
+                serializer.BeginBatch();
+
+                ClearSelection();
+
+                CopyPasteData copyPasteData = JsonUtility.FromJson<CopyPasteData>(data);
+                Dictionary<string, string> oldToNewMapping = new Dictionary<string, string>();
+
+                // Gather all nodes to copy
+                List<NodeView> nodesToCopy = new List<NodeView>();
+                foreach (var nodeGuid in copyPasteData.nodeGuids) {
+                    NodeView nodeView = FindNodeView(nodeGuid);
+                    nodesToCopy.Add(nodeView);
+                }
+
+                // Gather all edges to create
+                List<EdgeToCreate> edgesToCreate = new List<EdgeToCreate>();
+                foreach (var nodeGuid in copyPasteData.nodeGuids) {
+                    NodeView nodeView = FindNodeView(nodeGuid);
+                    var nodesParent = nodeView.NodeParent;
+                    if (nodesToCopy.Contains(nodesParent)) {
+                        EdgeToCreate newEdge = new EdgeToCreate();
+                        newEdge.parent = nodesParent;
+                        newEdge.child = nodeView;
+                        edgesToCreate.Add(newEdge);
+                    }
+                }
+
+                // Copy all nodes
+                foreach (var nodeView in nodesToCopy) {
+                    Node newNode = serializer.CreateNode(nodeView.node.GetType(), nodeView.node.position + Vector2.one * 50);
+                    NodeView newNodeView = CreateNodeView(newNode);
+                    AddToSelection(newNodeView);
+
+                    // Map old to new guids so edges can be cloned.
+                    oldToNewMapping[nodeView.node.guid] = newNode.guid;
+                }
+
+                // Copy all edges
+                foreach(var edge in edgesToCreate) {
+                    NodeView oldParent = edge.parent;
+                    NodeView oldChild = edge.child;
+
+                    // These should already have been created.
+                    NodeView newParent = FindNodeView(oldToNewMapping[oldParent.node.guid]);
+                    NodeView newChild = FindNodeView(oldToNewMapping[oldChild.node.guid]);
+
+                    serializer.AddChild(newParent.node, newChild.node);
+                    AddChild(newParent, newChild);
+                }
+
+                // Save changes
+                serializer.EndBatch();
+            };
+
+            // Enable copy paste always?
+            canPasteSerializedData = (data) => {
+                return true;
+            };
+
             viewTransformChanged += OnViewTransformChanged;
-
-            nodeCreationRequest = NodeCreationRequest;
-        }
-
-        void NodeCreationRequest(NodeCreationContext ctx) {
-            Debug.Log("Node Creation Request");
         }
 
         void OnViewTransformChanged(GraphView graphView) {
@@ -43,6 +137,10 @@ namespace TheKiwiCoder {
 
         public NodeView FindNodeView(Node node) {
             return GetNodeByGuid(node.guid) as NodeView;
+        }
+
+        public NodeView FindNodeView(string guid) {
+            return GetNodeByGuid(guid) as NodeView;
         }
 
         public void ClearView() {
@@ -139,7 +237,8 @@ namespace TheKiwiCoder {
         }
 
         public override void BuildContextualMenu(ContextualMenuPopulateEvent evt) {
-            // base.BuildContextualMenu(evt); // Disable default cut/copy/paste context menu options.. who uses those anyway?
+            //base.BuildContextualMenu(evt); // Disable default cut/copy/paste context menu options.. who uses those anyway?
+
             CreateNodeWindow.Show(evt.mousePosition, null);
         }
 

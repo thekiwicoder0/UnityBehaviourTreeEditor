@@ -117,13 +117,13 @@ The tree view is where you'll spend most of the time creating and organising nod
 
 ### Adding Nodes
 
-New nodes can be added to the tree via the context menu by right clicking anywhere in the canvas and selecting which type of node to add. The nodes are grouped into three sub menus, Actions, Composites, and Decorators.
+New nodes can be added to the tree via the context menu by right clicking on the canvas and selecting which type of node to add. The nodes are grouped into three sub menus, Actions, Composites, and Decorators. You can start typing immediately to filter nodes by name
 
 <img src="Documentation/Images/new_node.png" width = "200" />
 
-### Creating New Nodes
+### Creating New Node Script
 
-The built in node types will only get you so far. The real power of behaviour trees comes when you design and create your own node types. Nodes are standard C# scripts which inherit from one of three base types, `ActionNode`, `CompositeNode`, or `DecoratorNode`. These scripts can be created by hand, or by using the context menu which will fill out the boilerplate automatically for you.
+The real power of behaviour trees comes when you design and create your own node types. Nodes are standard C# scripts which inherit from one of three base types, `ActionNode`, `CompositeNode`, or `DecoratorNode`. These scripts can be created by hand, or by using the context menu which will generate a new script from a template for you.
 
 <img src="Documentation/Images/new_script.png" width = "200" />
 
@@ -149,7 +149,11 @@ O | Frames the canvas origin |
 [ | Frames the parent node of the current selection |
 ] | Frames the child node of the current selection |
 CTRL | Selects the sub hierarchy of this node |
-
+CTRL + D | Duplicates the selected nodes |
+CTRL + C | Copys the selected nodes |
+CTRL + V | Pastes the selected nodes (must deselect first) |
+Left Click | Select Node |
+Right Click | Create Node Context menu |
 
 ### Node Inspector View
 
