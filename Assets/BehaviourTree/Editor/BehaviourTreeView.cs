@@ -53,10 +53,17 @@ namespace TheKiwiCoder {
             
             Insert(0, new GridBackground());
 
+
             this.AddManipulator(new ContentZoomer());
             this.AddManipulator(new ContentDragger());
             this.AddManipulator(new HierarchySelector());
+
+            // Disable adjacent node snapping (via EditorPrefs, used by SelectionDragger)
+            bool previousValue = EditorPrefs.GetBool("GraphSnapping");
+            EditorPrefs.SetBool("GraphSnapping", false);
             this.AddManipulator(new SelectionDragger());
+            EditorPrefs.SetBool("GraphSnapping", previousValue);
+
             this.AddManipulator(new RectangleSelector());
 
             // Perform Copy
