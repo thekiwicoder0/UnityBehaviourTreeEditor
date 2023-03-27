@@ -312,7 +312,7 @@ namespace TheKiwiCoder {
         }
 
         public void PopToSubtree(int depth, BehaviourTree tree) {
-            while (breadcrumbs.childCount > depth) {
+            while (breadcrumbs != null && breadcrumbs.childCount > depth) {
                 breadcrumbs.PopItem();
             }
             
