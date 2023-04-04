@@ -31,7 +31,7 @@ namespace TheKiwiCoder {
                 case State.Failure:
                     if (restartOnFailure) {
                         iterationCount++;
-                        if (iterationCount == maxRepeats && maxRepeats > 0) {
+                        if (iterationCount >= maxRepeats && maxRepeats > 0) {
                             return State.Failure;
                         } else {
                             return State.Running;
@@ -42,7 +42,7 @@ namespace TheKiwiCoder {
                 case State.Success:
                     if (restartOnSuccess) {
                         iterationCount++;
-                        if (iterationCount == maxRepeats && maxRepeats > 0) {
+                        if (iterationCount >= maxRepeats && maxRepeats > 0) {
                             return State.Success;
                         } else {
                             return State.Running;
@@ -55,5 +55,5 @@ namespace TheKiwiCoder {
         }
     }
 
-    
+
 }
