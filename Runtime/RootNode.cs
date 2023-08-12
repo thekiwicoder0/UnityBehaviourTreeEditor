@@ -5,7 +5,7 @@ using UnityEngine;
 namespace TheKiwiCoder {
 
     [System.Serializable]
-    public class RootNode : Node {
+    public class RootNode : Node, IHasChild {
 
         [SerializeReference]
         [HideInInspector] 
@@ -25,6 +25,21 @@ namespace TheKiwiCoder {
             } else {
                 return State.Failure;
             }
+        }
+
+        public void AddChild(Node child)
+        {
+            this.child = child;
+        }
+
+        public void RemoveChild(Node child)
+        {
+            this.child = null;
+        }
+
+        public List<Node> GetChildren()
+        {
+            return new List<Node>() { this.child };
         }
     }
 }

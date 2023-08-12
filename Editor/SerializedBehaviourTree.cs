@@ -136,45 +136,25 @@ namespace TheKiwiCoder {
         }
 
         public void AddChild(Node parent, Node child) {
-            
-            var parentProperty = FindNode(Nodes, parent);
+            IHasChild hasChild = parent as IHasChild;
 
-            // RootNode, Decorator node
-            var childProperty = parentProperty.FindPropertyRelative(sPropChild);
-            if (childProperty != null) {
-                childProperty.managedReferenceValue = child;
-                ApplyChanges();
+            if (null == hasChild)
+            {
                 return;
             }
 
-            // Composite nodes
-            var childrenProperty = parentProperty.FindPropertyRelative(sPropChildren);
-            if (childrenProperty != null) {
-                SerializedProperty newChild = AppendArrayElement(childrenProperty);
-                newChild.managedReferenceValue = child;
-                ApplyChanges();
-                return;
-            }
+            hasChild.AddChild(child);
         }
 
         public void RemoveChild(Node parent, Node child) {
-            var parentProperty = FindNode(Nodes, parent);
+            IHasChild hasChild = parent as IHasChild;
 
-            // RootNode, Decorator node
-            var childProperty = parentProperty.FindPropertyRelative(sPropChild);
-            if (childProperty != null) {
-                childProperty.managedReferenceValue = null;
-                ApplyChanges();
+            if (null == hasChild)
+            {
                 return;
             }
 
-            // Composite nodes
-            var childrenProperty = parentProperty.FindPropertyRelative(sPropChildren);
-            if (childrenProperty != null) {
-                RemoveNodeArrayElement(childrenProperty, child);
-                ApplyChanges();
-                return;
-            }
+            hasChild.RemoveChild(child);
         }
 
         public void CreateBlackboardKey(string keyName, System.Type keyType) {
