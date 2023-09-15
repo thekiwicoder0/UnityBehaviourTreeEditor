@@ -20,8 +20,8 @@ namespace TheKiwiCoder {
         [HideInInspector] public Blackboard blackboard;
         [TextArea] public string description;
         [Tooltip("When enabled, the nodes OnDrawGizmos will be invoked")] public bool drawGizmos = false;
-        
-        public virtual void OnInit() { 
+
+        public virtual void OnInit() {
             // Nothing to do here
         }
 
@@ -55,5 +55,9 @@ namespace TheKiwiCoder {
         protected abstract void OnStart();
         protected abstract void OnStop();
         protected abstract State OnUpdate();
+
+        protected virtual void Log(string message) {
+            Debug.Log($"[{GetType()}]{message}");
+        }
     }
 }

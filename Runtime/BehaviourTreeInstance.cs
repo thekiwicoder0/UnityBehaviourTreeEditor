@@ -8,10 +8,21 @@ namespace TheKiwiCoder {
     public class BehaviourTreeInstance : MonoBehaviour {
 
         // The main behaviour tree asset
-        [Tooltip("BehaviourTree asset to instantiate during Awake")] 
+        [Tooltip("BehaviourTree asset to instantiate during Awake")]
         public BehaviourTree behaviourTree;
-        
-        [Tooltip("Run behaviour tree validation at startup (Can be disabled for release)")] 
+        BehaviourTree runtimeTree;
+
+        public BehaviourTree RuntimeTree {
+            get {
+                if (runtimeTree != null) {
+                    return runtimeTree;
+                } else {
+                    return behaviourTree;
+                }
+            }
+        }
+
+        [Tooltip("Run behaviour tree validation at startup (Can be disabled for release)")]
         public bool validate = true;
 
         // These values override the keys in the blackboard
@@ -21,23 +32,24 @@ namespace TheKiwiCoder {
         Context context;
 
         // Start is called before the first frame update
-        void Awake() {
+        void OnEnable() {
+
             bool isValid = ValidateTree();
             if (isValid) {
                 context = CreateBehaviourTreeContext();
-                behaviourTree = behaviourTree.Clone();
-                behaviourTree.Bind(context);
+                runtimeTree = behaviourTree.Clone();
+                runtimeTree.Bind(context);
 
                 ApplyKeyOverrides();
             } else {
-                behaviourTree = null;
+                runtimeTree = null;
             }
         }
 
         void ApplyKeyOverrides() {
-            foreach(var pair in blackboardOverrides) {
+            foreach (var pair in blackboardOverrides) {
                 // Find the key from the new behaviour tree instance
-                var targetKey = behaviourTree.blackboard.Find(pair.key.name);
+                var targetKey = runtimeTree.blackboard.Find(pair.key.name);
                 var sourceKey = pair.value;
                 if (targetKey != null && sourceKey != null) {
                     targetKey.CopyFrom(sourceKey);
@@ -47,8 +59,8 @@ namespace TheKiwiCoder {
 
         // Update is called once per frame
         void Update() {
-            if (behaviourTree) {
-                behaviourTree.Update();
+            if (runtimeTree) {
+                runtimeTree.Update();
             }
         }
 
@@ -76,7 +88,7 @@ namespace TheKiwiCoder {
         }
 
         bool IsRecursive(BehaviourTree tree, out string cycle) {
-            
+
             // Check if any of the subtree nodes and their decendents form a circular reference, which will cause a stack overflow.
             List<string> treeStack = new List<string>();
             HashSet<BehaviourTree> referencedTrees = new HashSet<BehaviourTree>();
@@ -91,7 +103,7 @@ namespace TheKiwiCoder {
                         treeStack.Add(subtree.treeAsset.name);
                         if (referencedTrees.Contains(subtree.treeAsset)) {
                             int index = 0;
-                            foreach(var tree in treeStack) {
+                            foreach (var tree in treeStack) {
                                 index++;
                                 if (index == treeStack.Count) {
                                     cyclePath += $"{tree}";
@@ -116,17 +128,21 @@ namespace TheKiwiCoder {
             BehaviourTree.Traverse(tree.rootNode, traverse);
             referencedTrees.Remove(tree);
 
-            treeStack.RemoveAt(treeStack.Count-1);
+            treeStack.RemoveAt(treeStack.Count - 1);
             cycle = cyclePath;
             return cycleFound;
         }
 
         private void OnDrawGizmosSelected() {
-            if (!behaviourTree) {
+            if (!Application.isPlaying) {
                 return;
             }
 
-            BehaviourTree.Traverse(behaviourTree.rootNode, (n) => {
+            if (!runtimeTree) {
+                return;
+            }
+
+            BehaviourTree.Traverse(runtimeTree.rootNode, (n) => {
                 if (n.drawGizmos) {
                     n.OnDrawGizmos();
                 }
@@ -134,21 +150,21 @@ namespace TheKiwiCoder {
         }
 
         public BlackboardKey<T> FindBlackboardKey<T>(string keyName) {
-            if (behaviourTree) {
-                return behaviourTree.blackboard.Find<T>(keyName);
+            if (runtimeTree) {
+                return runtimeTree.blackboard.Find<T>(keyName);
             }
             return null;
         }
 
         public void SetBlackboardValue<T>(string keyName, T value) {
-            if (behaviourTree) {
-                behaviourTree.blackboard.SetValue(keyName, value);
+            if (runtimeTree) {
+                runtimeTree.blackboard.SetValue(keyName, value);
             }
         }
 
         public T GetBlackboardValue<T>(string keyName) {
-            if (behaviourTree) {
-                return behaviourTree.blackboard.GetValue<T>(keyName);
+            if (runtimeTree) {
+                return runtimeTree.blackboard.GetValue<T>(keyName);
             }
             return default(T);
         }

@@ -13,10 +13,10 @@ namespace TheKiwiCoder {
         VisualElement pairContainer;
 
         BehaviourTree GetBehaviourTree(SerializedProperty property) {
-            if(property.serializedObject.targetObject is BehaviourTree tree) {
+            if (property.serializedObject.targetObject is BehaviourTree tree) {
                 return tree;
             } else if (property.serializedObject.targetObject is BehaviourTreeInstance instance) {
-                return instance.behaviourTree;
+                return instance.RuntimeTree;
             }
             Debug.LogError("Could not find behaviour tree this is referencing");
             return null;
@@ -31,7 +31,7 @@ namespace TheKiwiCoder {
             dropdown.formatListItemCallback = FormatItem;
             dropdown.formatSelectedValueCallback = FormatItem;
             dropdown.value = first.managedReferenceValue as BlackboardKey;
-            
+
             BehaviourTree tree = GetBehaviourTree(property);
             dropdown.RegisterCallback<MouseEnterEvent>((evt) => {
                 dropdown.choices.Clear();

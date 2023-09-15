@@ -47,7 +47,7 @@ namespace TheKiwiCoder {
         public TextAsset scriptTemplateActionNode;
         public TextAsset scriptTemplateCompositeNode;
         public TextAsset scriptTemplateDecoratorNode;
-        
+
         public BehaviourTreeView treeView;
         public InspectorView inspectorView;
         public BlackboardView blackboardView;
@@ -88,7 +88,7 @@ namespace TheKiwiCoder {
         }
 
         public void CreateGUI() {
-            Instance = this; 
+            Instance = this;
             settings = BehaviourTreeProjectSettings.GetOrCreateSettings();
 
             // Each editor window contains a root VisualElement object
@@ -223,7 +223,7 @@ namespace TheKiwiCoder {
             if (Selection.activeGameObject) {
                 BehaviourTreeInstance runner = Selection.activeGameObject.GetComponent<BehaviourTreeInstance>();
                 if (runner) {
-                    SelectNewTree(runner.behaviourTree);
+                    SelectNewTree(runner.RuntimeTree);
                 }
             }
         }
@@ -234,7 +234,7 @@ namespace TheKiwiCoder {
         }
 
         void SelectTree(BehaviourTree newTree) {
-            
+
             // If tree view is null the window is probably unfocused
             if (treeView == null) {
                 return;
@@ -270,7 +270,7 @@ namespace TheKiwiCoder {
         }
 
         void ClearIfSelected(string path) {
-            if (serializer == null) { 
+            if (serializer == null) {
                 return;
             }
 
@@ -315,7 +315,7 @@ namespace TheKiwiCoder {
             while (breadcrumbs != null && breadcrumbs.childCount > depth) {
                 breadcrumbs.PopItem();
             }
-            
+
             if (tree) {
                 SelectTree(tree);
             }
