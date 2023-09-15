@@ -53,6 +53,8 @@ https://github.com/thekiwicoder0/UnityBehaviourTreeEditor.git
 
 See https://docs.unity3d.com/Manual/upm-ui-actions.html for more options on installing packages.
 
+Note: If you receive the error `No 'git' executable was found` you're likely missing a git installation. You can install git from here: https://git-scm.com/download/win
+
 ## Getting Started
 
 The first time opening up the behaviour tree editor a prompt will appear where you can either select an existing tree to open, or create a new one:
