@@ -1,38 +1,69 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace TheKiwiCoder {
-
+namespace BehaviourTreeBuilder
+{
     // The context is a shared object every node has access to.
     // Commonly used components and subsytems should be stored here
     // It will be somewhat specfic to your game exactly what to add here.
     // Feel free to extend this class 
-    public class Context {
-        public GameObject gameObject;
-        public Transform transform;
-        public Animator animator;
-        public Rigidbody physics;
-        public NavMeshAgent agent;
-        public SphereCollider sphereCollider;
-        public BoxCollider boxCollider;
-        public CapsuleCollider capsuleCollider;
-        public CharacterController characterController;
+    public class Context
+    {
+        //AI
+#if USE_NAVMESH
+        public NavMeshAgent Agent;
+#endif
+        
+#if USE_CHARACTER_CONTROLLER
+        public CharacterController CharacterController;
+#endif
+        //Common
+        public Animator Animator;
+        public GameObject GameObject;
+        public Transform Transform;
+        
+        //3D
+#if CORE_3D
+        public BoxCollider BoxCollider;
+        public CapsuleCollider CapsuleCollider;
+        public Rigidbody Rigidbody;
+        public SphereCollider SphereCollider;
+#else
+        
+        //2D
+        public BoxCollider2D BoxCollider2D;
+        public CapsuleCollider2D CapsuleCollider2D;
+        public Rigidbody2D Rigidbody2D;
+        public CircleCollider2D CircleCollider2D;
+#endif
+
         // Add other game specific systems here
 
-        public static Context CreateFromGameObject(GameObject gameObject) {
+        public static Context CreateFromGameObject(GameObject gameObject)
+        {
             // Fetch all commonly used components
-            Context context = new Context();
-            context.gameObject = gameObject;
-            context.transform = gameObject.transform;
-            context.animator = gameObject.GetComponentInChildren<Animator>();
-            context.physics = gameObject.GetComponent<Rigidbody>();
-            context.agent = gameObject.GetComponent<NavMeshAgent>();
-            context.sphereCollider = gameObject.GetComponent<SphereCollider>();
-            context.boxCollider = gameObject.GetComponent<BoxCollider>();
-            context.capsuleCollider = gameObject.GetComponent<CapsuleCollider>();
-            context.characterController = gameObject.GetComponent<CharacterController>();
+            var context = new Context();
+            context.GameObject = gameObject;
+            context.Transform = gameObject.transform;
+            context.Animator = gameObject.GetComponent<Animator>();
+#if USE_NAVMESH
+            context.Agent = gameObject.GetComponent<NavMeshAgent>();
+#endif
+#if USE_CHARACTER_CONTROLLER
+            context.CharacterController = gameObject.GetComponent<CharacterController>();
+#endif
+            
+#if CORE_3D
+            context.Rigidbody = gameObject.GetComponent<Rigidbody>();
+            context.BoxCollider = gameObject.GetComponent<BoxCollider>();
+            context.SphereCollider = gameObject.GetComponent<SphereCollider>();
+            context.CapsuleCollider = gameObject.GetComponent<CapsuleCollider>();
+#else  
+            context.Rigidbody2D = gameObject.GetComponent<Rigidbody2D>();
+            context.BoxCollider2D = gameObject.GetComponent<BoxCollider2D>();
+            context.CapsuleCollider2D = gameObject.GetComponent<CapsuleCollider2D>();
+            context.CircleCollider2D = gameObject.GetComponent<CircleCollider2D>();
+#endif
 
             // Add whatever else you need here...
 

@@ -1,23 +1,36 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using System.Linq;
+using System;
+using Random = UnityEngine.Random;
 
-namespace TheKiwiCoder {
-    [System.Serializable]
-    public class RandomSelector : CompositeNode {
+namespace BehaviourTreeBuilder
+{
+    [Serializable]
+    public class RandomSelector : CompositeNode
+    {
         protected int current;
 
-        protected override void OnStart() {
+        protected override void OnStart()
+        {
             current = Random.Range(0, children.Count);
         }
 
-        protected override void OnStop() {
+        protected override void OnStop()
+        {
         }
 
-        protected override State OnUpdate() {
+        protected override void OnFixedUpdate()
+        {
+            children[current].FixedUpdate();
+        }
+
+        protected override State OnUpdate()
+        {
             var child = children[current];
             return child.Update();
+        }
+
+        protected override void OnLateUpdate()
+        {
+            children[current].LateUpdate();
         }
     }
 }

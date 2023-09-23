@@ -1,38 +1,57 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using TheKiwiCoder;
 using System;
+using UnityEngine;
+using UnityEngine.Serialization;
 
-namespace TheKiwiCoder {
+namespace BehaviourTreeBuilder
+{
+    [Serializable]
+    public class SubTree : ActionNode
+    {
+        [Tooltip("Behaviour tree asset to run as a subtree")]
+        public BehaviourTree TreeAsset;
+        [NonSerialized] public BehaviourTree TreeInstance;
 
-    [System.Serializable]
-    public class SubTree : ActionNode {
-        
-        [Tooltip("Behaviour tree asset to run as a subtree")] public BehaviourTree treeAsset;
-        [HideInInspector] public BehaviourTree treeInstance;
-
-        public override void OnInit() {
-            if (treeAsset) {
-                treeInstance = treeAsset.Clone();
-                treeInstance.Bind(context);
+        public override void OnInit()
+        {
+            if (TreeAsset)
+            {
+                TreeInstance = TreeAsset.Clone();
+                TreeInstance.Bind(context);
             }
         }
 
-        protected override void OnStart() {
-            if (treeInstance) {
-                treeInstance.treeState = Node.State.Running;
+        protected override void OnStart()
+        {
+            if (TreeInstance) TreeInstance.treeState = State.Running;
+        }
+
+        protected override void OnStop()
+        {
+            if (state == State.Idle)
+            {
+                TreeInstance.Abort();
             }
         }
 
-        protected override void OnStop() {
+        protected override void OnFixedUpdate()
+        {
+            TreeInstance.FixedUpdate();
         }
 
-        protected override State OnUpdate() {
-            if (treeInstance) {
-                return treeInstance.Update();
-            }
+        protected override State OnUpdate()
+        {
+            if (TreeInstance) return TreeInstance.Update();
             return State.Failure;
+        }
+        
+        protected override void OnLateUpdate()
+        {
+            TreeInstance.LateUpdate();
+        }
+
+        public override string OnShowDescription()
+        {
+            return $"Sub Tree: {TreeAsset?.name}";
         }
     }
 }

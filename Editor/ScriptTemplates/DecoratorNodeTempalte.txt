@@ -1,18 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TheKiwiCoder;
+using BehaviourTreeBuilder;
 
-[System.Serializable]
-public class #SCRIPTNAME# : DecoratorNode
+namespace #NAMESPACE#
 {
-    protected override void OnStart() {
-    }
-
-    protected override void OnStop() {
-    }
-
-    protected override State OnUpdate() {
-        return State.Success;
+    [System.Serializable]
+    public class #SCRIPTNAME# : DecoratorNode
+    {
+        // OnStart is called immediately before execution. It is used to setup any variables that need to be reset from the previous run.
+        protected override void OnStart() 
+        {
+        }
+        
+        // OnStop is called after execution on a success or failure.
+        protected override void OnStop() 
+        {
+        }
+        
+        // OnUpdate runs the actual task.
+        protected override State OnUpdate() 
+        {
+            return State.Success;
+        }
     }
 }

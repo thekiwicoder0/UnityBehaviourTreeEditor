@@ -1,32 +1,25 @@
 {
-    "name": "com.thekiwicoder.behaviourtreeditor",
-    "version": "0.0.19",
-    "displayName": "Behaviour Tree Editor",
-    "description": "Behaviour Tree runtime and Editor built with UI Toolkit",
-    "unity": "2021.3",
-    "unityRelease": "0f1",
-    "documentationUrl": "https://github.com/thekiwicoder0/UnityBehaviourTreeEditor/blob/main/Assets/BehaviourTree/README.md",
-    "changelogUrl": "https://github.com/thekiwicoder0/UnityBehaviourTreeEditor/blob/main/Assets/BehaviourTree/CHANGELOG.md",
-    "licensesUrl": "https://github.com/thekiwicoder0/UnityBehaviourTreeEditor/blob/main/Assets/BehaviourTree/LICENSE.MD",
-    "dependencies": {
-   },
-   "keywords": [
-      "behaviour tree",
-      "behaviour tree editor",
-      "thekiwicoder",
-      "ai",
-      "ai behaviour tree"
-    ],
-    "author": {
-      "name": "TheKiwiCoder",
-      "email": "thekiwicoder@gmail.com",
-      "url": "https://www.thekiwicoder.com"
-    },
-    "samples": [
-      {
-          "displayName": "Random Walk",
-          "description": "Simple example behaviour tree which moves a navmeshagent to random locations within a bounding area",
-          "path": "Samples~/RandomWalk"
-      }
-    ]
-  }
+  "name": "com.tiendat3699.behaviourtreebuilder",
+  "version": "0.0.1",
+  "displayName": "Behaviour Tree Builder",
+  "description": "Behaviour Tree runtime and Editor built with UI Toolkit",
+  "unity": "2021.3",
+  "unityRelease": "0f1",
+  "documentationUrl": "https://github.com/tiendat3699/UnityBehaviourTreeBuilder/blob/main/README.md",
+  "changelogUrl": "https://github.com/tiendat3699/UnityBehaviourTreeBuilder/blob/main/CHANGELOG.md",
+  "licensesUrl": "https://github.com/tiendat3699/UnityBehaviourTreeBuilder/blob/main/LICENSE.MD",
+  "keywords": [
+    "behaviour tree",
+    "behaviour tree editor",
+    "thekiwicoder",
+    "ai",
+    "ai behaviour tree"
+  ],
+  "samples": [
+    {
+      "displayName": "Random Walk",
+      "description": "Simple example behaviour tree which moves a navmeshagent to random locations within a bounding area",
+      "path": "Samples~/RandomWalk"
+    }
+  ]
+}

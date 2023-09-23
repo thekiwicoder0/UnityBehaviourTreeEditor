@@ -1,22 +1,19 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
-    <Style src="project://database/Assets/BehaviourTree/Editor/UIBuilder/NodeViewStyle.uss?fileID=7433441132597879392&amp;guid=9d9e34dc0396ab94ab90fc5f26f12277&amp;type=3#NodeViewStyle" />
+    <Style src="project://database/Assets/UnityBehaviourTreeEditor-main/Editor/UIBuilder/NodeViewStyle.uss?fileID=7433441132597879392&amp;guid=9d9e34dc0396ab94ab90fc5f26f12277&amp;type=3#NodeViewStyle" />
     <ui:VisualElement name="node-state" />
     <ui:VisualElement name="node-border" style="background-image: none;">
         <ui:VisualElement name="contents">
             <ui:VisualElement name="top">
-                <ui:VisualElement name="input" />
+                <ui:VisualElement name="input" class="custom-port node-port" />
+                <ui:VisualElement class="node-port" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); margin-top: -1px; min-height: 15px;" />
                 <ui:VisualElement name="divider" class="vertical" />
                 <ui:VisualElement name="title">
-                    <ui:Label name="title-label" text="SequencerNode" class="unity-text-element unity-label" />
-                    <ui:VisualElement name="title-button-container">
-                        <ui:VisualElement name="collapse-button">
-                            <ui:VisualElement name="icon" />
-                        </ui:VisualElement>
-                    </ui:VisualElement>
-                    <ui:Label display-tooltip-when-elided="true" name="description" />
+                    <ui:Label name="title-label" text="SequencerNode" class="unity-text-element unity-label" style="padding-left: 8px; padding-right: 8px; padding-top: 16px; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0;" />
+                    <ui:Label display-tooltip-when-elided="true" name="description" style="padding-left: 8px; padding-right: 8px; padding-top: 2px; padding-bottom: 16px; margin-left: auto; margin-right: auto; margin-top: auto; margin-bottom: auto;" />
                 </ui:VisualElement>
                 <ui:VisualElement name="divider" class="horizontal" />
-                <ui:VisualElement name="output" />
+                <ui:VisualElement style="flex-grow: 1; background-color: rgb(87, 87, 87); margin-bottom: -1px; min-height: 15px;" />
+                <ui:VisualElement name="output" class="custom-port" />
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>

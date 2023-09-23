@@ -1,59 +1,80 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
-namespace TheKiwiCoder {
-    [System.Serializable]
-    public class Repeat : DecoratorNode {
+namespace BehaviourTreeBuilder
+{
+    [Serializable]
+    public class Repeat : DecoratorNode
+    {
+        [Tooltip("Restarts the subtree on success")]
+        public bool restartOnSuccess = true;
 
-        [Tooltip("Restarts the subtree on success")] public bool restartOnSuccess = true;
-        [Tooltip("Restarts the subtree on failure")] public bool restartOnFailure = false;
-        [Tooltip("Maximum number of times the subtree will be repeated. Set to 0 to loop forever")] public int maxRepeats = 0;
+        [Tooltip("Restarts the subtree on failure")]
+        public bool restartOnFailure;
 
-        int iterationCount = 0;
+        [Tooltip("Maximum number of times the subtree will be repeated. Set to 0 to loop forever")]
+        public int maxRepeats;
 
-        protected override void OnStart() {
+        private int iterationCount;
+
+        protected override void OnStart()
+        {
             iterationCount = 0;
         }
 
-        protected override void OnStop() {
-
+        protected override void OnStop()
+        {
         }
 
-        protected override State OnUpdate() {
-            if (child == null) {
-                return State.Failure;
-            }
+        protected override void OnFixedUpdate()
+        {
+            child.FixedUpdate();
+        }
 
-            switch (child.Update()) {
+        protected override State OnUpdate()
+        {
+            if (child == null) return State.Failure;
+
+            switch (child.Update())
+            {
                 case State.Running:
                     break;
                 case State.Failure:
-                    if (restartOnFailure) {
+                    if (restartOnFailure)
+                    {
                         iterationCount++;
-                        if (iterationCount >= maxRepeats && maxRepeats > 0) {
+                        child.Abort();
+                        if (iterationCount == maxRepeats && maxRepeats > 0)
                             return State.Failure;
-                        } else {
-                            return State.Running;
-                        }
-                    } else {
-                        return State.Failure;
+                        return State.Running;
                     }
+
+                    return State.Failure;
                 case State.Success:
-                    if (restartOnSuccess) {
+                    if (restartOnSuccess)
+                    {
                         iterationCount++;
-                        if (iterationCount >= maxRepeats && maxRepeats > 0) {
+                        child.Abort();
+                        if (iterationCount == maxRepeats && maxRepeats > 0)
                             return State.Success;
-                        } else {
-                            return State.Running;
-                        }
-                    } else {
-                        return State.Success;
+                        return State.Running;
                     }
+
+                    return State.Success;
             }
+
             return State.Running;
         }
+
+        protected override void OnLateUpdate()
+        {
+            child.LateUpdate();
+        }
+
+        public override string OnShowDescription()
+        {
+            return
+                $"restartOnSuccess:{restartOnSuccess} \nrestartOnFailure:{restartOnFailure} \nmaxRepeats:{maxRepeats}";
+        }
     }
-
-
 }

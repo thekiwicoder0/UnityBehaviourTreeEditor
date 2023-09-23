@@ -1,20 +1,20 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
-    <Style src="project://database/Assets/BehaviourTree/Editor/UIBuilder/BehaviourTreeEditorStyle.uss?fileID=7433441132597879392&amp;guid=8781ca2a6e79ccf4da2e234c8c123d2f&amp;type=3#BehaviourTreeEditorStyle" />
+    <Style src="project://database/Assets/Behaviour%20Tree/Editor/UIBuilder/BehaviourTreeEditorStyle.uss?fileID=7433441132597879392&amp;guid=8781ca2a6e79ccf4da2e234c8c123d2f&amp;type=3#BehaviourTreeEditorStyle" />
     <uie:Toolbar>
         <uie:ToolbarMenu display-tooltip-when-elided="true" text="Assets " />
         <uie:ToolbarSpacer style="flex-grow: 1;" />
         <ui:Label display-tooltip-when-elided="true" name="Version" />
     </uie:Toolbar>
-    <TheKiwiCoder.SplitView fixed-pane-initial-dimension="300">
+    <BehaviourTreeBuilder.SplitView fixed-pane-initial-dimension="300">
         <ui:VisualElement name="left-panel">
-            <TheKiwiCoder.SplitView orientation="Vertical" fixed-pane-initial-dimension="400">
+            <BehaviourTreeBuilder.SplitView orientation="Vertical" fixed-pane-initial-dimension="400">
                 <ui:VisualElement name="inspector-container" style="background-color: rgb(56, 56, 56);">
                     <ui:Label text="Inspector" display-tooltip-when-elided="true" style="background-color: rgb(37, 37, 37);" />
-                    <TheKiwiCoder.InspectorView style="background-color: rgb(56, 56, 56);" />
+                    <BehaviourTreeBuilder.InspectorView style="background-color: rgb(56, 56, 56);" />
                 </ui:VisualElement>
                 <ui:VisualElement name="blackboard-container" style="background-color: rgb(56, 56, 56);">
                     <ui:Label text="Blackboard" display-tooltip-when-elided="true" style="background-color: rgb(37, 37, 37);" />
-                    <TheKiwiCoder.BlackboardView style="flex-grow: 1;">
+                    <BehaviourTreeBuilder.BlackboardView style="flex-grow: 1;">
                         <ui:ListView focusable="true" name="ListView_Keys" view-data-key="ListView_Keys" show-border="false" show-alternating-row-backgrounds="ContentOnly" show-foldout-header="false" header-title="Keys" reorderable="true" reorder-mode="Animated" show-bound-collection-size="false" virtualization-method="DynamicHeight" binding-path="blackboard.keys" style="flex-grow: 1;" />
                         <ui:VisualElement style="border-top-width: 1px; border-top-color: rgb(89, 89, 89); padding-top: 1px; min-height: 80px;">
                             <ui:Label text="Create New Key..." display-tooltip-when-elided="true" style="-unity-font-style: italic;" />
@@ -22,41 +22,36 @@
                             <ui:VisualElement name="PopupField_Placeholder" />
                             <ui:Button text="Create" display-tooltip-when-elided="true" name="Button_KeyCreate" />
                         </ui:VisualElement>
-                    </TheKiwiCoder.BlackboardView>
+                    </BehaviourTreeBuilder.BlackboardView>
                 </ui:VisualElement>
-            </TheKiwiCoder.SplitView>
+            </BehaviourTreeBuilder.SplitView>
         </ui:VisualElement>
         <ui:VisualElement name="right-panel">
             <uie:Toolbar>
                 <uie:ToolbarBreadcrumbs name="breadcrumbs" />
             </uie:Toolbar>
-            <TheKiwiCoder.BehaviourTreeView focusable="true" style="flex-grow: 1; border-top-width: 2px; border-top-color: rgb(0, 0, 0);" />
+            <BehaviourTreeBuilder.BehaviourTreeView focusable="true" style="flex-grow: 1; border-top-width: 2px; border-top-color: rgb(0, 0, 0);" />
         </ui:VisualElement>
-    </TheKiwiCoder.SplitView>
-    <TheKiwiCoder.OverlayView name="OverlayView" style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; align-items: center; justify-content: center; background-color: rgba(0, 0, 0, 0.5); visibility: hidden;">
-        <ui:VisualElement style="flex-grow: 0; background-color: rgb(56, 56, 56); border-top-left-radius: 10px; border-bottom-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; flex-shrink: 0; width: 500px;">
-            <ui:Label tabindex="-1" text="Open Behaviour Tree" display-tooltip-when-elided="true" style="font-size: 25px; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; -unity-font-style: bold;" />
+    </BehaviourTreeBuilder.SplitView>
+    <BehaviourTreeBuilder.OverlayView name="OverlayView" style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; align-items: center; justify-content: center; background-color: rgba(0, 0, 0, 0.5); visibility: visible;">
+        <ui:VisualElement style="flex-grow: 0; background-color: rgb(56, 56, 56); border-top-left-radius: 4px; border-bottom-left-radius: 4px; border-top-right-radius: 4px; border-bottom-right-radius: 4px; flex-shrink: 0; width: 500px;">
             <ui:VisualElement style="flex-grow: 0; margin-left: 10px; margin-right: 10px; margin-top: 10px; margin-bottom: 10px; background-color: rgb(56, 56, 56);">
-                <ui:VisualElement style="border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-left-color: rgb(117, 117, 117); border-right-color: rgb(117, 117, 117); border-top-color: rgb(117, 117, 117); border-bottom-color: rgb(117, 117, 117); border-top-left-radius: 5px; border-bottom-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px;">
-                    <ui:Label text="Select Existing ..." display-tooltip-when-elided="true" style="-unity-text-align: upper-left; font-size: 16px; color: rgb(210, 210, 210); -unity-font-style: italic;" />
-                    <ui:DropdownField index="-1" label="Asset" />
-                    <ui:Button text="Open" display-tooltip-when-elided="true" name="OpenButton" style="align-items: flex-start; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; -unity-text-align: middle-center; flex-grow: 0; width: 150px;" />
+                <ui:VisualElement style="border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-left-color: rgb(117, 117, 117); border-right-color: rgb(117, 117, 117); border-top-color: rgb(117, 117, 117); border-bottom-color: rgb(117, 117, 117); border-top-left-radius: 4px; border-bottom-left-radius: 4px; border-top-right-radius: 4px; border-bottom-right-radius: 4px; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px;">
+                    <ui:Label tabindex="-1" text="Open Exist" display-tooltip-when-elided="true" style="font-size: 16px; -unity-font-style: bold; flex-grow: 1; align-items: flex-start; justify-content: flex-start; -unity-text-align: upper-left; margin-bottom: 8px;" />
+                    <ui:VisualElement style="justify-content: center; align-items: stretch; flex-direction: row;">
+                        <ui:VisualElement style="justify-content: center; flex-basis: 420px;">
+                            <ui:DropdownField index="-1" label="Asset" />
+                        </ui:VisualElement>
+                        <ui:Button text="Open" display-tooltip-when-elided="true" name="OpenButton" style="-unity-text-align: middle-center; margin-top: 1px; margin-left: auto; flex-basis: 80px;" />
+                    </ui:VisualElement>
                 </ui:VisualElement>
-                <ui:VisualElement style="border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-top-left-radius: 5px; border-bottom-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-left-color: rgb(117, 117, 117); border-right-color: rgb(117, 117, 117); border-top-color: rgb(117, 117, 117); border-bottom-color: rgb(117, 117, 117); align-items: flex-start; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; margin-top: 10px; justify-content: flex-start;">
-                    <ui:Label tabindex="-1" text="Create New ..." display-tooltip-when-elided="true" style="font-size: 16px; -unity-font-style: italic; flex-grow: 1; align-items: flex-start; justify-content: flex-start;" />
+                <ui:VisualElement style="border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-top-left-radius: 4px; border-bottom-left-radius: 4px; border-top-right-radius: 4px; border-bottom-right-radius: 4px; border-left-color: rgb(117, 117, 117); border-right-color: rgb(117, 117, 117); border-top-color: rgb(117, 117, 117); border-bottom-color: rgb(117, 117, 117); align-items: flex-start; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; margin-top: 10px; justify-content: flex-start;">
+                    <ui:Label tabindex="-1" text="Create New" display-tooltip-when-elided="true" style="font-size: 16px; -unity-font-style: bold; flex-grow: 1; align-items: flex-start; justify-content: flex-start; -unity-text-align: upper-center; margin-bottom: 8px;" />
                     <ui:TextField picking-mode="Ignore" label="Name" value="New Behaviour Tree" text="New Behaviour Tree" name="TreeName" style="flex-grow: 1;" />
                     <ui:TextField picking-mode="Ignore" label="Path" text="Assets/" name="LocationPath" style="flex-grow: 1;" />
-                    <ui:Button text="Create" display-tooltip-when-elided="true" name="CreateButton" style="align-items: flex-start; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; -unity-text-align: middle-center; flex-grow: 0; width: 150px;" />
+                    <ui:Button text="Create" display-tooltip-when-elided="true" name="CreateButton" style="align-items: flex-start; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; -unity-text-align: middle-center; flex-grow: 0; width: 80px; margin-left: auto; margin-top: 8px; height: 20px;" />
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>
-    </TheKiwiCoder.OverlayView>
-    <TheKiwiCoder.NewScriptDialogView name="NewScriptDialogView" focusable="true" style="visibility: hidden; position: absolute; left: 0; top: 0; right: 0; bottom: 0; justify-content: center; align-items: center;">
-        <ui:VisualElement name="Background" style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.5);" />
-        <ui:VisualElement focusable="true" style="flex-grow: 0; background-color: rgb(56, 56, 56); border-top-left-radius: 10px; border-bottom-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; flex-shrink: 0; width: 250px; height: 115px;">
-            <ui:Label tabindex="-1" text="New Script" display-tooltip-when-elided="true" name="Title" style="font-size: 20px; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; -unity-font-style: bold; justify-content: flex-end; -unity-text-align: upper-left;" />
-            <ui:TextField picking-mode="Ignore" value="asd" text="Enter name..." name="FileName" style="font-size: 15px; -unity-text-align: upper-center; align-items: auto; justify-content: center; padding-left: 10px; padding-right: 10px; padding-top: 10px; padding-bottom: 10px;" />
-            <ui:Button text="OK" display-tooltip-when-elided="true" style="padding-left: 0; padding-right: 0; margin-left: 60px; margin-right: 60px;" />
-        </ui:VisualElement>
-    </TheKiwiCoder.NewScriptDialogView>
+    </BehaviourTreeBuilder.OverlayView>
 </ui:UXML>

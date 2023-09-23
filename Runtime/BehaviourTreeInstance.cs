@@ -1,12 +1,13 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace TheKiwiCoder {
-
-    [AddComponentMenu("TheKiwiCoder/BehaviourTreeInstance")]
-    public class BehaviourTreeInstance : MonoBehaviour {
-
+namespace BehaviourTreeBuilder
+{
+    [AddComponentMenu("BehaviourTree/BehaviourTreeInstance")]
+    public class BehaviourTreeInstance : MonoBehaviour
+    {
         // The main behaviour tree asset
         [Tooltip("BehaviourTree asset to instantiate during Awake")]
         public BehaviourTree behaviourTree;
@@ -26,10 +27,10 @@ namespace TheKiwiCoder {
         public bool validate = true;
 
         // These values override the keys in the blackboard
-        public List<BlackboardKeyValuePair> blackboardOverrides = new List<BlackboardKeyValuePair>();
+        public List<BlackboardKeyValuePair> blackboardOverrides = new();
 
         // Storage container object to hold game object subsystems
-        Context context;
+        private Context context;
 
         // Start is called before the first frame update
         void OnEnable() {
@@ -46,12 +47,15 @@ namespace TheKiwiCoder {
             }
         }
 
-        void ApplyKeyOverrides() {
-            foreach (var pair in blackboardOverrides) {
+        void ApplyKeyOverrides()
+        {
+            foreach (var pair in blackboardOverrides)
+            {
                 // Find the key from the new behaviour tree instance
                 var targetKey = runtimeTree.blackboard.Find(pair.key.name);
                 var sourceKey = pair.value;
-                if (targetKey != null && sourceKey != null) {
+                if (targetKey != null && sourceKey != null)
+                {
                     targetKey.CopyFrom(sourceKey);
                 }
             }
@@ -64,63 +68,99 @@ namespace TheKiwiCoder {
             }
         }
 
-        Context CreateBehaviourTreeContext() {
+        private void FixedUpdate()
+        {
+            if (runtimeTree) runtimeTree.FixedUpdate();
+        }
+
+        private void LateUpdate()
+        {
+            if (runtimeTree) runtimeTree.LateUpdate();
+        }
+
+        private void OnDrawGizmosSelected()
+        {
+            if (!Application.isPlaying) 
+            {
+                return;
+            }
+
+            if (!runtimeTree)
+            {
+                return;
+            }
+
+
+            BehaviourTree.Traverse(runtimeTree.rootNode, n =>
+            {
+                if (n.drawGizmos) n.OnDrawGizmos();
+            });
+        }
+
+        private Context CreateBehaviourTreeContext()
+        {
             return Context.CreateFromGameObject(gameObject);
         }
 
-        bool ValidateTree() {
-            if (!behaviourTree) {
+        private bool ValidateTree()
+        {
+            if (!behaviourTree)
+            {
                 Debug.LogWarning($"No BehaviourTree assigned to {name}, assign a behaviour tree in the inspector");
                 return false;
             }
 
-            bool isValid = true;
-            if (validate) {
+            var isValid = true;
+            if (validate)
+            {
                 string cyclePath;
                 isValid = !IsRecursive(behaviourTree, out cyclePath);
 
-                if (!isValid) {
-                    Debug.LogError($"Failed to create recursive behaviour tree. Found cycle at: {cyclePath}");
-                }
+                if (!isValid) Debug.LogError($"Failed to create recursive behaviour tree. Found cycle at: {cyclePath}");
             }
 
             return isValid;
         }
 
-        bool IsRecursive(BehaviourTree tree, out string cycle) {
-
+        private bool IsRecursive(BehaviourTree tree, out string cycle)
+        {
             // Check if any of the subtree nodes and their decendents form a circular reference, which will cause a stack overflow.
-            List<string> treeStack = new List<string>();
-            HashSet<BehaviourTree> referencedTrees = new HashSet<BehaviourTree>();
+            var treeStack = new List<string>();
+            var referencedTrees = new HashSet<BehaviourTree>();
 
-            bool cycleFound = false;
-            string cyclePath = "";
+            var cycleFound = false;
+            var cyclePath = "";
 
-            System.Action<Node> traverse = null;
-            traverse = (node) => {
-                if (!cycleFound) {
-                    if (node is SubTree subtree && subtree.treeAsset != null) {
-                        treeStack.Add(subtree.treeAsset.name);
-                        if (referencedTrees.Contains(subtree.treeAsset)) {
-                            int index = 0;
-                            foreach (var tree in treeStack) {
+            Action<Node> traverse = null;
+            traverse = node =>
+            {
+                if (!cycleFound)
+                    if (node is SubTree subtree && subtree.TreeAsset != null)
+                    {
+                        treeStack.Add(subtree.TreeAsset.name);
+                        if (referencedTrees.Contains(subtree.TreeAsset))
+                        {
+                            var index = 0;
+                            foreach (var tree in treeStack)
+                            {
                                 index++;
-                                if (index == treeStack.Count) {
+                                if (index == treeStack.Count)
                                     cyclePath += $"{tree}";
-                                } else {
+                                else
                                     cyclePath += $"{tree} -> ";
-                                }
                             }
 
                             cycleFound = true;
-                        } else {
-                            referencedTrees.Add(subtree.treeAsset);
-                            BehaviourTree.Traverse(subtree.treeAsset.rootNode, traverse);
-                            referencedTrees.Remove(subtree.treeAsset);
                         }
+                        else
+                        {
+                            referencedTrees.Add(subtree.TreeAsset);
+                            BehaviourTree.Traverse(subtree.TreeAsset.rootNode, traverse);
+                            referencedTrees.Remove(subtree.TreeAsset);
+                        }
+
                         treeStack.RemoveAt(treeStack.Count - 1);
                     }
-                }
             };
             treeStack.Add(tree.name);
 
@@ -133,40 +173,21 @@ namespace TheKiwiCoder {
             return cycleFound;
         }
 
-        private void OnDrawGizmosSelected() {
-            if (!Application.isPlaying) {
-                return;
-            }
-
-            if (!runtimeTree) {
-                return;
-            }
-
-            BehaviourTree.Traverse(runtimeTree.rootNode, (n) => {
-                if (n.drawGizmos) {
-                    n.OnDrawGizmos();
-                }
-            });
-        }
-
-        public BlackboardKey<T> FindBlackboardKey<T>(string keyName) {
-            if (runtimeTree) {
-                return runtimeTree.blackboard.Find<T>(keyName);
-            }
+        public BlackboardKey<T> FindBlackboardKey<T>(string keyName)
+        {
+            if (runtimeTree) return runtimeTree.blackboard.Find<T>(keyName);
             return null;
         }
 
-        public void SetBlackboardValue<T>(string keyName, T value) {
-            if (runtimeTree) {
-                runtimeTree.blackboard.SetValue(keyName, value);
-            }
+        public void SetBlackboardValue<T>(string keyName, T value)
+        {
+            if (runtimeTree) runtimeTree.blackboard.SetValue(keyName, value);
         }
 
-        public T GetBlackboardValue<T>(string keyName) {
-            if (runtimeTree) {
-                return runtimeTree.blackboard.GetValue<T>(keyName);
-            }
-            return default(T);
+        public T GetBlackboardValue<T>(string keyName)
+        {
+            if (runtimeTree) return runtimeTree.blackboard.GetValue<T>(keyName);
+            return default;
         }
     }
 }

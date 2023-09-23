@@ -1,28 +1,43 @@
 using UnityEditor;
-using UnityEngine.UIElements;
 using UnityEditor.UIElements;
+using UnityEngine.UIElements;
 
-namespace TheKiwiCoder {
+namespace BehaviourTreeBuilder
+{
     [CustomEditor(typeof(BehaviourTreeInstance))]
-    public class BehaviourTreeInstanceEditor : Editor {
+    public class BehaviourTreeInstanceEditor : Editor
+    {
+        private BehaviourTree _tree;
 
-        public override VisualElement CreateInspectorGUI() {
+        private void OnEnable()
+        {
+            var behaviourTreeInstance = target as BehaviourTreeInstance;
+            if (behaviourTreeInstance != null) _tree = behaviourTreeInstance.behaviourTree;
+        }
 
-            VisualElement container = new VisualElement();
-
-            PropertyField treeField = new PropertyField();
+        public override VisualElement CreateInspectorGUI()
+        {
+            var container = new VisualElement();
+        
+            var treeField = new PropertyField();
             treeField.bindingPath = nameof(BehaviourTreeInstance.behaviourTree);
-
-            PropertyField validateField = new PropertyField();
+        
+            var validateField = new PropertyField();
             validateField.bindingPath = nameof(BehaviourTreeInstance.validate);
-
-            PropertyField publicKeys = new PropertyField();
+        
+            var publicKeys = new PropertyField();
             publicKeys.bindingPath = nameof(BehaviourTreeInstance.blackboardOverrides);
-
+        
+            var openEditorButton = new Button(() => BehaviourTreeEditorWindow.OpenWindow(_tree));
+            openEditorButton.style.height = 30;
+            openEditorButton.style.marginTop = 10;
+            openEditorButton.text = "Open In Editor";
+        
             container.Add(treeField);
             container.Add(validateField);
             container.Add(publicKeys);
-
+            container.Add(openEditorButton);
+        
             return container;
         }
     }

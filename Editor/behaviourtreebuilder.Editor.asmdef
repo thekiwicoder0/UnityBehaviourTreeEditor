@@ -1,5 +1,5 @@
 {
-    "name": "thekiwicoder.behaviourtreeeditor.Editor",
+    "name": "behaviourtreebuilder.Editor",
     "rootNamespace": "",
     "references": [
         "GUID:de36970526c77594384934601eff4883"

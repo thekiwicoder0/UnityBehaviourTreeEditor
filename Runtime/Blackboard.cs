@@ -1,9 +1,10 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace TheKiwiCoder {
-
+namespace BehaviourTreeBuilder
+{
     // The Blackboard stores a set of keys which can be used to pass values between different nodes in the behaviour tree.
     // Nodes can read and write to blackboard keys to share data.
     // 
@@ -39,58 +40,62 @@ namespace TheKiwiCoder {
     // 
     // Note: Subtrees have their own unique copy of the blackboard.
     // 
-    [System.Serializable]
-    public class Blackboard {
-
-        [SerializeReference]
-        public List<BlackboardKey> keys = new List<BlackboardKey>();
+    [Serializable]
+    public class Blackboard
+    {
+        [TableList(HideToolbar = true)]
+        [SerializeReference] public List<BlackboardKey> keys = new();
 
         // Finds the first key which matches keyName
-        public BlackboardKey Find(string keyName) {
-            return keys.Find((key) => {
-                return key.name == keyName;
-            });
+        public BlackboardKey Find(string keyName)
+        {
+            return keys.Find(key => { return key.name == keyName; });
         }
 
         // Finds a key that matches keyName with the type specified
-        public BlackboardKey<T> Find<T>(string keyName) {
+        public BlackboardKey<T> Find<T>(string keyName)
+        {
             var foundKey = Find(keyName);
 
-            if (foundKey == null) {
+            if (foundKey == null)
+            {
                 Debug.LogWarning($"Failed to find blackboard key, invalid keyname:{keyName}");
                 return null;
             }
 
-            if (foundKey.underlyingType != typeof(T)) {
-                Debug.LogWarning($"Failed to find blackboard key, invalid keytype:{typeof(T)}, Expected:{foundKey.underlyingType}");
+            if (foundKey.underlyingType != typeof(T))
+            {
+                Debug.LogWarning(
+                    $"Failed to find blackboard key, invalid keytype:{typeof(T)}, Expected:{foundKey.underlyingType}");
                 return null;
             }
 
             var foundKeyTyped = foundKey as BlackboardKey<T>;
-            if (foundKeyTyped == null) {
-                Debug.LogWarning($"Failed to find blackboard key, casting failed:{typeof(T)}, Expected:{foundKey.underlyingType}");
+            if (foundKeyTyped == null)
+            {
+                Debug.LogWarning(
+                    $"Failed to find blackboard key, casting failed:{typeof(T)}, Expected:{foundKey.underlyingType}");
                 return null;
             }
+
             return foundKeyTyped;
         }
 
         // Tries to set a key to a value using the type specified.
         // Note: This may fail if the key with the matching name has a different type to the one specified
-        public void SetValue<T>(string keyName, T value) {
-            BlackboardKey<T> key = Find<T>(keyName);
-            if (key != null) {
-                key.value = value;
-            }
+        public void SetValue<T>(string keyName, T value)
+        {
+            var key = Find<T>(keyName);
+            if (key != null) key.value = value;
         }
 
         // Tries to get a key value using the type specified.
         // Note: This may fail if the key with the matching name has a different type to the one specified
-        public T GetValue<T>(string keyName) {
-            BlackboardKey<T> key = Find<T>(keyName);
-            if (key != null) {
-                return key.value;
-            }
-            return default(T);
+        public T GetValue<T>(string keyName)
+        {
+            var key = Find<T>(keyName);
+            if (key != null) return key.value;
+            return default;
         }
     }
 }

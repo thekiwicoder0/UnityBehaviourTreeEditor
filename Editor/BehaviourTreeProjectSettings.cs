@@ -1,21 +1,29 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
+using System.Runtime.Serialization;
+using Sirenix.OdinInspector;
 using UnityEditor;
+using UnityEditor.Build;
 using UnityEngine;
-using UnityEngine.UIElements;
-using UnityEditor.UIElements;
+using UnityEngine.Serialization;
 
-namespace TheKiwiCoder {
+namespace BehaviourTreeBuilder
+{
     // Create a new type of Settings Asset.
-    public class BehaviourTreeProjectSettings : ScriptableObject {
+    public class BehaviourTreeProjectSettings : ScriptableObject
+    {
+        [Required]
+        public string namespaceScriptNode;
+        [Tooltip("Folder where new tree assets will be created")]
+        [FolderPath, Required]
+        public string newTreePath = "Assets";
 
-        [Tooltip("Folder where new tree assets will be created. (Must begin with 'Assets')")]
-        public string newTreePath = "Assets/";
-
-        [Tooltip("Folder where new node scripts will be created. (Must begin with 'Assets')")]
-        public string newNodePath = "Assets/";
-
+        [Tooltip("Folder where new node scripts will be created")]
+        [FolderPath, Required]
+        public string newNodePath = "Assets";
+        
+        [Header("Custom Script Template")]
         [Tooltip("Script template to use when creating action nodes")]
         public TextAsset scriptTemplateActionNode;
 
@@ -25,13 +33,25 @@ namespace TheKiwiCoder {
         [Tooltip("Script template to use when creating decorator nodes")]
         public TextAsset scriptTemplateDecoratorNode;
 
-        static BehaviourTreeProjectSettings FindSettings(){
-            var guids = AssetDatabase.FindAssets($"t:{nameof(BehaviourTreeProjectSettings)}");
-            if (guids.Length > 1) {
-                Debug.LogWarning($"Found multiple settings files, using the first.");
-            }
+        [Header("Node view Color")]
+        public Color RootNodeColor = new Color(1f, 0.231f, 0.231f, 1f);
+        public Color ActionNodeColor = new Color(0.383f, 1f, 0f, 1f);
+        public Color CompositeNodeColor = new Color(1f, 0.937f, 0.137f, 1f);
+        public Color DecoratorNodeColor = new Color(0f, 0.572f, 1f, 1f);
 
-            switch (guids.Length) {
+        [Header("Define Settings")]
+        [SerializeField] private bool _core3D;
+        [SerializeField] private bool _navMesh;
+        [SerializeField] private bool _characterController;
+        [SerializeField] private BuildTargetGroup[] _buildTargetGroups;
+
+        private static BehaviourTreeProjectSettings FindSettings()
+        {
+            var guids = AssetDatabase.FindAssets($"t:{nameof(BehaviourTreeProjectSettings)}");
+            if (guids.Length > 1) Debug.LogWarning("Found multiple settings files, using the first.");
+
+            switch (guids.Length)
+            {
                 case 0:
                     return null;
                 default:
@@ -40,57 +60,39 @@ namespace TheKiwiCoder {
             }
         }
 
-        internal static BehaviourTreeProjectSettings GetOrCreateSettings() {
+        internal static BehaviourTreeProjectSettings GetOrCreateSettings()
+        {
             var settings = FindSettings();
-            if (settings == null) {
-                settings = ScriptableObject.CreateInstance<BehaviourTreeProjectSettings>();
-                AssetDatabase.CreateAsset(settings, "Assets/BehaviourTreeProjectSettings.asset");
+            if (settings == null)
+            {
+                settings = CreateInstance<BehaviourTreeProjectSettings>();
+                string path = "Assets/Behaviour Tree";
+                if (!Directory.Exists(path)) Directory.CreateDirectory(path);
+                AssetDatabase.CreateAsset(settings, $"{path}/BehaviourTreeProjectSettings.asset");
                 AssetDatabase.SaveAssets();
             }
+
             return settings;
         }
 
-        internal static SerializedObject GetSerializedSettings() {
+        internal static SerializedObject GetSerializedSettings()
+        {
             return new SerializedObject(GetOrCreateSettings());
         }
-    }
-
-    // Register a SettingsProvider using UIElements for the drawing framework:
-    static class MyCustomSettingsUIElementsRegister {
-        [SettingsProvider]
-        public static SettingsProvider CreateMyCustomSettingsProvider() {
-            // First parameter is the path in the Settings window.
-            // Second parameter is the scope of this setting: it only appears in the Settings window for the Project scope.
-            var provider = new SettingsProvider("Project/BehaviourTreeProjectSettings", SettingsScope.Project) {
-                label = "BehaviourTree",
-                // activateHandler is called when the user clicks on the Settings item in the Settings window.
-                activateHandler = (searchContext, rootElement) => {
-                    var settings = BehaviourTreeProjectSettings.GetSerializedSettings();
-
-                    // rootElement is a VisualElement. If you add any children to it, the OnGUI function
-                    // isn't called because the SettingsProvider uses the UIElements drawing framework.
-                    var title = new Label() {
-                        text = "Behaviour Tree Settings"
-                    };
-                    title.AddToClassList("title");
-                    rootElement.Add(title);
-
-                    var properties = new VisualElement() {
-                        style =
-                        {
-                            flexDirection = FlexDirection.Column
-                        }
-                    };
-                    properties.AddToClassList("property-list");
-                    rootElement.Add(properties);
-
-                    properties.Add(new InspectorElement(settings));
-
-                    rootElement.Bind(settings);
-                },
-            };
-
-            return provider;
+        
+        [Button(ButtonSizes.Large)]
+        private void BuildDefine()
+        {
+            if (_core3D)  EditorUtility.AddCompileDefine("CORE_3D", _buildTargetGroups);
+            else  EditorUtility.RemoveCompileDefine("CORE_3D", _buildTargetGroups);
+            
+            if (_navMesh) EditorUtility.AddCompileDefine("USE_NAVMESH", _buildTargetGroups);
+            else EditorUtility.RemoveCompileDefine("USE_NAVMESH", _buildTargetGroups);
+            
+            if(_characterController) EditorUtility.AddCompileDefine("USE_CHARACTER_CONTROLLER", _buildTargetGroups);
+            else EditorUtility.RemoveCompileDefine("USE_CHARACTER_CONTROLLER", _buildTargetGroups);
+            
+            AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
         }
     }
 }
