@@ -40,13 +40,13 @@ namespace TheKiwiCoder {
                 runtimeTree = behaviourTree.Clone();
                 runtimeTree.Bind(context);
 
-                ApplyKeyOverrides();
+                ApplyBlackboardOverrides();
             } else {
                 runtimeTree = null;
             }
         }
 
-        void ApplyKeyOverrides() {
+        void ApplyBlackboardOverrides() {
             foreach (var pair in blackboardOverrides) {
                 // Find the key from the new behaviour tree instance
                 var targetKey = runtimeTree.blackboard.Find(pair.key.name);

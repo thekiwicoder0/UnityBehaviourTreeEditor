@@ -1,5 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
-    <Style src="project://database/Assets/BehaviourTree/Editor/UIBuilder/BehaviourTreeEditorStyle.uss?fileID=7433441132597879392&amp;guid=8781ca2a6e79ccf4da2e234c8c123d2f&amp;type=3#BehaviourTreeEditorStyle" />
+    <Style src="project://database/Packages/com.thekiwicoder.behaviourtreeditor/Editor/UIBuilder/BehaviourTreeEditorStyle.uss?fileID=7433441132597879392&amp;guid=8781ca2a6e79ccf4da2e234c8c123d2f&amp;type=3#BehaviourTreeEditorStyle" />
     <uie:Toolbar>
         <uie:ToolbarMenu display-tooltip-when-elided="true" text="Assets " />
         <uie:ToolbarSpacer style="flex-grow: 1;" />
@@ -33,21 +33,14 @@
             <TheKiwiCoder.BehaviourTreeView focusable="true" style="flex-grow: 1; border-top-width: 2px; border-top-color: rgb(0, 0, 0);" />
         </ui:VisualElement>
     </TheKiwiCoder.SplitView>
-    <TheKiwiCoder.OverlayView name="OverlayView" style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; align-items: center; justify-content: center; background-color: rgba(0, 0, 0, 0.5); visibility: hidden;">
-        <ui:VisualElement style="flex-grow: 0; background-color: rgb(56, 56, 56); border-top-left-radius: 10px; border-bottom-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; flex-shrink: 0; width: 500px;">
-            <ui:Label tabindex="-1" text="Open Behaviour Tree" display-tooltip-when-elided="true" style="font-size: 25px; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; -unity-font-style: bold;" />
-            <ui:VisualElement style="flex-grow: 0; margin-left: 10px; margin-right: 10px; margin-top: 10px; margin-bottom: 10px; background-color: rgb(56, 56, 56);">
-                <ui:VisualElement style="border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-left-color: rgb(117, 117, 117); border-right-color: rgb(117, 117, 117); border-top-color: rgb(117, 117, 117); border-bottom-color: rgb(117, 117, 117); border-top-left-radius: 5px; border-bottom-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px;">
-                    <ui:Label text="Select Existing ..." display-tooltip-when-elided="true" style="-unity-text-align: upper-left; font-size: 16px; color: rgb(210, 210, 210); -unity-font-style: italic;" />
-                    <ui:DropdownField index="-1" label="Asset" />
-                    <ui:Button text="Open" display-tooltip-when-elided="true" name="OpenButton" style="align-items: flex-start; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; -unity-text-align: middle-center; flex-grow: 0; width: 150px;" />
-                </ui:VisualElement>
-                <ui:VisualElement style="border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-top-left-radius: 5px; border-bottom-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-left-color: rgb(117, 117, 117); border-right-color: rgb(117, 117, 117); border-top-color: rgb(117, 117, 117); border-bottom-color: rgb(117, 117, 117); align-items: flex-start; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; margin-top: 10px; justify-content: flex-start;">
-                    <ui:Label tabindex="-1" text="Create New ..." display-tooltip-when-elided="true" style="font-size: 16px; -unity-font-style: italic; flex-grow: 1; align-items: flex-start; justify-content: flex-start;" />
-                    <ui:TextField picking-mode="Ignore" label="Name" value="New Behaviour Tree" text="New Behaviour Tree" name="TreeName" style="flex-grow: 1;" />
-                    <ui:TextField picking-mode="Ignore" label="Path" text="Assets/" name="LocationPath" style="flex-grow: 1;" />
-                    <ui:Button text="Create" display-tooltip-when-elided="true" name="CreateButton" style="align-items: flex-start; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; -unity-text-align: middle-center; flex-grow: 0; width: 150px;" />
-                </ui:VisualElement>
+    <TheKiwiCoder.OverlayView name="OverlayView" style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; align-items: center; justify-content: center; background-color: rgba(0, 0, 0, 0.5); visibility: visible;">
+        <ui:VisualElement name="ProjectView" style="flex-grow: 0; background-color: rgb(56, 56, 56); border-top-left-radius: 10px; border-bottom-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; flex-shrink: 0; width: 500px; display: flex; min-height: 400px; max-height: 800px;">
+            <ui:Label tabindex="-1" text="Open Behaviour Tree" display-tooltip-when-elided="true" name="Title" style="font-size: 25px; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; -unity-font-style: bold; -unity-text-align: upper-left; margin-left: 10px; margin-right: 10px; margin-top: 10px; margin-bottom: 10px;" />
+            <ui:VisualElement style="flex-grow: 1; margin-left: 10px; margin-right: 10px; margin-top: 10px; margin-bottom: 10px; background-color: rgb(56, 56, 56);">
+                <ui:ScrollView name="ListViewContainer" style="min-height: 50px;" />
+            </ui:VisualElement>
+            <ui:VisualElement style="align-items: flex-start; margin-left: 10px; margin-right: 10px; margin-top: 10px; margin-bottom: 10px;">
+                <ui:Button text="Create New Tree" display-tooltip-when-elided="true" name="CreateButton" style="align-items: flex-start; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; -unity-text-align: middle-center; width: 150px; min-height: 40px;" />
             </ui:VisualElement>
         </ui:VisualElement>
     </TheKiwiCoder.OverlayView>

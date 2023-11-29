@@ -16,3 +16,8 @@ Label {
 .node-property-field .unity-base-field {
     margin-left: 0;
 }
+
+.unity-multi-column-view__cell {
+    justify-content: center;
+    margin-left: 5px;
+}
