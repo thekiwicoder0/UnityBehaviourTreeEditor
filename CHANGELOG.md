@@ -6,9 +6,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 Note this package is still in very early development and in high flux. 
 
-# [0.0.19] - 27-03-2023
+# [0.0.20] - 29-11-2023
 
-## Update 19
+### Added
+- N/A
+
+### Changed
+- Improved Open Behaviour Tree dialog menu
+
+### Fixed
+- BlackboardKey 'Delete' context menu option now appears when clicking anywhere within the row
+
+# [0.0.19] - 27-03-2023
 
 - Restructured repository to contain just the package rather than the project. Installation URL is now just https://github.com/thekiwicoder0/UnityBehaviourTreeEditor.git
 - Increased node text size slightly and center aligned
@@ -16,8 +25,6 @@ Note this package is still in very early development and in high flux.
 - Use GraphElement.Capabilities to disable node snapping rather than editor prefs
 
 # [0.0.18] - 09-03-2023
-
-## Update 18
 
 - Blackboard Keys can now be renamed by double clicking on the blackboard key label
 - Nodes can be copy, pasted, and duplicated in the tree view
