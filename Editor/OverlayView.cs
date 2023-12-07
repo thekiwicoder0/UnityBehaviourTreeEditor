@@ -2,9 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEditor;
-using UnityEditor.UIElements;
 using System;
-using WebSocketSharp;
 
 namespace TheKiwiCoder {
     public class OverlayView : VisualElement {
@@ -119,7 +117,7 @@ namespace TheKiwiCoder {
             var settings = BehaviourTreeEditorWindow.Instance.settings;
 
             string savePath = UnityEditor.EditorUtility.SaveFilePanel("Create New", settings.newTreePath, "New Behavior Tree", "asset");
-            if (savePath.IsNullOrEmpty()) {
+            if (string.IsNullOrEmpty(savePath)) {
                 return;
             }
 
