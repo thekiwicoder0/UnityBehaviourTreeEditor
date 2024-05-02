@@ -6,8 +6,9 @@ using UnityEditor;
 using UnityEditor.UIElements;
 
 namespace TheKiwiCoder {
-    public class NewScriptDialogView : VisualElement {
-        public new class UxmlFactory : UxmlFactory<NewScriptDialogView, UxmlTraits> { }
+
+    [UxmlElement]
+    public partial class NewScriptDialogView : VisualElement {
 
         EditorUtility.ScriptTemplate scriptTemplate;
         TextField textField;

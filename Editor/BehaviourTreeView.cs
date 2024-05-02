@@ -8,8 +8,9 @@ using System;
 using System.Linq;
 
 namespace TheKiwiCoder {
-    public class BehaviourTreeView : GraphView {
-        public new class UxmlFactory : UxmlFactory<BehaviourTreeView, GraphView.UxmlTraits> { }
+
+    [UxmlElement]
+    public partial class BehaviourTreeView : GraphView {
 
         // Node positions snap to 15 pixels
         public static int gridSnapSize = 15;
