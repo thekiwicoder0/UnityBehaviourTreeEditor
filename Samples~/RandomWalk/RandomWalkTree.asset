@@ -26,8 +26,8 @@ MonoBehaviour:
   blackboard:
     keys:
     - rid: 1704181477311250435
-  viewPosition: {x: 707, y: 142, z: 0}
-  viewScale: {x: 0.7561437, y: 0.7561437, z: 1}
+  viewPosition: {x: 784, y: 43, z: 0}
+  viewScale: {x: 0.8695652, y: 0.8695652, z: 1}
   references:
     version: 2
     RefIds:

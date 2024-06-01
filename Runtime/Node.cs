@@ -12,7 +12,6 @@ namespace TheKiwiCoder {
             Success
         }
 
-        [HideInInspector] public State state = State.Running;
         [HideInInspector] public bool started = false;
         [HideInInspector] public string guid = System.Guid.NewGuid().ToString();
         [HideInInspector] public Vector2 position;
@@ -32,7 +31,9 @@ namespace TheKiwiCoder {
                 started = true;
             }
 
-            state = OnUpdate();
+            var state = OnUpdate();
+
+            context.tickResults[guid] = state;
 
             if (state != State.Running) {
                 OnStop();
@@ -45,7 +46,6 @@ namespace TheKiwiCoder {
         public void Abort() {
             BehaviourTree.Traverse(this, (node) => {
                 node.started = false;
-                node.state = State.Running;
                 node.OnStop();
             });
         }

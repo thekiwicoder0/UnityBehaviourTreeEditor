@@ -2,6 +2,34 @@
 
 All notable changes to this package will be documented in this file.
 
+# [0.0.30] - 01-06-2024
+## Changed
+- Runtime: Selector / Sequencer / Parallel nodes now actively tick all children rather than ticking from the previous child. 
+- Runtime: Added TickDelta to context object to support multiple tick modes
+- Nodes: RandomPosition min/max values expanded to vector3
+- Nodes: Parallel node now has a threshold property to determine how many children need to succeed before this node returns success.
+- Editor: Behaviour Tree menu item is now accessed under `Window -> AI -> Behaviour Tree` to conform with standard Unity tools
+- Editor: Grid snap size is now 225 by default. 
+- Editor: Populate GameObject behaviour tree instances to asset selector while in play mode
+- Editor: Improved debugger performance when inspecting an active tree.
+
+## Added
+- Runtime: Conditional Nodes. Specialisation of an ActionNode which returns true/false. Has built in node option for negating the condition
+- Runtime: BehaviourTreeInstance.ManualTick() function to control behaviour tree tick manually
+- Runtime: BehaviourTreeInstance.StartBehaviour() function to manually start a behaviour
+- Runtime: TickMode to control when the tree is ticked (update/fixedupdate/lateupdate/manual)
+- Runtime: StartMode to control when the tree is started (awake/onenable/start/manual)
+- Runtime: Unity profile markers for runtime and editor
+- ProjectSettings: grid snap size to project settings
+- ProjectSettings: autoSelectNodeHierarchy option to enable subtree selection by default
+- Editor: Added icons to nodes on canvas 
+
+## Removed
+
+- Runtime: Removed Switch Node
+- Runtime: Removed Interrupt Selector Node
+- Runtime: Removed Random Selector Node
+
 # [0.0.21] - 02-05-2024
 
 ### Changed

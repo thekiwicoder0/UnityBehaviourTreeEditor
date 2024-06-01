@@ -115,21 +115,7 @@ namespace TheKiwiCoder {
         }
 
         void OnCreateAsset() {
-            var settings = BehaviourTreeEditorWindow.Instance.settings;
-
-            string savePath = UnityEditor.EditorUtility.SaveFilePanel("Create New", settings.newTreePath, "New Behavior Tree", "asset");
-            if (string.IsNullOrEmpty(savePath)) {
-                return;
-            }
-
-            string name = System.IO.Path.GetFileNameWithoutExtension(savePath);
-            string folder = System.IO.Path.GetDirectoryName(savePath);
-            folder = folder.Substring(folder.IndexOf("Assets"));
-
-            //System.IO.Directory.CreateDirectory(folder);
-            BehaviourTree tree = EditorUtility.CreateNewTree(name, folder);
-
-
+            BehaviourTree tree = EditorUtility.CreateNewTree();
             if (tree) {
                 TreeSelected(tree);
                 style.visibility = Visibility.Hidden;

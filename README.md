@@ -98,11 +98,9 @@ The composite node types included in the package are:
 
 |Node Type|Execution Order|Success|Failure|
 ---| --- | --- | --- |
-| Sequencer | Executes children one at a time left to right | When all children return success | When one child returns failure
-| Selector | Executes children one at a time left to right | When one child returns success | When all children return failure
-| Random Selector | Randomly selects one child to execute (:O) | When the child returns success | When the child returns failure
-| Parallel | Executes all children 'at once' concurrently. Multiple children can be in the running state at the same time. | When all children return success | When one child returns failure. Remaining running children are aborted.
-| Interrupt Selector | Similar to Selector, but children are constantly reevaluated each tick. If a child with higher priority succeeds, the current running child is aborted and control is given to the new child. | When one child returns success | When all children return failure
+| Sequencer | Ticks children left to right until a child returns failure. | When all children return success | When one child returns failure
+| Selector | Ticks children left to right until a child returns success. | When one child returns success | When all children return failure
+| Parallel | Ticks all children until M children return success. | When M children return success | When (N-M)+1 children return failure
 
 ## Decorator Nodes
 
@@ -120,7 +118,7 @@ The Decorator node types included in the package are:
 
 ## The Editor
 
-The main window can be accessed via the menu ```TheKiwiCoder->BehaviourTreeEditor...```
+The main window can be accessed via the menu ```Window->AI->BehaviourTree...```
 
 <img src="Documentation/Images/menu_command.png" width = "200" />
 
@@ -285,3 +283,8 @@ While in playmode, a game object can be selected to analyse which state it's in.
 There are various settings for the behaviour tree editor. These can be accessed via the standard project settings menu under the 'Behaviour Tree' category.
 
 <img src="Documentation/Images/settings.png" width = "400" />
+
+
+### References
+
+1. Michele Colledanchise and Petter ¨Ogren, Behavior Trees in Robotics and AI. https://arxiv.org/pdf/1709.00084

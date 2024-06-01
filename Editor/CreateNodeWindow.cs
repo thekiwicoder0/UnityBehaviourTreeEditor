@@ -26,15 +26,21 @@ namespace TheKiwiCoder {
                     }
                     return BehaviourTreeEditorWindow.Instance.scriptTemplateActionNode;
                 case 1:
+                    if (projectSettings.scriptTemplateConditionNode) {
+                        return projectSettings.scriptTemplateConditionNode;
+                    }
+                    return BehaviourTreeEditorWindow.Instance.scriptTemplateConditionNode;
+                case 2:
                     if (projectSettings.scriptTemplateCompositeNode) {
                         return projectSettings.scriptTemplateCompositeNode;
                     }
                     return BehaviourTreeEditorWindow.Instance.scriptTemplateCompositeNode;
-                case 2:
+                case 3:
                     if (projectSettings.scriptTemplateDecoratorNode) {
                         return projectSettings.scriptTemplateDecoratorNode;
                     }
                     return BehaviourTreeEditorWindow.Instance.scriptTemplateDecoratorNode;
+                
             }
             Debug.LogError("Unhandled script template type:" + type);
             return null;
@@ -51,8 +57,9 @@ namespace TheKiwiCoder {
 
             scriptFileAssets = new EditorUtility.ScriptTemplate[] {
                 new EditorUtility.ScriptTemplate { templateFile = GetScriptTemplate(0), defaultFileName = "NewActionNode", subFolder = "Actions" },
-                new EditorUtility.ScriptTemplate { templateFile = GetScriptTemplate(1), defaultFileName = "NewCompositeNode", subFolder = "Composites" },
-                new EditorUtility.ScriptTemplate { templateFile = GetScriptTemplate(2), defaultFileName = "NewDecoratorNode", subFolder = "Decorators" },
+                new EditorUtility.ScriptTemplate { templateFile = GetScriptTemplate(1), defaultFileName = "NewConditionNode", subFolder = "Conditions" },
+                new EditorUtility.ScriptTemplate { templateFile = GetScriptTemplate(2), defaultFileName = "NewCompositeNode", subFolder = "Composites" },
+                new EditorUtility.ScriptTemplate { templateFile = GetScriptTemplate(3), defaultFileName = "NewDecoratorNode", subFolder = "Decorators" },
             };
         }
 
@@ -69,11 +76,26 @@ namespace TheKiwiCoder {
                 tree.Add(new SearchTreeGroupEntry(new GUIContent("Actions")) { level = 1 });
                 var types = TypeCache.GetTypesDerivedFrom<ActionNode>();
                 foreach (var type in types) {
-                    System.Action invoke = () => CreateNode(type, context);
-                    tree.Add(new SearchTreeEntry(new GUIContent($"{type.Name}")) {level = 2,userData = invoke });
+
+                    // Ignore condition types
+                    if (!type.IsSubclassOf(typeof(ConditionNode))) {
+                        System.Action invoke = () => CreateNode(type, context);
+                        tree.Add(new SearchTreeEntry(new GUIContent($"{type.Name}")) {level = 2,userData = invoke });
+                    }
                 }
             }
 
+            // Condition nodes can only be added as children
+            if (isSourceParent || source == null) 
+            {
+                tree.Add(new SearchTreeGroupEntry(new GUIContent("Conditions")) { level = 1 });
+                var types = TypeCache.GetTypesDerivedFrom<ConditionNode>();
+                foreach (var type in types) {
+                    System.Action invoke = () => CreateNode(type, context);
+                    tree.Add(new SearchTreeEntry(new GUIContent($"{type.Name}")) { level = 2, userData = invoke });
+                }
+            }
+                
             {
                 tree.Add(new SearchTreeGroupEntry(new GUIContent("Composites")) { level = 1 });
                 {
@@ -97,15 +119,19 @@ namespace TheKiwiCoder {
             }
 
             {
+                
                 tree.Add(new SearchTreeGroupEntry(new GUIContent("New Script...")) { level = 1 });
 
                 System.Action createActionScript = () => CreateScript(scriptFileAssets[0], context);
                 tree.Add(new SearchTreeEntry(new GUIContent($"New Action Script")) { level = 2, userData = createActionScript });
 
-                System.Action createCompositeScript = () => CreateScript(scriptFileAssets[1], context);
+                System.Action createConditionScript = () => CreateScript(scriptFileAssets[1], context);
+                tree.Add(new SearchTreeEntry(new GUIContent($"New Condition Script")) { level = 2, userData = createConditionScript });
+
+                System.Action createCompositeScript = () => CreateScript(scriptFileAssets[2], context);
                 tree.Add(new SearchTreeEntry(new GUIContent($"New Composite Script")) { level = 2, userData = createCompositeScript });
 
-                System.Action createDecoratorScript = () => CreateScript(scriptFileAssets[2], context);
+                System.Action createDecoratorScript = () => CreateScript(scriptFileAssets[3], context);
                 tree.Add(new SearchTreeEntry(new GUIContent($"New Decorator Script")) { level = 2, userData = createDecoratorScript });
             }
 

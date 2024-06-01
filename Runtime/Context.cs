@@ -5,11 +5,10 @@ using UnityEngine.AI;
 
 namespace TheKiwiCoder {
 
-    // The context is a shared object every node has access to.
-    // Commonly used components and subsytems should be stored here
-    // It will be somewhat specfic to your game exactly what to add here.
-    // Feel free to extend this class 
+    // The context is a storage object for sharing common data between nodes in the tree.
+    // Useful for caching components, game objects, or other data that is used by multiple nodes.
     public class Context {
+
         public GameObject gameObject;
         public Transform transform;
         public Animator animator;
@@ -19,7 +18,8 @@ namespace TheKiwiCoder {
         public BoxCollider boxCollider;
         public CapsuleCollider capsuleCollider;
         public CharacterController characterController;
-        // Add other game specific systems here
+        public Dictionary<string, Node.State> tickResults;
+        public float tickDelta;
 
         public static Context CreateFromGameObject(GameObject gameObject) {
             // Fetch all commonly used components
@@ -33,10 +33,12 @@ namespace TheKiwiCoder {
             context.boxCollider = gameObject.GetComponent<BoxCollider>();
             context.capsuleCollider = gameObject.GetComponent<CapsuleCollider>();
             context.characterController = gameObject.GetComponent<CharacterController>();
-
-            // Add whatever else you need here...
-
+            context.tickResults = new Dictionary<string, Node.State>();
             return context;
+        }
+
+        public T GetComponent<T>() where T : Component {
+            return gameObject.GetComponent<T>();
         }
     }
 }

@@ -3,29 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace TheKiwiCoder {
+    
     [System.Serializable]
     public class Selector : CompositeNode {
-        protected int current;
 
         protected override void OnStart() {
-            current = 0;
+
         }
 
         protected override void OnStop() {
         }
 
         protected override State OnUpdate() {
-            for (int i = current; i < children.Count; ++i) {
-                current = i;
-                var child = children[current];
-
-                switch (child.Update()) {
-                    case State.Running:
-                        return State.Running;
-                    case State.Success:
-                        return State.Success;
-                    case State.Failure:
-                        continue;
+            for (int i = 0; i < children.Count; ++i) {
+                var childStatus = children[i].Update();
+                if (childStatus == State.Running) {
+                    return State.Running;
+                } else if (childStatus == State.Success) {
+                    return State.Success;
                 }
             }
 

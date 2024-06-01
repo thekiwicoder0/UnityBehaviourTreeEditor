@@ -24,7 +24,19 @@ namespace TheKiwiCoder
         }
 
 
-        public static BehaviourTree CreateNewTree(string assetName, string folder) {
+        public static BehaviourTree CreateNewTree() {
+
+            var settings = BehaviourTreeEditorWindow.Instance.settings;
+
+            string savePath = UnityEditor.EditorUtility.SaveFilePanel("Create New", settings.newTreePath, "New Behavior Tree", "asset");
+            if (string.IsNullOrEmpty(savePath)) {
+                return null;
+            }
+
+            string assetName = System.IO.Path.GetFileNameWithoutExtension(savePath);
+            string folder = System.IO.Path.GetDirectoryName(savePath);
+            folder = folder.Substring(folder.IndexOf("Assets"));
+
 
             string path = System.IO.Path.Join(folder, $"{assetName}.asset");
             if (System.IO.File.Exists(path)) {
@@ -87,8 +99,8 @@ namespace TheKiwiCoder
 
         }
 
-        public static float RoundTo(float value, int nearestInteger) {
-            return (Mathf.FloorToInt(value / nearestInteger)) * nearestInteger;
+        public static float SnapTo(float value, int nearestInteger) {
+            return (Mathf.RoundToInt(value / nearestInteger)) * nearestInteger;
         }
 
     }

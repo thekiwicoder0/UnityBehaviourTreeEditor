@@ -14,6 +14,14 @@
     border-bottom-right-radius: 5px;
 }
 
+.node {
+    min-width: 150px;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
 #input {
     align-items: center;
 }
@@ -49,13 +57,6 @@
     border-bottom-width: 1px;
 }
 
-:selected > #selection-border {
-    border-left-width: 1px;
-    border-right-width: 1px;
-    border-top-width: 1px;
-    border-bottom-width: 1px;
-}
-
 :hover:selected > #selection-border {
     border-left-width: 2px;
     border-right-width: 2px;
@@ -63,12 +64,11 @@
     border-bottom-width: 2px;
 }
 
-.node {
-    min-width: 150px;
-    margin-left: 0;
-    margin-right: 0;
-    margin-top: 0;
-    margin-bottom: 0;
+:selected > #selection-border {
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
 }
 
 #title {
@@ -77,32 +77,19 @@
     min-height: 30px;
 }
 
-#description {
-    font-size: 12px;
+.composite #description {
+    font-size: 18px;
     white-space: normal;
     max-width: 140px;
+    display: flex;
+    visibility: visible;
+    -unity-text-align: upper-center;
+    -unity-font-style: italic;
 }
 
 #divider {
     min-height: 1px;
     background-color: rgb(72, 72, 72);
-}
-
-.action #input {
-    background-color: rgb(152, 206, 0);
-}
-
-.composite #input {
-    background-color: rgb(246, 174, 45);
-}
-
-.decorator #input {
-    background-color: rgb(137, 166, 251);
-}
-
-.root #input {
-    background-color: rgb(255, 81, 84);
-    min-height: 20px;
 }
 
 #node-state {
@@ -117,20 +104,159 @@
     border-bottom-right-radius: 5px;
 }
 
-.running #node-state {
-    background-color: rgb(255, 213, 0);
-}
-
-.success #node-state {
-    background-color: rgba(60, 212, 0, 0.54);
-}
-
-.failure #node-state {
-    background-color: rgba(250, 25, 25, 0.67);
-}
-
 #title-label {
     font-size: 18px;
     -unity-text-align: upper-center;
     -unity-font-style: bold;
+    background-color: rgba(0, 0, 0, 0);
+    color: rgb(40, 40, 40);
+    margin-top: -20px;
+}
+
+.root #input {
+    background-color: rgb(255, 81, 84);
+    min-height: 20px;
+}
+
+.root #icon {
+    background-image: url('project://database/Packages/com.thekiwicoder.behaviourtreeditor/Editor/Icons/node_root.png?fileID=2800000&guid=8c12a5297a60c5a43b1268d547473810&type=3#node_root');
+    -unity-background-scale-mode: scale-to-fit;
+    width: 32px;
+    height: 32px;
+    justify-content: flex-start;
+    align-items: auto;
+    align-self: center;
+    margin-top: 5px;
+}
+
+.action #icon {
+    background-image: url('project://database/Assets/node_action.png?fileID=2800000&guid=8e9a5a1f81c11ef4e9047b305972efcb&type=3#node_action');
+    -unity-background-scale-mode: scale-to-fit;
+    width: 32px;
+    height: 32px;
+    justify-content: flex-start;
+    align-items: auto;
+    align-self: flex-start;
+    margin-top: 5px;
+}
+
+.action #title {
+    align-items: center;
+    display: flex;
+    visibility: visible;
+    flex-grow: 1;
+}
+
+.action #title-label {
+    align-items: flex-start;
+    padding-left: 6px;
+    display: none;
+    visibility: hidden;
+}
+
+.action #title-button-container {
+    flex-direction: row;
+    align-items: center;
+    padding-right: 5px;
+    padding-left: 5px;
+    flex-grow: 1;
+    justify-content: flex-end;
+}
+
+.action #input {
+    background-color: rgb(0, 120, 206);
+}
+
+.condition #node-border {
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+    border-bottom-left-radius: 15px;
+}
+
+.condition #selection-border {
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+    border-bottom-left-radius: 15px;
+}
+
+.condition #input {
+    background-color: rgb(181, 0, 206);
+}
+
+.condition #icon {
+    background-image: url('project://database/Packages/com.thekiwicoder.behaviourtreeditor/Editor/Icons/node_exclamation.png?fileID=2800000&guid=dd3247368b7f1bc43baf81039a01f4ee&type=3#node_exclamation');
+    -unity-background-scale-mode: scale-to-fit;
+    width: 25px;
+    height: 25px;
+    justify-content: flex-start;
+    align-items: auto;
+    align-self: flex-start;
+    margin-top: 5px;
+    -unity-background-image-tint-color: rgb(224, 214, 43);
+    display: none;
+    visibility: hidden;
+}
+
+.condition.invert #icon {
+    background-image: url('project://database/Packages/com.thekiwicoder.behaviourtreeditor/Editor/Icons/node_exclamation.png?fileID=2800000&guid=dd3247368b7f1bc43baf81039a01f4ee&type=3#node_exclamation');
+    -unity-background-scale-mode: scale-to-fit;
+    width: 25px;
+    height: 25px;
+    justify-content: flex-start;
+    align-items: auto;
+    align-self: flex-start;
+    margin-top: 5px;
+    -unity-background-image-tint-color: rgb(224, 214, 43);
+    display: flex;
+    visibility: visible;
+}
+
+.composite #input {
+    background-color: rgb(246, 174, 45);
+}
+
+.composite #output {
+}
+
+.sequencer #icon {
+    background-image: url('project://database/Assets/node_sequencer.png?fileID=2800000&guid=001bd574542a77b4993e606be0fcb007&type=3#node_sequencer');
+    -unity-background-scale-mode: scale-to-fit;
+    width: 36px;
+    height: 36px;
+    justify-content: flex-start;
+    align-items: auto;
+    align-self: center;
+    margin-top: 5px;
+}
+
+.parallel #icon {
+    background-image: url('project://database/Packages/com.thekiwicoder.behaviourtreeditor/Editor/Icons/node_parallel.png?fileID=2800000&guid=457b3ae70c47bfa4088ee77f4fc884c7&type=3#node_parallel');
+    -unity-background-scale-mode: scale-to-fit;
+    width: 36px;
+    height: 36px;
+    justify-content: flex-start;
+    align-items: auto;
+    align-self: center;
+    margin-top: 5px;
+}
+
+.selector #icon {
+    background-image: url('project://database/Packages/com.thekiwicoder.behaviourtreeditor/Editor/Icons/node_selector.png?fileID=2800000&guid=05c3c1cf306a9264a859ae5258b19dd2&type=3#node_selector');
+    -unity-background-scale-mode: scale-to-fit;
+    width: 32px;
+    height: 32px;
+    justify-content: flex-start;
+    align-items: auto;
+    align-self: center;
+    margin-top: 5px;
+}
+
+.decorator #input {
+    background-color: rgb(137, 166, 251);
+}
+
+.node-edge {
+    --edge-color: rgb(0, 1, 0);
 }

@@ -10,20 +10,34 @@ namespace TheKiwiCoder {
     // Create a new type of Settings Asset.
     public class BehaviourTreeProjectSettings : ScriptableObject {
 
+        [Header("Asset Settings")]
         [Tooltip("Folder where new tree assets will be created. (Must begin with 'Assets')")]
         public string newTreePath = "Assets/";
 
         [Tooltip("Folder where new node scripts will be created. (Must begin with 'Assets')")]
         public string newNodePath = "Assets/";
 
-        [Tooltip("Script template to use when creating action nodes")]
+        [Tooltip("Custom script template to use when creating action nodes")]
         public TextAsset scriptTemplateActionNode;
 
-        [Tooltip("Script template to use when creating composite nodes")]
+        [Tooltip("Custom script template to use when creating condition nodes")]
+        public TextAsset scriptTemplateConditionNode;
+
+        [Tooltip("Custom script template to use when creating composite nodes")]
         public TextAsset scriptTemplateCompositeNode;
 
-        [Tooltip("Script template to use when creating decorator nodes")]
+        [Tooltip("Custom script template to use when creating decorator nodes")]
         public TextAsset scriptTemplateDecoratorNode;
+
+        [Header("Node Canvas Settings")]
+        [Tooltip("Horizontal grid size nodes will snap to")]
+        public int gridSnapSizeX = 15;
+
+        [Tooltip("Vertical grid size nodes will snap to")]
+        public int gridSnapSizeY = 225;
+
+        [Tooltip("If enabled, selecting a node will automatically add all it's children to the selection. If disabled, hold control to select entire node hierarchy")]
+        public bool autoSelectNodeHierarchy = false;
 
         static BehaviourTreeProjectSettings FindSettings(){
             var guids = AssetDatabase.FindAssets($"t:{nameof(BehaviourTreeProjectSettings)}");

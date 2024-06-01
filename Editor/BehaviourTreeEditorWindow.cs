@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEditor.UIElements;
 using UnityEditor.Callbacks;
-
+using Unity.Profiling;
 
 namespace TheKiwiCoder {
 
@@ -39,12 +39,15 @@ namespace TheKiwiCoder {
                 return AssetDeleteResult.DidNotDelete;
             }
         }
+
+        static readonly ProfilerMarker editorUpdate = new ProfilerMarker("BehaviourTree.EditorUpdate");
         public static BehaviourTreeEditorWindow Instance;
         public BehaviourTreeProjectSettings settings;
         public VisualTreeAsset behaviourTreeXml;
         public VisualTreeAsset nodeXml;
         public StyleSheet behaviourTreeStyle;
         public TextAsset scriptTemplateActionNode;
+        public TextAsset scriptTemplateConditionNode;
         public TextAsset scriptTemplateCompositeNode;
         public TextAsset scriptTemplateDecoratorNode;
 
@@ -64,7 +67,7 @@ namespace TheKiwiCoder {
         public BehaviourTree tree;
         public SerializedBehaviourTree serializer;
 
-        [MenuItem("TheKiwiCoder/BehaviourTreeEditor ...")]
+        [MenuItem("Window/AI/BehaviourTree")]
         public static void OpenWindow() {
             BehaviourTreeEditorWindow wnd = GetWindow<BehaviourTreeEditorWindow>();
             wnd.titleContent = new GUIContent("BehaviourTreeEditor");
@@ -128,6 +131,25 @@ namespace TheKiwiCoder {
                         SelectNewTree(tree);
                     });
                 });
+                if (EditorApplication.isPlaying) {
+                    
+                    toolbarMenu.menu.AppendSeparator();
+
+                    var behaviourTreeInstances = Resources.FindObjectsOfTypeAll(typeof(BehaviourTreeInstance));
+                    foreach(var instance in behaviourTreeInstances) {
+                        BehaviourTreeInstance behaviourTreeInstance = instance as BehaviourTreeInstance;
+                        GameObject gameObject = behaviourTreeInstance.gameObject;
+                        if (behaviourTreeInstance != null && gameObject.scene != null && gameObject.scene.name != null) {
+                            
+                            toolbarMenu.menu.AppendAction($"{gameObject.name} [{behaviourTreeInstance.behaviourTree.name}]", (a) => {
+                                SelectNewTree(behaviourTreeInstance.RuntimeTree);
+                                Selection.activeObject = gameObject;
+                                
+                            });
+                        }
+                    }
+                    
+                }
                 toolbarMenu.menu.AppendSeparator();
                 toolbarMenu.menu.AppendAction("New Tree...", (a) => OnToolbarNewAsset());
             });
@@ -288,12 +310,14 @@ namespace TheKiwiCoder {
 
         private void OnInspectorUpdate() {
             if (Application.isPlaying) {
+                editorUpdate.Begin();
                 treeView?.UpdateNodeStates();
+                editorUpdate.End();
             }
         }
 
         void OnToolbarNewAsset() {
-            BehaviourTree tree = EditorUtility.CreateNewTree("New Behaviour Tree", settings.newTreePath);
+            BehaviourTree tree = EditorUtility.CreateNewTree();
             if (tree) {
                 SelectNewTree(tree);
             }

@@ -33,7 +33,9 @@ namespace TheKiwiCoder {
                     return;
             }
 
-            if (evt.ctrlKey) {
+            bool forceSelectNodeHierarchy = BehaviourTreeEditorWindow.Instance.settings.autoSelectNodeHierarchy;
+            if (evt.ctrlKey || forceSelectNodeHierarchy) {
+                graphView.ClearSelection();
                 SelectChildren(evt, graphView, clickedElement);
             }
         }
@@ -44,6 +46,10 @@ namespace TheKiwiCoder {
                 var view = graphView.FindNodeView(node);
                 graphView.AddToSelection(view);
             });
+
+            // Insepctor should always focus on root element so this needs to be selected last
+            graphView.RemoveFromSelection(clickedElement);
+            graphView.AddToSelection(clickedElement);
         }
     }
 }

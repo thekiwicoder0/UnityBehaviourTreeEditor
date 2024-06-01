@@ -6,10 +6,13 @@ using UnityEngine.UIElements;
 using UnityEditor.UIElements;
 using UnityEditor.Experimental.GraphView;
 using UnityEditor;
+using System.Linq;
+using UnityEngine.XR;
 
 namespace TheKiwiCoder {
 
     public class NodeView : UnityEditor.Experimental.GraphView.Node {
+        
         public Action<NodeView> OnNodeSelected;
         public Node node;
         public Port input;
@@ -58,20 +61,67 @@ namespace TheKiwiCoder {
         public void SetupDataBinding() {
             SerializedBehaviourTree serializer = BehaviourTreeEditorWindow.Instance.serializer;
             var nodeProp = serializer.FindNode(serializer.Nodes, node);
-            if (nodeProp != null) {
+            if (nodeProp == null) {
+                return;
+            }
+
+            if (node is ActionNode) {
+                Label descriptionLabel = this.Q<Label>("description");
+                descriptionLabel.text = node.GetType().Name;
+            }
+            
+            if (node is CompositeNode) {
                 var descriptionProp = nodeProp.FindPropertyRelative("description");
-                if (descriptionProp != null) {
-                    Label descriptionLabel = this.Q<Label>("description");
-                    descriptionLabel.BindProperty(descriptionProp);
-                }
+                Label descriptionLabel = this.Q<Label>("description");
+                SetDescriptionFieldVisible(descriptionLabel, descriptionProp);
+                descriptionLabel.TrackPropertyValue(descriptionProp, (property) => {
+                    SetDescriptionFieldVisible(descriptionLabel, property);
+                });
+                descriptionLabel.BindProperty(descriptionProp);
+            }
+
+            if (node is ConditionNode) {
+                var invertProperty = nodeProp.FindPropertyRelative("invert");
+                var icon = this.Q<VisualElement>("icon");
+                icon.TrackPropertyValue(invertProperty, UpdateConditionNodeClasses);
+            }
+        }
+
+        void SetDescriptionFieldVisible(Label label, SerializedProperty property) {
+            if (property.stringValue == null || property.stringValue.Length == 0) {
+                label.style.display = DisplayStyle.None;
+            } else {
+                label.style.display = DisplayStyle.Flex;
+            }
+        }
+
+        private void UpdateConditionNodeClasses(SerializedProperty obj) {
+            if (obj.boolValue) {
+                AddToClassList("invert");
+            } else {
+                RemoveFromClassList("invert");
             }
         }
 
         private void SetupClasses() {
             if (node is ActionNode) {
                 AddToClassList("action");
+
+                if (node is ConditionNode conditionNode) {
+                    AddToClassList("condition");
+                    if (conditionNode.invert) {
+                        AddToClassList("invert");
+                    }
+                }
             } else if (node is CompositeNode) {
                 AddToClassList("composite");
+                if (node is Sequencer) {
+                    AddToClassList("sequencer");
+                } else if (node is Selector) {
+                    AddToClassList("selector");
+                } else if (node is Parallel) {
+                    AddToClassList("parallel");
+                }
             } else if (node is DecoratorNode) {
                 AddToClassList("decorator");
             } else if (node is RootNode) {
@@ -116,8 +166,11 @@ namespace TheKiwiCoder {
         }
 
         public override void SetPosition(Rect newPos) {
-            newPos.x = EditorUtility.RoundTo(newPos.x, BehaviourTreeView.gridSnapSize);
-            newPos.y = EditorUtility.RoundTo(newPos.y, BehaviourTreeView.gridSnapSize);
+
+            var projectSettings = BehaviourTreeEditorWindow.Instance.settings;
+
+            newPos.x = EditorUtility.SnapTo(newPos.x, projectSettings.gridSnapSizeX);
+            newPos.y = EditorUtility.SnapTo(newPos.y, projectSettings.gridSnapSizeY);
 
             base.SetPosition(newPos);
 
@@ -143,27 +196,50 @@ namespace TheKiwiCoder {
             return left.position.x < right.position.x ? -1 : 1;
         }
 
-        public void UpdateState() {
-
-            RemoveFromClassList("running");
-            RemoveFromClassList("failure");
-            RemoveFromClassList("success");
-
+        public void UpdateState(Dictionary<string, Node.State> tickResults) {
             if (Application.isPlaying) {
-                switch (node.state) {
-                    case Node.State.Running:
-                        if (node.started) {
-                            AddToClassList("running");
-                        }
-                        break;
-                    case Node.State.Failure:
-                        AddToClassList("failure");
-                        break;
-                    case Node.State.Success:
-                        AddToClassList("success");
-                        break;
+                Node.State tickResult;
+                if(tickResults.TryGetValue(node.guid, out tickResult)) {
+                    ApplyActiveNodeStateStyle(tickResult);
+                } else {
+                    ApplyInactiveNodeStateStyle();
                 }
             }
+        }
+
+        void ApplyActiveNodeStateStyle(Node.State state) {
+            style.borderLeftWidth = 5;
+            style.borderRightWidth = 5;
+            style.borderTopWidth = 5;
+            style.borderBottomWidth = 5;
+            style.opacity = 1.0f;
+
+            if (state == Node.State.Success) {
+                style.borderLeftColor = Color.green;
+                style.borderRightColor = Color.green;
+                style.borderTopColor = Color.green;
+                style.borderBottomColor = Color.green;
+            }
+            else if (state == Node.State.Failure) {
+                style.borderLeftColor = Color.red;
+                style.borderRightColor = Color.red;
+                style.borderTopColor = Color.red;
+                style.borderBottomColor = Color.red;
+            }
+            else if (state == Node.State.Running) {
+                style.borderLeftColor = Color.yellow;
+                style.borderRightColor = Color.yellow;
+                style.borderTopColor = Color.yellow;
+                style.borderBottomColor = Color.yellow;
+            }
+        }
+
+        void ApplyInactiveNodeStateStyle() {
+            style.borderLeftWidth = 0;
+            style.borderRightWidth = 0;
+            style.borderTopWidth = 0;
+            style.borderBottomWidth = 0;
+            style.opacity = 0.5f;
         }
     }
 }

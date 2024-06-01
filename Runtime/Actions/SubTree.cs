@@ -1,8 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using TheKiwiCoder;
-using System;
 
 namespace TheKiwiCoder {
 
@@ -20,9 +16,7 @@ namespace TheKiwiCoder {
         }
 
         protected override void OnStart() {
-            if (treeInstance) {
-                treeInstance.treeState = Node.State.Running;
-            }
+            
         }
 
         protected override void OnStop() {
@@ -30,7 +24,7 @@ namespace TheKiwiCoder {
 
         protected override State OnUpdate() {
             if (treeInstance) {
-                return treeInstance.Update();
+                return treeInstance.Tick(context.tickDelta);
             }
             return State.Failure;
         }

@@ -6,45 +6,40 @@ using System.Linq;
 namespace TheKiwiCoder {
     [System.Serializable]
     public class Parallel : CompositeNode {
-        List<State> childrenLeftToExecute = new List<State>();
+
+        public int successThreshold = 1;
 
         protected override void OnStart() {
-            childrenLeftToExecute.Clear();
-            children.ForEach(a => {
-                childrenLeftToExecute.Add(State.Running);
-            });
+            
         }
 
         protected override void OnStop() {
         }
 
         protected override State OnUpdate() {
-            bool stillRunning = false;
-            for (int i = 0; i < childrenLeftToExecute.Count(); ++i) {
-                if (childrenLeftToExecute[i] == State.Running) {
-                    var status = children[i].Update();
-                    if (status == State.Failure) {
-                        AbortRunningChildren();
-                        return State.Failure;
-                    }
+            var childCount = children.Count;
 
-                    if (status == State.Running) {
-                        stillRunning = true;
-                    }
+            int successCount = 0;
+            int failureCount = 0;
 
-                    childrenLeftToExecute[i] = status;
+            for (int i = 0; i < childCount; ++i) {
+                var childState = children[i].Update();
+                if (childState == State.Success) {
+                    successCount++;
+                } else if (childState == State.Failure) {
+                    failureCount++;
                 }
             }
 
-            return stillRunning ? State.Running : State.Success;
-        }
-
-        void AbortRunningChildren() {
-            for (int i = 0; i < childrenLeftToExecute.Count(); ++i) {
-                if (childrenLeftToExecute[i] == State.Running) {
-                    children[i].Abort();
-                }
+            if (successCount >= successThreshold) {
+                return State.Success;
             }
+
+            if (failureCount > (childCount-successThreshold)) {
+                return State.Failure;
+            }
+
+            return State.Running;
         }
     }
 }

@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,9 +15,9 @@ namespace TheKiwiCoder {
         [SerializeReference]
         public List<Node> nodes = new List<Node>();
 
-        public Node.State treeState = Node.State.Running;
-
         public Blackboard blackboard = new Blackboard();
+
+        public Context treeContext;
 
         #region  EditorProperties 
         public Vector3 viewPosition = new Vector3(600, 300);
@@ -38,11 +39,10 @@ namespace TheKiwiCoder {
             });
         }
 
-        public Node.State Update() {
-            if (treeState == Node.State.Running) {
-                treeState = rootNode.Update();
-            }
-            return treeState;
+        public Node.State Tick(float tickDelta) {
+            treeContext.tickDelta = tickDelta;
+            treeContext.tickResults.Clear();
+            return rootNode.Update();
         }
 
         public static List<Node> GetChildren(Node parent) {
@@ -77,6 +77,7 @@ namespace TheKiwiCoder {
         }
 
         public void Bind(Context context) {
+            treeContext = context;
             Traverse(rootNode, node => {
                 node.context = context;
                 node.blackboard = blackboard;

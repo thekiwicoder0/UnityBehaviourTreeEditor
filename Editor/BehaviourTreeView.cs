@@ -11,10 +11,6 @@ namespace TheKiwiCoder {
 
     [UxmlElement]
     public partial class BehaviourTreeView : GraphView {
-
-        // Node positions snap to 15 pixels
-        public static int gridSnapSize = 15;
-
         public Action<NodeView> OnNodeSelected;
 
         protected override bool canCopySelection => true;
@@ -324,10 +320,25 @@ namespace TheKiwiCoder {
         }
 
         public void UpdateNodeStates() {
-            nodes.ForEach(n => {
-                NodeView view = n as NodeView;
-                view.UpdateState();
-            });
+            if (serializer == null) {
+                return;
+            }
+
+            if (serializer.tree == null) {
+                return;
+            }
+
+            if (serializer.tree.treeContext == null) {
+                return;
+            }
+
+            var tickResults = serializer.tree.treeContext.tickResults;
+            if (tickResults != null) {
+                nodes.ForEach(n => {
+                    NodeView view = n as NodeView;
+                    view.UpdateState(tickResults);
+                });
+            }
         }
 
         public void SelectNode(NodeView nodeView) {

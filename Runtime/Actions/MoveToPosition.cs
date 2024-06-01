@@ -40,6 +40,14 @@ namespace TheKiwiCoder {
         }
 
         protected override void OnStop() {
+            if (context.agent == null) {
+                return;
+            }
+
+            if (!context.agent.enabled) {
+                return;
+            }
+
             if (context.agent.pathPending) {
                 context.agent.ResetPath();
             }

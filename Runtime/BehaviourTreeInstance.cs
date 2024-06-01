@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Profiling;
 using UnityEngine;
 
 namespace TheKiwiCoder {
@@ -7,11 +8,36 @@ namespace TheKiwiCoder {
     [AddComponentMenu("TheKiwiCoder/BehaviourTreeInstance")]
     public class BehaviourTreeInstance : MonoBehaviour {
 
+        public enum TickMode {
+            None, // Use this update method to manually update the tree by calling ManualTick()
+            FixedUpdate,
+            Update,
+            LateUpdate
+        };
+
+        public enum StartMode {
+            None, // Use this start method to manually start the tree by calling StartBehaviour()
+            OnEnable,
+            OnAwake,
+            OnStart
+        };
+
         // The main behaviour tree asset
         [Tooltip("BehaviourTree asset to instantiate during Awake")]
         public BehaviourTree behaviourTree;
-        BehaviourTree runtimeTree;
 
+        [Tooltip("When to update this behaviour tree in the frame")]
+        public TickMode tickMode = TickMode.Update;
+
+        [Tooltip("When to start this behaviour tree")]
+        public StartMode startMode = StartMode.OnStart;
+
+        [Tooltip("Run behaviour tree validation at startup (Can be disabled for release)")]
+        public bool validate = true;
+
+        [Tooltip("Override / set blackboard key values for this behaviour tree instance")]
+        public List<BlackboardKeyValuePair> blackboardOverrides = new List<BlackboardKeyValuePair>();
+        
         public BehaviourTree RuntimeTree {
             get {
                 if (runtimeTree != null) {
@@ -22,27 +48,33 @@ namespace TheKiwiCoder {
             }
         }
 
-        [Tooltip("Run behaviour tree validation at startup (Can be disabled for release)")]
-        public bool validate = true;
-
-        // These values override the keys in the blackboard
-        public List<BlackboardKeyValuePair> blackboardOverrides = new List<BlackboardKeyValuePair>();
+        // Runtime tree instance
+        BehaviourTree runtimeTree;
 
         // Storage container object to hold game object subsystems
         Context context;
 
-        // Start is called before the first frame update
+        // Profile markers
+        static readonly ProfilerMarker profileUpdate = new ProfilerMarker("BehaviourTreeInstance.Update");
+
+        // Tree state from last tick
+        Node.State treeState = Node.State.Running;
+
         void OnEnable() {
+            if (startMode == StartMode.OnEnable) {
+                StartBehaviour(behaviourTree);
+            }
+        }
 
-            bool isValid = ValidateTree();
-            if (isValid) {
-                context = CreateBehaviourTreeContext();
-                runtimeTree = behaviourTree.Clone();
-                runtimeTree.Bind(context);
+        private void Awake() {
+            if (startMode == StartMode.OnAwake) {
+                StartBehaviour(behaviourTree);
+            }
+        }
 
-                ApplyBlackboardOverrides();
-            } else {
-                runtimeTree = null;
+        private void Start() {
+            if (startMode == StartMode.OnStart) {
+                StartBehaviour(behaviourTree);
             }
         }
 
@@ -57,19 +89,61 @@ namespace TheKiwiCoder {
             }
         }
 
-        // Update is called once per frame
-        void Update() {
+        void InternalUpdate(float tickDelta) {
             if (runtimeTree) {
-                runtimeTree.Update();
+                profileUpdate.Begin();
+                treeState = runtimeTree.Tick(tickDelta);
+                profileUpdate.End();
             }
+        }
+
+        void FixedUpdate() {
+            if (tickMode == TickMode.FixedUpdate) {
+                InternalUpdate(Time.fixedDeltaTime);
+            }
+        }
+
+        void Update() {
+            if (tickMode == TickMode.Update) {
+                InternalUpdate(Time.deltaTime);
+            }
+        }
+
+        void LateUpdate() {
+            if (tickMode == TickMode.LateUpdate) {
+                InternalUpdate(Time.deltaTime);
+            }
+        }
+
+        public void ManualTick(float tickDelta) {
+            if (tickMode != TickMode.None) {
+                Debug.LogWarning($"Manually ticking the behaviour tree while in {tickMode} will cause duplicate updates");
+            }
+            InternalUpdate(tickDelta);
+        }
+
+        public void StartBehaviour(BehaviourTree tree) {
+            bool isValid = ValidateTree(tree);
+            if (isValid) {
+                InstantiateTree(tree);
+            } else {
+                runtimeTree = null;
+            }
+        }
+
+        public void InstantiateTree(BehaviourTree tree) {
+            context = CreateBehaviourTreeContext();
+            runtimeTree = tree.Clone();
+            runtimeTree.Bind(context);
+            ApplyBlackboardOverrides();
         }
 
         Context CreateBehaviourTreeContext() {
             return Context.CreateFromGameObject(gameObject);
         }
 
-        bool ValidateTree() {
-            if (!behaviourTree) {
+        bool ValidateTree(BehaviourTree tree) {
+            if (!tree) {
                 Debug.LogWarning($"No BehaviourTree assigned to {name}, assign a behaviour tree in the inspector");
                 return false;
             }
@@ -77,7 +151,7 @@ namespace TheKiwiCoder {
             bool isValid = true;
             if (validate) {
                 string cyclePath;
-                isValid = !IsRecursive(behaviourTree, out cyclePath);
+                isValid = !IsRecursive(tree, out cyclePath);
 
                 if (!isValid) {
                     Debug.LogError($"Failed to create recursive behaviour tree. Found cycle at: {cyclePath}");
