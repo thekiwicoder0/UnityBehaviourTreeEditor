@@ -119,7 +119,7 @@
 }
 
 .root #icon {
-    background-image: url('project://database/Packages/com.thekiwicoder.behaviourtreeditor/Editor/Icons/node_root.png?fileID=2800000&guid=8c12a5297a60c5a43b1268d547473810&type=3#node_root');
+    background-image: resource('node_root');
     -unity-background-scale-mode: scale-to-fit;
     width: 32px;
     height: 32px;
@@ -130,7 +130,7 @@
 }
 
 .action #icon {
-    background-image: url('project://database/Assets/node_action.png?fileID=2800000&guid=8e9a5a1f81c11ef4e9047b305972efcb&type=3#node_action');
+    background-image: resource('node_action');
     -unity-background-scale-mode: scale-to-fit;
     width: 32px;
     height: 32px;
@@ -186,7 +186,7 @@
 }
 
 .condition #icon {
-    background-image: url('project://database/Packages/com.thekiwicoder.behaviourtreeditor/Editor/Icons/node_exclamation.png?fileID=2800000&guid=dd3247368b7f1bc43baf81039a01f4ee&type=3#node_exclamation');
+    background-image: resource('node_condition');
     -unity-background-scale-mode: scale-to-fit;
     width: 25px;
     height: 25px;
@@ -200,7 +200,7 @@
 }
 
 .condition.invert #icon {
-    background-image: url('project://database/Packages/com.thekiwicoder.behaviourtreeditor/Editor/Icons/node_exclamation.png?fileID=2800000&guid=dd3247368b7f1bc43baf81039a01f4ee&type=3#node_exclamation');
+    background-image: resource('node_exclamation');
     -unity-background-scale-mode: scale-to-fit;
     width: 25px;
     height: 25px;
@@ -221,7 +221,7 @@
 }
 
 .sequencer #icon {
-    background-image: url('project://database/Assets/node_sequencer.png?fileID=2800000&guid=001bd574542a77b4993e606be0fcb007&type=3#node_sequencer');
+    background-image: resource('node_sequencer');
     -unity-background-scale-mode: scale-to-fit;
     width: 36px;
     height: 36px;
@@ -232,7 +232,7 @@
 }
 
 .parallel #icon {
-    background-image: url('project://database/Packages/com.thekiwicoder.behaviourtreeditor/Editor/Icons/node_parallel.png?fileID=2800000&guid=457b3ae70c47bfa4088ee77f4fc884c7&type=3#node_parallel');
+    background-image: resource('node_parallel');
     -unity-background-scale-mode: scale-to-fit;
     width: 36px;
     height: 36px;
@@ -243,7 +243,7 @@
 }
 
 .selector #icon {
-    background-image: url('project://database/Packages/com.thekiwicoder.behaviourtreeditor/Editor/Icons/node_selector.png?fileID=2800000&guid=05c3c1cf306a9264a859ae5258b19dd2&type=3#node_selector');
+    background-image: resource('node_selector');
     -unity-background-scale-mode: scale-to-fit;
     width: 32px;
     height: 32px;
