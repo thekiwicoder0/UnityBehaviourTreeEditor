@@ -43,7 +43,7 @@ This repository contains a Unity Package which can be installed from package man
 
 ## Installation 
 
-The minimum version currently supported is Unity 2021.3.
+The minimum version currently supported is Unity 2023.2
 
 To install the BehaviourTreeEditor, run the `Add Package From git URL` command from PackageManager inside Unity and paste in the following URL:
 

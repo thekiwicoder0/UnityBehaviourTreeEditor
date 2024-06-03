@@ -3,7 +3,7 @@
   "version": "0.0.30",
   "displayName": "Behaviour Tree Editor",
   "description": "Behaviour Tree runtime and Editor built with UI Toolkit",
-  "unity": "2021.3",
+  "unity": "2023.2",
   "unityRelease": "0f1",
   "documentationUrl": "https://github.com/thekiwicoder0/UnityBehaviourTreeEditor/blob/main/Assets/BehaviourTree/README.md",
   "changelogUrl": "https://github.com/thekiwicoder0/UnityBehaviourTreeEditor/blob/main/Assets/BehaviourTree/CHANGELOG.md",
