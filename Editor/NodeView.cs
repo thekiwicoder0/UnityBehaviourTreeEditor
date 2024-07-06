@@ -12,7 +12,7 @@ using UnityEngine.XR;
 namespace TheKiwiCoder {
 
     public class NodeView : UnityEditor.Experimental.GraphView.Node {
-        
+
         public Action<NodeView> OnNodeSelected;
         public Node node;
         public Port input;
@@ -31,7 +31,7 @@ namespace TheKiwiCoder {
             get {
                 // This is untested and may not work. Possibly output should be input.
                 List<NodeView> children = new List<NodeView>();
-                foreach(var edge in output.connections) {
+                foreach (var edge in output.connections) {
                     NodeView child = edge.output.node as NodeView;
                     if (child != null) {
                         children.Add(child);
@@ -39,6 +39,10 @@ namespace TheKiwiCoder {
                 }
                 return children;
             }
+        }
+
+        public override void BuildContextualMenu(ContextualMenuPopulateEvent evt) {
+            base.BuildContextualMenu(evt);
         }
 
         public NodeView(Node node, VisualTreeAsset nodeXml) : base(AssetDatabase.GetAssetPath(nodeXml)) {
@@ -57,7 +61,7 @@ namespace TheKiwiCoder {
 
             this.AddManipulator(new DoubleClickNode());
         }
-        
+
         public void SetupDataBinding() {
             SerializedBehaviourTree serializer = BehaviourTreeEditorWindow.Instance.serializer;
             var nodeProp = serializer.FindNode(serializer.Nodes, node);
@@ -65,11 +69,17 @@ namespace TheKiwiCoder {
                 return;
             }
 
+
+
             if (node is ActionNode) {
                 Label descriptionLabel = this.Q<Label>("description");
-                descriptionLabel.text = node.GetType().Name;
+                if (node is SubTree subtree) {
+                    descriptionLabel.text = subtree.treeAsset.name.ToUpper();
+                } else {
+                    descriptionLabel.text = node.GetType().Name;
+                }
             }
-            
+
             if (node is CompositeNode) {
                 var descriptionProp = nodeProp.FindPropertyRelative("description");
                 Label descriptionLabel = this.Q<Label>("description");
@@ -112,6 +122,10 @@ namespace TheKiwiCoder {
                     if (conditionNode.invert) {
                         AddToClassList("invert");
                     }
+                }
+
+                if (node is SubTree) {
+                    AddToClassList("subtree");
                 }
             } else if (node is CompositeNode) {
                 AddToClassList("composite");
@@ -199,7 +213,7 @@ namespace TheKiwiCoder {
         public void UpdateState(Dictionary<string, Node.State> tickResults) {
             if (Application.isPlaying) {
                 Node.State tickResult;
-                if(tickResults.TryGetValue(node.guid, out tickResult)) {
+                if (tickResults.TryGetValue(node.guid, out tickResult)) {
                     ApplyActiveNodeStateStyle(tickResult);
                 } else {
                     ApplyInactiveNodeStateStyle();
@@ -219,14 +233,12 @@ namespace TheKiwiCoder {
                 style.borderRightColor = Color.green;
                 style.borderTopColor = Color.green;
                 style.borderBottomColor = Color.green;
-            }
-            else if (state == Node.State.Failure) {
+            } else if (state == Node.State.Failure) {
                 style.borderLeftColor = Color.red;
                 style.borderRightColor = Color.red;
                 style.borderTopColor = Color.red;
                 style.borderBottomColor = Color.red;
-            }
-            else if (state == Node.State.Running) {
+            } else if (state == Node.State.Running) {
                 style.borderLeftColor = Color.yellow;
                 style.borderRightColor = Color.yellow;
                 style.borderTopColor = Color.yellow;
