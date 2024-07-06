@@ -70,7 +70,7 @@ namespace TheKiwiCoder {
 
                 PropertyField field = new PropertyField();
                 field.label = second.displayName;
-                field.bindingPath = nameof(BlackboardKey<object>.value);
+                field.BindProperty(second.FindPropertyRelative(nameof(BlackboardKey<object>.value)));
                 pairContainer.Add(field);
             }
 

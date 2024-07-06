@@ -39,27 +39,22 @@ namespace TheKiwiCoder {
             double duration = EditorApplication.timeSinceStartup - time;
             if (duration < doubleClickDuration) {
                 OnDoubleClick(evt, clickedElement);
+                evt.StopImmediatePropagation();
             }
 
             time = EditorApplication.timeSinceStartup;
         }
 
-        void OpenScriptForNode(MouseDownEvent evt, NodeView clickedElement) {
-            // Open script in the editor:
-            var nodeName = clickedElement.node.GetType().Name;
-            var assetGuids = AssetDatabase.FindAssets($"t:TextAsset {nodeName}");
-            for (int i = 0; i < assetGuids.Length; ++i) {
-                var path = AssetDatabase.GUIDToAssetPath(assetGuids[i]);
-                var filename = System.IO.Path.GetFileName(path);
-                if (filename == $"{nodeName}.cs") {
-                    var script = AssetDatabase.LoadAssetAtPath<TextAsset>(path);
-                    AssetDatabase.OpenAsset(script);
-                    break;
-                }
-            }
+        void OpenScriptForNode(NodeView clickedElement) {
 
-            // Remove the node from selection to prevent dragging it around when returning to the editor.
-            BehaviourTreeEditorWindow.Instance.treeView.RemoveFromSelection(clickedElement);
+            var script = EditorUtility.GetNodeScriptPath(clickedElement);
+            if (script) {
+                // Open script in the editor:
+                AssetDatabase.OpenAsset(script);
+                
+                // Remove the node from selection to prevent dragging it around when returning to the editor.
+                BehaviourTreeEditorWindow.Instance.treeView.RemoveFromSelection(clickedElement);
+            }
         }
 
         void OpenSubtree(NodeView clickedElement) {
@@ -70,7 +65,7 @@ namespace TheKiwiCoder {
             if (clickedElement.node is SubTree) {
                 OpenSubtree(clickedElement);
             } else {
-                OpenScriptForNode(evt, clickedElement);
+                OpenScriptForNode(clickedElement);
             }
         }
     }

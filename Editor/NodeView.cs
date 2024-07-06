@@ -1,13 +1,10 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEditor.UIElements;
 using UnityEditor.Experimental.GraphView;
 using UnityEditor;
-using System.Linq;
-using UnityEngine.XR;
 
 namespace TheKiwiCoder {
 
@@ -43,6 +40,12 @@ namespace TheKiwiCoder {
 
         public override void BuildContextualMenu(ContextualMenuPopulateEvent evt) {
             base.BuildContextualMenu(evt);
+            evt.menu.AppendAction("Create Subtree...", CreateSubtree);
+        }
+
+        private void CreateSubtree(DropdownMenuAction action) {
+            var treeView = BehaviourTreeEditorWindow.Instance.treeView;
+            treeView.CreateSubTree(this);
         }
 
         public NodeView(Node node, VisualTreeAsset nodeXml) : base(AssetDatabase.GetAssetPath(nodeXml)) {
@@ -69,12 +72,14 @@ namespace TheKiwiCoder {
                 return;
             }
 
-
-
             if (node is ActionNode) {
                 Label descriptionLabel = this.Q<Label>("description");
                 if (node is SubTree subtree) {
-                    descriptionLabel.text = subtree.treeAsset.name.ToUpper();
+                    var treeAssetProperty = nodeProp.FindPropertyRelative(nameof(SubTree.treeAsset));
+                    SetSubTreeLabel(descriptionLabel, treeAssetProperty);
+                    descriptionLabel.TrackPropertyValue(treeAssetProperty, (property) => {
+                        SetSubTreeLabel(descriptionLabel, property);
+                    });
                 } else {
                     descriptionLabel.text = node.GetType().Name;
                 }
@@ -102,6 +107,15 @@ namespace TheKiwiCoder {
                 label.style.display = DisplayStyle.None;
             } else {
                 label.style.display = DisplayStyle.Flex;
+            }
+        }
+
+        void SetSubTreeLabel(Label label, SerializedProperty property) {
+            if (property.objectReferenceValue == null) {
+                label.text = "SubTree";
+            } else {
+                BehaviourTree treeAsset = property.objectReferenceValue as BehaviourTree;
+                label.text = treeAsset.name;
             }
         }
 
@@ -195,9 +209,7 @@ namespace TheKiwiCoder {
 
         public override void OnSelected() {
             base.OnSelected();
-            if (OnNodeSelected != null) {
-                OnNodeSelected.Invoke(this);
-            }
+            OnNodeSelected?.Invoke(this);
         }
 
         public void SortChildren() {

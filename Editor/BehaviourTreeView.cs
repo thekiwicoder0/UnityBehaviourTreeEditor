@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEditor.Experimental.GraphView;
@@ -24,11 +22,12 @@ namespace TheKiwiCoder {
         protected override bool canDeleteSelection => true;
 
         SerializedBehaviourTree serializer;
-        
+
         bool dontUpdateModel = false;
 
         [Serializable]
         class CopyPasteData {
+
             public List<string> nodeGuids = new List<string>();
 
             public void AddGraphElements(IEnumerable<GraphElement> elementsToCopy) {
@@ -47,7 +46,7 @@ namespace TheKiwiCoder {
         };
 
         public BehaviourTreeView() {
-            
+
             Insert(0, new GridBackground());
 
 
@@ -86,18 +85,20 @@ namespace TheKiwiCoder {
                 List<EdgeToCreate> edgesToCreate = new List<EdgeToCreate>();
                 foreach (var nodeGuid in copyPasteData.nodeGuids) {
                     NodeView nodeView = FindNodeView(nodeGuid);
-                    var nodesParent = nodeView.NodeParent;
-                    if (nodesToCopy.Contains(nodesParent)) {
-                        EdgeToCreate newEdge = new EdgeToCreate();
-                        newEdge.parent = nodesParent;
-                        newEdge.child = nodeView;
-                        edgesToCreate.Add(newEdge);
+                    if (nodeView != null) {
+                        var nodesParent = nodeView.NodeParent;
+                        if (nodesToCopy.Contains(nodesParent)) {
+                            EdgeToCreate newEdge = new EdgeToCreate();
+                            newEdge.parent = nodesParent;
+                            newEdge.child = nodeView;
+                            edgesToCreate.Add(newEdge);
+                        }
                     }
                 }
 
                 // Copy all nodes
                 foreach (var nodeView in nodesToCopy) {
-                    Node newNode = serializer.CreateNode(nodeView.node.GetType(), nodeView.node.position + Vector2.one * 50);
+                    Node newNode = serializer.CloneNode(nodeView.node, nodeView.node.position + Vector2.one * 50);
                     NodeView newNodeView = CreateNodeView(newNode);
                     AddToSelection(newNodeView);
 
@@ -106,7 +107,7 @@ namespace TheKiwiCoder {
                 }
 
                 // Copy all edges
-                foreach(var edge in edgesToCreate) {
+                foreach (var edge in edgesToCreate) {
                     NodeView oldParent = edge.parent;
                     NodeView oldChild = edge.child;
 
@@ -137,6 +138,9 @@ namespace TheKiwiCoder {
         }
 
         public NodeView FindNodeView(Node node) {
+            if (node == null) {
+                return null;
+            }
             return GetNodeByGuid(node.guid) as NodeView;
         }
 
@@ -147,12 +151,12 @@ namespace TheKiwiCoder {
         public void ClearView() {
             graphViewChanged -= OnGraphViewChanged;
             DeleteElements(graphElements.ToList());
-            graphViewChanged += OnGraphViewChanged; 
+            graphViewChanged += OnGraphViewChanged;
         }
 
         public void PopulateView(SerializedBehaviourTree tree) {
             serializer = tree;
-            
+
             ClearView();
 
             Debug.Assert(serializer.tree.rootNode != null);
@@ -167,9 +171,9 @@ namespace TheKiwiCoder {
                     NodeView parentView = FindNodeView(n);
                     NodeView childView = FindNodeView(c);
                     Debug.Assert(parentView != null, "Invalid parent after deserialising");
-                    Debug.Assert(childView != null, $"Null child view after deserialising parent{parentView.node.GetType().Name}");
+                    Debug.Assert(childView != null, $"Null child view after deserialising parent '{parentView.node.GetType().Name}'");
                     CreateEdgeView(parentView, childView);
-                    
+
                 });
             });
 
@@ -230,8 +234,8 @@ namespace TheKiwiCoder {
                 view.SortChildren();
             });
 
-            foreach(var elem in blockedDeletes) {
-                graphViewChange.elementsToRemove.Remove(elem);  
+            foreach (var elem in blockedDeletes) {
+                graphViewChange.elementsToRemove.Remove(elem);
             }
 
             return graphViewChange;
@@ -271,7 +275,7 @@ namespace TheKiwiCoder {
             Node node = serializer.CreateNode(type, position);
 
             // Delete the childs previous parent
-            foreach(var connection in childView.input.connections) {
+            foreach (var connection in childView.input.connections) {
                 var childParent = connection.output.node as NodeView;
                 serializer.RemoveChild(childParent.node, childView.node);
             }
@@ -288,15 +292,15 @@ namespace TheKiwiCoder {
             return nodeView;
         }
 
-        NodeView CreateNodeView(Node node) {
+        public NodeView CreateNodeView(Node node) {
             NodeView nodeView = new NodeView(node, BehaviourTreeEditorWindow.Instance.nodeXml);
-            AddElement(nodeView);
             nodeView.OnNodeSelected = OnNodeSelected;
+            AddElement(nodeView);
             return nodeView;
         }
 
         public void AddChild(NodeView parentView, NodeView childView) {
-            
+
             // Delete Previous output connections
             if (parentView.output.capacity == Port.Capacity.Single) {
                 RemoveElements(parentView.output.connections);
@@ -345,6 +349,78 @@ namespace TheKiwiCoder {
             ClearSelection();
             if (nodeView != null) {
                 AddToSelection(nodeView);
+            }
+        }
+        public void SelectNode(Node node) {
+            var nodeView = FindNodeView(node);
+            SelectNode(nodeView);
+        }
+
+        public void InspectNode(Node node) {
+            var nodeView = FindNodeView(node);
+            OnNodeSelected(nodeView);
+        }
+
+        internal void DeleteNodeView(Node n) {
+            var nodeView = FindNodeView(n);
+            if (nodeView != null) {
+                if (nodeView.input != null) {
+                    RemoveElements(nodeView.input.connections);
+                }
+                if (nodeView.output != null) {
+                    RemoveElements(nodeView.output.connections);
+                }
+                RemoveElement(nodeView);
+            }
+        }
+
+        public void CreateSubTree(NodeView nodeView) {
+
+            var sourceTree = BehaviourTreeEditorWindow.Instance.serializer;
+
+            InspectNode(null);
+
+            BehaviourTree tree = EditorUtility.CreateNewTree();
+            if (tree) {
+
+
+                var subTreeRootParent = nodeView.NodeParent.node;
+                var subTreeRoot = nodeView.node;
+
+                // Create new Subtree asset
+                {
+                    SerializedBehaviourTree serializer = new SerializedBehaviourTree(tree);
+                    serializer.BeginBatch();
+
+                    serializer.CloneTree(subTreeRoot, tree.rootNode);
+
+                    serializer.EndBatch();
+                }
+
+                // Replace subtree with subtree node
+                {
+                    sourceTree.BeginBatch();
+
+                    // Create New SubTree Node with the newly created asset
+                    var subTreeNode = sourceTree.CreateNode<SubTree>(subTreeRoot.position) as SubTree;
+                    sourceTree.SetNodeProperty(subTreeNode, nameof(SubTree.treeAsset), tree);
+
+                    // Unparent subtree from it's parent
+                    sourceTree.RemoveChild(subTreeRootParent, subTreeRoot);
+
+                    // Parent Subtree node to previous parent
+                    sourceTree.AddChild(subTreeRootParent, subTreeNode);
+
+                    // Delete remaining subtree
+                    sourceTree.DeleteTree(subTreeRoot);
+
+                    sourceTree.EndBatch();
+
+                    // Refresh view, focus new subtree node
+                    PopulateView(sourceTree);
+                    InspectNode(subTreeNode);
+                    SelectNode(subTreeNode);
+                }
             }
         }
     }

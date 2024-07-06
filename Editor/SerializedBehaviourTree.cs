@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using System;
 
 namespace TheKiwiCoder {
 
@@ -55,14 +56,13 @@ namespace TheKiwiCoder {
         }
 
         // Start is called before the first frame update
-        public SerializedBehaviourTree(BehaviourTree tree)
-        {
+        public SerializedBehaviourTree(BehaviourTree tree) {
             serializedObject = new SerializedObject(tree);
             this.tree = tree;
         }
 
         public SerializedProperty FindNode(SerializedProperty array, Node node) {
-            for(int i = 0; i < array.arraySize; ++i) {
+            for (int i = 0; i < array.arraySize; ++i) {
                 var current = array.GetArrayElementAtIndex(i);
                 if (current.FindPropertyRelative(sPropGuid).stringValue == node.guid) {
                     return current;
@@ -93,15 +93,76 @@ namespace TheKiwiCoder {
             }
         }
 
-        public Node CreateNodeInstance(System.Type type) {
-            Node node = System.Activator.CreateInstance(type) as Node;
-            node.guid = GUID.Generate().ToString();
-            return node;
-        }
-
         SerializedProperty AppendArrayElement(SerializedProperty arrayProperty) {
             arrayProperty.InsertArrayElementAtIndex(arrayProperty.arraySize);
             return arrayProperty.GetArrayElementAtIndex(arrayProperty.arraySize - 1);
+        }
+
+        public void CloneTree(Node rootNode, Node parentNode) {
+            Dictionary<Node, Node> oldToNewMapping = new Dictionary<Node, Node>();
+
+            List<Node> sourceNodes = new List<Node>();
+            BehaviourTree.Traverse(rootNode, (n) => {
+                sourceNodes.Add(n);
+            });
+
+
+            var verticalOffset = parentNode.position;
+            verticalOffset.y += BehaviourTreeEditorWindow.Instance.settings.gridSnapSizeY;
+
+            // Clone Nodes
+            foreach (var node in sourceNodes) {
+                var newNode = CloneNode(node, (node.position - rootNode.position) + verticalOffset);
+                oldToNewMapping[node] = newNode;
+            }
+
+            // Clone Edges
+            foreach (var node in sourceNodes) {
+                var children = BehaviourTree.GetChildren(node);
+                var newParent = oldToNewMapping[node];
+                foreach (var child in children) {
+                    var newChild = oldToNewMapping[child];
+                    AddChild(newParent, newChild);
+                }
+            }
+
+            // Parent subtree root to rootnode in new tree asset
+            var newSubTreeRoot = oldToNewMapping[rootNode];
+            AddChild(parentNode, newSubTreeRoot);
+        }
+
+        public Node CloneNode(Node node, Vector2 position) {
+            Node copy = node.Clone();
+            copy.guid = GUID.Generate().ToString();
+            copy.position = position;
+
+            SerializedProperty newNode = AppendArrayElement(Nodes);
+            newNode.managedReferenceValue = copy;
+
+            ApplyChanges();
+
+            return copy;
+        }
+
+        public Node CreateNode<T>(Vector2 position) where T : Node, new() {
+
+            Node node = new T();
+            node.guid = GUID.Generate().ToString();
+            node.position = position;
+
+            SerializedProperty newNode = AppendArrayElement(Nodes);
+            newNode.managedReferenceValue = node;
+
+            ApplyChanges();
+
+            return node;
+        }
+
+        public Node CreateNodeInstance(System.Type type) {
+
+            Node node = System.Activator.CreateInstance(type) as Node;
+            node.guid = GUID.Generate().ToString();
+            return node;
         }
 
         public Node CreateNode(System.Type type, Vector2 position) {
@@ -124,20 +185,33 @@ namespace TheKiwiCoder {
 
         public void DeleteNode(Node node) {
 
-            SerializedProperty nodesProperty = Nodes;
+            RemoveNodeArrayElement(Nodes, node);
 
-            for(int i = 0; i < nodesProperty.arraySize; ++i) {
-                var prop = nodesProperty.GetArrayElementAtIndex(i);
-                var guid = prop.FindPropertyRelative(sPropGuid).stringValue;
-                RemoveNodeArrayElement(Nodes, node);
+            ApplyChanges();
+        }
+
+        public void DeleteTree(Node rootNode) {
+
+            List<Node> nodesToDelete = new List<Node>();
+            BehaviourTree.Traverse(rootNode, (n) => {
+                nodesToDelete.Add(n);
+            });
+
+            foreach (var node in nodesToDelete) {
+                DeleteNode(node);
             }
 
             ApplyChanges();
         }
 
         public void AddChild(Node parent, Node child) {
-            
+
             var parentProperty = FindNode(Nodes, parent);
+            var childNode = FindNode(Nodes, child);
+            if (childNode == null) {
+                Debug.LogError("Child does not exist in the tree");
+                return;
+            }
 
             // RootNode, Decorator node
             var childProperty = parentProperty.FindPropertyRelative(sPropChild);
@@ -195,7 +269,7 @@ namespace TheKiwiCoder {
 
         public void DeleteBlackboardKey(string keyName) {
             SerializedProperty keysArray = BlackboardKeys;
-            for(int i = 0; i < keysArray.arraySize; ++i) {
+            for (int i = 0; i < keysArray.arraySize; ++i) {
                 var key = keysArray.GetArrayElementAtIndex(i);
                 BlackboardKey itemKey = key.managedReferenceValue as BlackboardKey;
                 if (itemKey.name == keyName) {
@@ -218,6 +292,29 @@ namespace TheKiwiCoder {
 
         public void EndBatch() {
             batchMode = false;
+            ApplyChanges();
+        }
+
+        internal void SetNodeProperty(Node node, string propertyPath, UnityEngine.Object objectReference) {
+            var serializedNode = FindNode(Nodes, node);
+            if (serializedNode == null) {
+                Debug.LogError($"Node {node} does not exist in serialized object");
+                return;
+            }
+
+            var nodeProperty = serializedNode.FindPropertyRelative(propertyPath);
+            if (nodeProperty == null) {
+                Debug.LogError($"Node Property '{propertyPath}' does not exist in {node.GetType().Name}");
+                return;
+            }
+
+            if (nodeProperty.propertyType != SerializedPropertyType.ObjectReference) {
+                Debug.LogError($"Node Property '{propertyPath}' is not an ObjectReference type");
+                return;
+            }
+
+            nodeProperty.objectReferenceValue = objectReference;
+
             ApplyChanges();
         }
     }

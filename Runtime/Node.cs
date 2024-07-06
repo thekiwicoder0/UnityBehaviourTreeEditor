@@ -59,5 +59,24 @@ namespace TheKiwiCoder {
         protected virtual void Log(string message) {
             Debug.Log($"[{GetType()}]{message}");
         }
+
+        public Node Clone() {
+            var clone = MemberwiseClone() as Node;
+
+            // Only clone this node. Child references will be cleared
+            if (clone is DecoratorNode decorator && decorator.child != null) {
+                decorator.child = null;
+            }
+
+            if (clone is RootNode rootNode && rootNode.child != null) {
+                rootNode.child = null;
+            }
+
+            if (clone is CompositeNode composite) {
+                composite.children = new List<Node>();
+            }
+
+            return clone;
+        }
     }
 }
