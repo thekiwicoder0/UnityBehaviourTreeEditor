@@ -7,10 +7,8 @@ using UnityEditor.UIElements;
 using UnityEditor.Search;
 using System.Linq;
 
-namespace TheKiwiCoder
-{
-    public static class EditorUtility
-    {
+namespace TheKiwiCoder {
+    public static class EditorUtility {
         public struct ScriptTemplate {
             public TextAsset templateFile;
             public string defaultFileName;
@@ -78,20 +76,20 @@ namespace TheKiwiCoder
         }
 
         public static PackageManifest GetPackageManifest() {
-            // Loop through all package.json files in the project and find this one.. 
+            // Loop through all package.json files in the project and find this one..  
             string[] packageJsons = AssetDatabase.FindAssets("package");
             string[] packagePaths = packageJsons.Select(AssetDatabase.GUIDToAssetPath).ToArray();
             foreach (var path in packagePaths) {
                 var asset = AssetDatabase.LoadAssetAtPath<TextAsset>(path);
                 if (asset) {
-                    try{
+                    try {
                         PackageManifest manifest = JsonUtility.FromJson<PackageManifest>(asset.text);
                         if (manifest.name == "com.thekiwicoder.behaviourtreeditor") {
                             return manifest;
                         }
                     }
                     catch {
-                        // Ignore if the manifest file failed to parse
+                        // Ignore if the manifest file failed to parse 
                     }
                 }
             }
@@ -103,5 +101,18 @@ namespace TheKiwiCoder
             return (Mathf.RoundToInt(value / nearestInteger)) * nearestInteger;
         }
 
+        public static TextAsset GetNodeScriptPath(NodeView nodeView) {
+            var nodeName = nodeView.node.GetType().Name;
+            var assetGuids = AssetDatabase.FindAssets($"t:TextAsset {nodeName}");
+            for (int i = 0; i < assetGuids.Length; ++i) {
+                var path = AssetDatabase.GUIDToAssetPath(assetGuids[i]);
+                var filename = System.IO.Path.GetFileName(path);
+                if (filename == $"{nodeName}.cs") {
+                    var script = AssetDatabase.LoadAssetAtPath<TextAsset>(path);
+                    return script;
+                }
+            }
+            return null;
+        }
     }
 }
