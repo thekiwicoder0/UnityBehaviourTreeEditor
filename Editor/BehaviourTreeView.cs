@@ -21,7 +21,7 @@ namespace TheKiwiCoder {
 
         protected override bool canDeleteSelection => true;
 
-        SerializedBehaviourTree serializer;
+        public SerializedBehaviourTree serializer;
 
         bool dontUpdateModel = false;
 
@@ -293,8 +293,7 @@ namespace TheKiwiCoder {
         }
 
         public NodeView CreateNodeView(Node node) {
-            NodeView nodeView = new NodeView(node, BehaviourTreeEditorWindow.Instance.nodeXml);
-            nodeView.OnNodeSelected = OnNodeSelected;
+            NodeView nodeView = new NodeView(node, BehaviourTreeEditorWindow.Instance.nodeXml, this);
             AddElement(nodeView);
             return nodeView;
         }
@@ -376,7 +375,8 @@ namespace TheKiwiCoder {
 
         public void CreateSubTree(NodeView nodeView) {
 
-            var sourceTree = BehaviourTreeEditorWindow.Instance.serializer;
+            BehaviourTreeEditorWindow window = BehaviourTreeEditorWindow.Instance;
+
 
             InspectNode(null);
 
@@ -389,35 +389,34 @@ namespace TheKiwiCoder {
 
                 // Create new Subtree asset
                 {
-                    SerializedBehaviourTree serializer = new SerializedBehaviourTree(tree);
-                    serializer.BeginBatch();
-
-                    serializer.CloneTree(subTreeRoot, tree.rootNode);
-
-                    serializer.EndBatch();
+                    SerializedBehaviourTree newTree = new SerializedBehaviourTree(tree);
+                    newTree.BeginBatch();
+                    newTree.CloneTree(subTreeRoot, tree.rootNode);
+                    newTree.EndBatch();
+                    window.NewTab(tree, false);
                 }
 
                 // Replace subtree with subtree node
                 {
-                    sourceTree.BeginBatch();
+                    serializer.BeginBatch();
 
                     // Create New SubTree Node with the newly created asset
-                    var subTreeNode = sourceTree.CreateNode<SubTree>(subTreeRoot.position) as SubTree;
-                    sourceTree.SetNodeProperty(subTreeNode, nameof(SubTree.treeAsset), tree);
+                    var subTreeNode = serializer.CreateNode<SubTree>(subTreeRoot.position) as SubTree;
+                    serializer.SetNodeProperty(subTreeNode, nameof(SubTree.treeAsset), tree);
 
                     // Unparent subtree from it's parent
-                    sourceTree.RemoveChild(subTreeRootParent, subTreeRoot);
+                    serializer.RemoveChild(subTreeRootParent, subTreeRoot);
 
                     // Parent Subtree node to previous parent
-                    sourceTree.AddChild(subTreeRootParent, subTreeNode);
+                    serializer.AddChild(subTreeRootParent, subTreeNode);
 
                     // Delete remaining subtree
-                    sourceTree.DeleteTree(subTreeRoot);
+                    serializer.DeleteTree(subTreeRoot);
 
-                    sourceTree.EndBatch();
+                    serializer.EndBatch();
 
                     // Refresh view, focus new subtree node
-                    PopulateView(sourceTree);
+                    PopulateView(serializer);
                     InspectNode(subTreeNode);
                     SelectNode(subTreeNode);
                 }

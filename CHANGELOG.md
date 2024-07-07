@@ -5,7 +5,11 @@ All notable changes to this package will be documented in this file.
 # [0.0.31] - WIP
 ## Added
 - SubTree node styling + icon
-- Added Create SubTree feature to node context menu.
+- Added `Create SubTree` feature to node context menu.
+- Added `TabView` to the main panel. Tree views now open in a new tab.
+
+## Removed
+- Removed breadcrumbs from main panel toolbar. Replaced with tabs
 
 ## Fixed
 - Blackboard key value property label not appearing on some nodes

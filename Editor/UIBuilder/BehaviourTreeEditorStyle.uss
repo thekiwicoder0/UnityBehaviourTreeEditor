@@ -21,3 +21,15 @@ Label {
     justify-content: center;
     margin-left: 5px;
 }
+
+BehaviourTreeView {
+    min-height: 1440px;
+}
+
+.unity-tab__header-label {
+    margin-bottom: 25px;
+}
+
+.unity-tab__header-underline {
+    padding-bottom: 0;
+}

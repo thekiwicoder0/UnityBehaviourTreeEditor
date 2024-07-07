@@ -66,6 +66,7 @@ namespace TheKiwiCoder {
 
         public void Show() {
             // Hidden in UIBuilder while editing..
+            style.display = DisplayStyle.Flex;
             style.visibility = Visibility.Visible;
 
             // Configure fields

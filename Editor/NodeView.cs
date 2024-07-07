@@ -10,7 +10,7 @@ namespace TheKiwiCoder {
 
     public class NodeView : UnityEditor.Experimental.GraphView.Node {
 
-        public Action<NodeView> OnNodeSelected;
+        public BehaviourTreeView treeView;
         public Node node;
         public Port input;
         public Port output;
@@ -44,11 +44,11 @@ namespace TheKiwiCoder {
         }
 
         private void CreateSubtree(DropdownMenuAction action) {
-            var treeView = BehaviourTreeEditorWindow.Instance.treeView;
             treeView.CreateSubTree(this);
         }
 
-        public NodeView(Node node, VisualTreeAsset nodeXml) : base(AssetDatabase.GetAssetPath(nodeXml)) {
+        public NodeView(Node node, VisualTreeAsset nodeXml, BehaviourTreeView treeView) : base(AssetDatabase.GetAssetPath(nodeXml)) {
+            this.treeView = treeView;
             this.capabilities &= ~(Capabilities.Snappable); // Disable node snapping
             this.node = node;
             this.title = node.GetType().Name;
@@ -63,10 +63,11 @@ namespace TheKiwiCoder {
             SetupDataBinding();
 
             this.AddManipulator(new DoubleClickNode());
+            this.treeView = treeView;
         }
 
         public void SetupDataBinding() {
-            SerializedBehaviourTree serializer = BehaviourTreeEditorWindow.Instance.serializer;
+            SerializedBehaviourTree serializer = treeView.serializer;
             var nodeProp = serializer.FindNode(serializer.Nodes, node);
             if (nodeProp == null) {
                 return;
@@ -202,14 +203,14 @@ namespace TheKiwiCoder {
 
             base.SetPosition(newPos);
 
-            SerializedBehaviourTree serializer = BehaviourTreeEditorWindow.Instance.serializer;
+            SerializedBehaviourTree serializer = treeView.serializer;
             Vector2 position = new Vector2(newPos.xMin, newPos.yMin);
             serializer.SetNodePosition(node, position);
         }
 
         public override void OnSelected() {
             base.OnSelected();
-            OnNodeSelected?.Invoke(this);
+            treeView.OnNodeSelected?.Invoke(this);
         }
 
         public void SortChildren() {

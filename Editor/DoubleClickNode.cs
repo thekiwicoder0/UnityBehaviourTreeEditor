@@ -1,13 +1,8 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using UnityEditor;
 using UnityEngine.UIElements;
-using UnityEditor.Experimental.GraphView;
 
 namespace TheKiwiCoder {
-    public class  DoubleClickNode : MouseManipulator {
+    public class DoubleClickNode : MouseManipulator {
 
         double time;
         double doubleClickDuration = 0.3;
@@ -26,7 +21,7 @@ namespace TheKiwiCoder {
 
         private void OnMouseDown(MouseDownEvent evt) {
             if (!CanStopManipulation(evt))
-                return; 
+                return;
 
             NodeView clickedElement = evt.target as NodeView;
             if (clickedElement == null) {
@@ -51,14 +46,18 @@ namespace TheKiwiCoder {
             if (script) {
                 // Open script in the editor:
                 AssetDatabase.OpenAsset(script);
-                
+
                 // Remove the node from selection to prevent dragging it around when returning to the editor.
-                BehaviourTreeEditorWindow.Instance.treeView.RemoveFromSelection(clickedElement);
+                BehaviourTreeEditorWindow.Instance.CurrentTreeView.RemoveFromSelection(clickedElement);
             }
         }
 
         void OpenSubtree(NodeView clickedElement) {
-            BehaviourTreeEditorWindow.Instance.PushSubTreeView(clickedElement.node as SubTree);
+            var subtreeNode = clickedElement.node as SubTree;
+            var treeToFocus = subtreeNode.treeAsset;
+            if (treeToFocus != null) {
+                BehaviourTreeEditorWindow.Instance.NewTab(treeToFocus, true);
+            }
         }
 
         void OnDoubleClick(MouseDownEvent evt, NodeView clickedElement) {

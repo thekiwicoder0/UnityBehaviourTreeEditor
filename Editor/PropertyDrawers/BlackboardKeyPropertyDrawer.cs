@@ -34,7 +34,7 @@ namespace TheKiwiCoder {
                 keyValue.bindingPath = nameof(BlackboardKey<object>.value);
 
                 container.AddManipulator(new ContextualMenuManipulator((evt) => {
-                    evt.menu.AppendAction("Delete", (x) => BehaviourTreeEditorWindow.Instance.serializer.DeleteBlackboardKey(property.displayName), DropdownMenuAction.AlwaysEnabled);
+                    evt.menu.AppendAction("Delete", (x) => BehaviourTreeEditorWindow.Instance.CurrentSerializer.DeleteBlackboardKey(property.displayName), DropdownMenuAction.AlwaysEnabled);
                 }));
                 container.style.flexDirection = FlexDirection.Row;
                 container.Add(keyName);

@@ -40,7 +40,7 @@ namespace TheKiwiCoder {
                         return projectSettings.scriptTemplateDecoratorNode;
                     }
                     return BehaviourTreeEditorWindow.Instance.scriptTemplateDecoratorNode;
-                
+
             }
             Debug.LogError("Unhandled script template type:" + type);
             return null;
@@ -71,8 +71,7 @@ namespace TheKiwiCoder {
             };
 
             // Action nodes can only be added as children
-            if (isSourceParent || source == null)
-            {
+            if (isSourceParent || source == null) {
                 tree.Add(new SearchTreeGroupEntry(new GUIContent("Actions")) { level = 1 });
                 var types = TypeCache.GetTypesDerivedFrom<ActionNode>();
                 foreach (var type in types) {
@@ -80,14 +79,13 @@ namespace TheKiwiCoder {
                     // Ignore condition types
                     if (!type.IsSubclassOf(typeof(ConditionNode))) {
                         System.Action invoke = () => CreateNode(type, context);
-                        tree.Add(new SearchTreeEntry(new GUIContent($"{type.Name}")) {level = 2,userData = invoke });
+                        tree.Add(new SearchTreeEntry(new GUIContent($"{type.Name}")) { level = 2, userData = invoke });
                     }
                 }
             }
 
             // Condition nodes can only be added as children
-            if (isSourceParent || source == null) 
-            {
+            if (isSourceParent || source == null) {
                 tree.Add(new SearchTreeGroupEntry(new GUIContent("Conditions")) { level = 1 });
                 var types = TypeCache.GetTypesDerivedFrom<ConditionNode>();
                 foreach (var type in types) {
@@ -95,7 +93,7 @@ namespace TheKiwiCoder {
                     tree.Add(new SearchTreeEntry(new GUIContent($"{type.Name}")) { level = 2, userData = invoke });
                 }
             }
-                
+
             {
                 tree.Add(new SearchTreeGroupEntry(new GUIContent("Composites")) { level = 1 });
                 {
@@ -113,13 +111,13 @@ namespace TheKiwiCoder {
                     var types = TypeCache.GetTypesDerivedFrom<DecoratorNode>();
                     foreach (var type in types) {
                         System.Action invoke = () => CreateNode(type, context);
-                        tree.Add(new SearchTreeEntry(new GUIContent($"{type.Name}")) {level = 2, userData = invoke});
+                        tree.Add(new SearchTreeEntry(new GUIContent($"{type.Name}")) { level = 2, userData = invoke });
                     }
                 }
             }
 
             {
-                
+
                 tree.Add(new SearchTreeGroupEntry(new GUIContent("New Script...")) { level = 1 });
 
                 System.Action createActionScript = () => CreateScript(scriptFileAssets[0], context);
@@ -147,9 +145,9 @@ namespace TheKiwiCoder {
 
         public void CreateNode(System.Type type, SearchWindowContext context) {
             BehaviourTreeEditorWindow editorWindow = BehaviourTreeEditorWindow.Instance;
-            
+
             var windowMousePosition = editorWindow.rootVisualElement.ChangeCoordinatesTo(editorWindow.rootVisualElement.parent, context.screenMousePosition - editorWindow.position.position);
-            var graphMousePosition = editorWindow.treeView.contentViewContainer.WorldToLocal(windowMousePosition);
+            var graphMousePosition = editorWindow.CurrentTreeView.contentViewContainer.WorldToLocal(windowMousePosition);
             var nodeOffset = new Vector2(-75, -20);
             var nodePosition = graphMousePosition + nodeOffset;
 
@@ -172,7 +170,7 @@ namespace TheKiwiCoder {
             BehaviourTreeEditorWindow editorWindow = BehaviourTreeEditorWindow.Instance;
 
             var windowMousePosition = editorWindow.rootVisualElement.ChangeCoordinatesTo(editorWindow.rootVisualElement.parent, context.screenMousePosition - editorWindow.position.position);
-            var graphMousePosition = editorWindow.treeView.contentViewContainer.WorldToLocal(windowMousePosition);
+            var graphMousePosition = editorWindow.CurrentTreeView.contentViewContainer.WorldToLocal(windowMousePosition);
             var nodeOffset = new Vector2(-75, -20);
             var nodePosition = graphMousePosition + nodeOffset;
 
@@ -182,7 +180,7 @@ namespace TheKiwiCoder {
         public static void Show(Vector2 mousePosition, NodeView source, bool isSourceParent = false) {
             Vector2 screenPoint = GUIUtility.GUIToScreenPoint(mousePosition);
             CreateNodeWindow searchWindowProvider = ScriptableObject.CreateInstance<CreateNodeWindow>();
-            searchWindowProvider.Initialise(BehaviourTreeEditorWindow.Instance.treeView, source, isSourceParent);
+            searchWindowProvider.Initialise(BehaviourTreeEditorWindow.Instance.CurrentTreeView, source, isSourceParent);
             SearchWindowContext windowContext = new SearchWindowContext(screenPoint, 240, 320);
             SearchWindow.Open(windowContext, searchWindowProvider);
         }

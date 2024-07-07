@@ -62,7 +62,7 @@ namespace TheKiwiCoder {
             dropdown.RegisterCallback<ChangeEvent<BlackboardKey>>((evt) => {
                 BlackboardKey newKey = evt.newValue;
                 reference.managedReferenceValue = newKey;
-                BehaviourTreeEditorWindow.Instance.serializer.ApplyChanges();
+                BehaviourTreeEditorWindow.Instance.CurrentSerializer.ApplyChanges();
 
                 if (evt.newValue == null) {
                     defaultValueField.style.display = DisplayStyle.Flex;
@@ -132,7 +132,7 @@ namespace TheKiwiCoder {
             dropdown.RegisterCallback<ChangeEvent<BlackboardKey>>((evt) => {
                 BlackboardKey newKey = evt.newValue;
                 reference.managedReferenceValue = newKey;
-                BehaviourTreeEditorWindow.Instance.serializer.ApplyChanges();
+                BehaviourTreeEditorWindow.Instance.CurrentSerializer.ApplyChanges();
             });
             return dropdown;
         }
