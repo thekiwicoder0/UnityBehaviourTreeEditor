@@ -9,8 +9,10 @@ public class TreeViewTab : Tab {
 
     public SerializedBehaviourTree serializer;
     public BehaviourTreeView treeView;
+    public bool isRuntimeTab = false;
 
     public TreeViewTab(BehaviourTree tree, StyleSheet styleSheet) : base(tree.name) {
+        isRuntimeTab = tree.name.Contains("Clone");
         name = tree.name;
         closeable = true;
         serializer = new SerializedBehaviourTree(tree);
@@ -28,5 +30,9 @@ public class TreeViewTab : Tab {
     void OnNodeSelected(NodeView node) {
         BehaviourTreeEditorWindow window = BehaviourTreeEditorWindow.Instance;
         window.InspectNode(serializer, node);
+    }
+
+    public void Close() {
+        RemoveFromHierarchy();
     }
 }

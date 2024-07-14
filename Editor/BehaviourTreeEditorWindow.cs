@@ -254,17 +254,35 @@ namespace TheKiwiCoder {
         private void OnPlayModeStateChanged(PlayModeStateChange obj) {
             switch (obj) {
                 case PlayModeStateChange.EnteredEditMode:
-                    EditorApplication.delayCall += OnSelectionChange;
+                    EditorApplication.delayCall += OnExitPlayMode;
                     break;
                 case PlayModeStateChange.ExitingEditMode:
                     break;
                 case PlayModeStateChange.EnteredPlayMode:
-                    EditorApplication.delayCall += OnSelectionChange;
+                    EditorApplication.delayCall += OnEnterPlayMode;
                     break;
                 case PlayModeStateChange.ExitingPlayMode:
                     inspectorView?.Clear();
                     break;
             }
+        }
+
+        void CloseRuntimeTabs() {
+            var tabs = tabView.Query<TreeViewTab>().ToList();
+            foreach (var tab in tabs) {
+                if (tab.isRuntimeTab) {
+                    tab.Close();
+                }
+            }
+        }
+
+        void OnEnterPlayMode() {
+            OnSelectionChange();
+        }
+
+        void OnExitPlayMode() {
+            OnSelectionChange();
+            CloseRuntimeTabs();
         }
 
         private void OnSelectionChange() {

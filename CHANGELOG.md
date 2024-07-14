@@ -6,7 +6,8 @@ All notable changes to this package will be documented in this file.
 ## Added
 - SubTree node styling + icon
 - Added `Create SubTree` feature to node context menu.
-- Added `TabView` to the main panel. Tree views now open in a new tab.
+- Added `TabView` to the main panel. Tree views now open in a new tab. 
+- Close runtime tabs when exiting playmode
 
 ## Removed
 - Removed breadcrumbs from main panel toolbar. Replaced with tabs
