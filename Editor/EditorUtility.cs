@@ -114,5 +114,13 @@ namespace TheKiwiCoder {
             }
             return null;
         }
+
+        public static void OpenScriptInEditor(NodeView nodeView) {
+            var script = GetNodeScriptPath(nodeView);
+            if (script) {
+                // Open script in the editor:
+                AssetDatabase.OpenAsset(script);
+            }
+        }
     }
 }

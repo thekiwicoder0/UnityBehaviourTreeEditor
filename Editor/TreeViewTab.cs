@@ -25,6 +25,10 @@ public class TreeViewTab : Tab {
         // TODO: Remove selection when closing the tab
 
         Add(treeView);
+
+        closed += (tab) => {
+            BehaviourTreeEditorWindow.Instance.OnTabClosed(tab);
+        };
     }
 
     void OnNodeSelected(NodeView node) {

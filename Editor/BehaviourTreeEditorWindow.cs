@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -86,6 +84,7 @@ namespace TheKiwiCoder {
         public Label versionLabel;
         public NewScriptDialogView newScriptDialog;
         public TabView tabView;
+        public BehaviourTreeEditorWindowState windowState;
 
         [SerializeField]
         public PendingScriptCreate pendingScriptCreate = new PendingScriptCreate();
@@ -117,6 +116,7 @@ namespace TheKiwiCoder {
         public void CreateGUI() {
             Instance = this;
             settings = BehaviourTreeProjectSettings.GetOrCreateSettings();
+            windowState = settings.windowState;
 
             // Each editor window contains a root VisualElement object
             VisualElement root = rootVisualElement;
@@ -139,6 +139,7 @@ namespace TheKiwiCoder {
             tabView = root.Q<TabView>();
             tabView.activeTabChanged -= OnTabChanged;
             tabView.activeTabChanged += OnTabChanged;
+
             versionLabel = root.Q<Label>("Version");
 
             // Toolbar assets menu
@@ -190,11 +191,8 @@ namespace TheKiwiCoder {
             // New Script Dialog
             newScriptDialog.style.visibility = Visibility.Hidden;
 
-            if (CurrentSerializer == null) {
-                overlayView.Show();
-            } else {
-                NewTab(CurrentSerializer.tree, true);
-            }
+            // Restore window state between compilations
+            windowState.Restore(this);
 
             // Create new node for any scripts just created coming back from a compile.
             if (pendingScriptCreate != null && pendingScriptCreate.pendingCreate) {
@@ -206,11 +204,21 @@ namespace TheKiwiCoder {
             TreeViewTab newTab = current as TreeViewTab;
             inspectorView.Clear();
             blackboardView?.Bind(newTab.serializer);
+            windowState.TabChanged(tabView.selectedTabIndex);
+        }
+
+        public void OnTabClosed(Tab tab) {
+            TreeViewTab treeTab = tab as TreeViewTab;
+            windowState.TabClosed(treeTab);
         }
 
         void CreatePendingScriptNode() {
 
             // #TODO: Unify this with CreateNodeWindow.CreateNode
+
+            if (CurrentTreeView == null) {
+                return;
+            }
 
             NodeView source = CurrentTreeView.GetNodeByGuid(pendingScriptCreate.sourceGuid) as NodeView;
             var nodeType = Type.GetType($"{pendingScriptCreate.scriptName}, Assembly-CSharp");
@@ -227,6 +235,7 @@ namespace TheKiwiCoder {
                 }
 
                 CurrentTreeView.SelectNode(createdNode);
+                EditorUtility.OpenScriptInEditor(createdNode);
             }
 
             pendingScriptCreate.Reset();
@@ -314,6 +323,9 @@ namespace TheKiwiCoder {
             // Otherwise create a new tab
             TreeViewTab newTab = new TreeViewTab(newTree, behaviourTreeStyle);
             tabView.Add(newTab);
+
+            // Record active tab
+            windowState.TabOpened(newTab);
 
             // And Focus
             if (focus) {
