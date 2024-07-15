@@ -1,4 +1,5 @@
 using UnityEditor;
+using UnityEngine.Device;
 using UnityEngine.UIElements;
 
 namespace TheKiwiCoder {
@@ -55,6 +56,10 @@ namespace TheKiwiCoder {
         void OpenSubtree(NodeView clickedElement) {
             var subtreeNode = clickedElement.node as SubTree;
             var treeToFocus = subtreeNode.treeAsset;
+            if (Application.isPlaying) {
+                treeToFocus = subtreeNode.treeInstance;
+            }
+
             if (treeToFocus != null) {
                 BehaviourTreeEditorWindow.Instance.NewTab(treeToFocus, true);
             }
