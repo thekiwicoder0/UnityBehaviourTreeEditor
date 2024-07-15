@@ -41,7 +41,6 @@ namespace TheKiwiCoder {
 
         public Node.State Tick(float tickDelta) {
             treeContext.tickDelta = tickDelta;
-            treeContext.tickResults.Clear();
             return rootNode.Update();
         }
 

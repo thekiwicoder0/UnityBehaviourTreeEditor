@@ -16,6 +16,7 @@ All notable changes to this package will be documented in this file.
 
 ## Fixed
 - Blackboard key value property label not appearing on some nodes
+- Fixed node states in debugger when using subtrees
 
 # [0.0.30] - 01-06-2024
 ## Changed

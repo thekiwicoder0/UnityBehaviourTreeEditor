@@ -37,7 +37,7 @@ namespace TheKiwiCoder {
 
         [Tooltip("Override / set blackboard key values for this behaviour tree instance")]
         public List<BlackboardKeyValuePair> blackboardOverrides = new List<BlackboardKeyValuePair>();
-        
+
         public BehaviourTree RuntimeTree {
             get {
                 if (runtimeTree != null) {
@@ -92,6 +92,7 @@ namespace TheKiwiCoder {
         void InternalUpdate(float tickDelta) {
             if (runtimeTree) {
                 profileUpdate.Begin();
+                context.tickResults.Clear();
                 treeState = runtimeTree.Tick(tickDelta);
                 profileUpdate.End();
             }
