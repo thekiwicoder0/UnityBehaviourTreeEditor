@@ -13,6 +13,7 @@ All notable changes to this package will be documented in this file.
 - Added subtree section to node canvas context menu
 - Added New Subtree option to node canvas context menu
 - Snap new nodes created via context menu to the grid
+- Added Expand Subtree context menu option to subtree nodes
 
 ## Removed
 - Removed breadcrumbs from main panel toolbar. Replaced with tabs

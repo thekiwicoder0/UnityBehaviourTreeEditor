@@ -41,6 +41,13 @@ namespace TheKiwiCoder {
         public override void BuildContextualMenu(ContextualMenuPopulateEvent evt) {
             base.BuildContextualMenu(evt);
             evt.menu.AppendAction("Create Subtree...", CreateSubtree);
+            if (node is SubTree subtree) {
+                evt.menu.AppendAction("Expand Subtree...", ExpandSubtree);
+            }
+        }
+
+        private void ExpandSubtree(DropdownMenuAction action) {
+            treeView.ExpandSubtree(this);
         }
 
         private void CreateSubtree(DropdownMenuAction action) {

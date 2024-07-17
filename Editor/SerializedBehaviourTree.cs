@@ -98,7 +98,7 @@ namespace TheKiwiCoder {
             return arrayProperty.GetArrayElementAtIndex(arrayProperty.arraySize - 1);
         }
 
-        public void CloneTree(Node rootNode, Node parentNode) {
+        public Node CloneTree(Node rootNode, Node parentNode, Vector2 position) {
             Dictionary<Node, Node> oldToNewMapping = new Dictionary<Node, Node>();
 
             List<Node> sourceNodes = new List<Node>();
@@ -106,13 +106,9 @@ namespace TheKiwiCoder {
                 sourceNodes.Add(n);
             });
 
-
-            var verticalOffset = parentNode.position;
-            verticalOffset.y += BehaviourTreeEditorWindow.Instance.settings.gridSnapSizeY;
-
             // Clone Nodes
             foreach (var node in sourceNodes) {
-                var newNode = CloneNode(node, (node.position - rootNode.position) + verticalOffset);
+                var newNode = CloneNode(node, (node.position - rootNode.position) + position);
                 oldToNewMapping[node] = newNode;
             }
 
@@ -129,6 +125,8 @@ namespace TheKiwiCoder {
             // Parent subtree root to rootnode in new tree asset
             var newSubTreeRoot = oldToNewMapping[rootNode];
             AddChild(parentNode, newSubTreeRoot);
+
+            return newSubTreeRoot;
         }
 
         public Node CloneNode(Node node, Vector2 position) {

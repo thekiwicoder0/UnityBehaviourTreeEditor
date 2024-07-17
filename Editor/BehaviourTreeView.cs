@@ -67,8 +67,14 @@ namespace TheKiwiCoder {
             // Perform Paste
             unserializeAndPaste = (operationName, data) => {
 
-                serializer.BeginBatch();
+                BehaviourTreeEditorWindow window = BehaviourTreeEditorWindow.Instance;
 
+                BehaviourTreeView targetView = window.CurrentTreeView;
+                SerializedBehaviourTree targetTree = window.CurrentSerializer;
+
+                targetTree.BeginBatch();
+
+                targetView.ClearSelection();
                 ClearSelection();
 
                 CopyPasteData copyPasteData = JsonUtility.FromJson<CopyPasteData>(data);
@@ -98,9 +104,9 @@ namespace TheKiwiCoder {
 
                 // Copy all nodes
                 foreach (var nodeView in nodesToCopy) {
-                    Node newNode = serializer.CloneNode(nodeView.node, nodeView.node.position + Vector2.one * 50);
-                    NodeView newNodeView = CreateNodeView(newNode);
-                    AddToSelection(newNodeView);
+                    Node newNode = targetTree.CloneNode(nodeView.node, nodeView.node.position + Vector2.one * 50);
+                    NodeView newNodeView = targetView.CreateNodeView(newNode);
+                    targetView.AddToSelection(newNodeView);
 
                     // Map old to new guids so edges can be cloned.
                     oldToNewMapping[nodeView.node.guid] = newNode.guid;
@@ -112,15 +118,15 @@ namespace TheKiwiCoder {
                     NodeView oldChild = edge.child;
 
                     // These should already have been created.
-                    NodeView newParent = FindNodeView(oldToNewMapping[oldParent.node.guid]);
-                    NodeView newChild = FindNodeView(oldToNewMapping[oldChild.node.guid]);
+                    NodeView newParent = targetView.FindNodeView(oldToNewMapping[oldParent.node.guid]);
+                    NodeView newChild = targetView.FindNodeView(oldToNewMapping[oldChild.node.guid]);
 
-                    serializer.AddChild(newParent.node, newChild.node);
-                    AddChild(newParent, newChild);
+                    targetTree.AddChild(newParent.node, newChild.node);
+                    targetView.AddChild(newParent, newChild);
                 }
 
                 // Save changes
-                serializer.EndBatch();
+                targetTree.EndBatch();
             };
 
             // Enable copy paste always?
@@ -373,6 +379,19 @@ namespace TheKiwiCoder {
             }
         }
 
+        public void ExpandSubtree(NodeView nodeView) {
+            Node subtreeParent = nodeView.NodeParent.node;
+            SubTree subtree = nodeView.node as SubTree;
+            var tree = subtree.treeAsset;
+
+            serializer.BeginBatch();
+            serializer.RemoveChild(subtreeParent, subtree);
+            serializer.DeleteTree(subtree);
+            serializer.CloneTree(tree.rootNode.child, subtreeParent, subtree.position);
+            serializer.EndBatch();
+            PopulateView(serializer);
+        }
+
         public void CreateSubTree(NodeView nodeView) {
 
             BehaviourTreeEditorWindow window = BehaviourTreeEditorWindow.Instance;
@@ -389,9 +408,12 @@ namespace TheKiwiCoder {
 
                 // Create new Subtree asset
                 {
+                    Vector2 position = tree.rootNode.position;
+                    position.y += BehaviourTreeEditorWindow.Instance.settings.gridSnapSizeY;
+
                     SerializedBehaviourTree newTree = new SerializedBehaviourTree(tree);
                     newTree.BeginBatch();
-                    newTree.CloneTree(subTreeRoot, tree.rootNode);
+                    newTree.CloneTree(subTreeRoot, tree.rootNode, position);
                     newTree.EndBatch();
                     window.NewTab(tree, false);
                 }
