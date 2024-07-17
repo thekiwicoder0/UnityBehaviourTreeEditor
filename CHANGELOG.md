@@ -10,6 +10,9 @@ All notable changes to this package will be documented in this file.
 - Close runtime tabs when exiting playmode.
 - Editor window state is now serialized. Previous tabs will be restored after closing and reopening the window.
 - New node script assets will be opened automatically in visual studio after compilation.
+- Added subtree section to node canvas context menu
+- Added New Subtree option to node canvas context menu
+- Snap new nodes created via context menu to the grid
 
 ## Removed
 - Removed breadcrumbs from main panel toolbar. Replaced with tabs
