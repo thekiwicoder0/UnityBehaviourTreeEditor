@@ -5,6 +5,7 @@ using UnityEngine.UIElements;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
+using System.ComponentModel;
 
 namespace TheKiwiCoder {
 
@@ -20,17 +21,25 @@ namespace TheKiwiCoder {
         private Button createButton;
 
         internal void Bind(SerializedBehaviourTree behaviourTree) {
-            
+
             this.behaviourTree = behaviourTree;
 
             listView = this.Q<ListView>("ListView_Keys");
             newKeyTextField = this.Q<TextField>("TextField_KeyName");
             VisualElement popupContainer = this.Q<VisualElement>("PopupField_Placeholder");
-            
+
             createButton = this.Q<Button>("Button_KeyCreate");
 
             // ListView
             listView.Bind(behaviourTree.serializedObject);
+            listView.RegisterCallback<KeyDownEvent>((e) => {
+                if (e.keyCode == KeyCode.Delete) {
+                    var key = listView.selectedItem as SerializedProperty;
+                    if (key != null) {
+                        BehaviourTreeEditorWindow.Instance.CurrentSerializer.DeleteBlackboardKey(key.displayName);
+                    }
+                }
+            });
 
             newKeyTypeField = new PopupField<Type>();
             newKeyTypeField.label = "Type";
@@ -38,7 +47,7 @@ namespace TheKiwiCoder {
             newKeyTypeField.formatSelectedValueCallback = FormatItem;
 
             var types = TypeCache.GetTypesDerivedFrom<BlackboardKey>();
-            foreach(var type in types) {
+            foreach (var type in types) {
                 if (type.IsGenericType) {
                     continue;
                 }
