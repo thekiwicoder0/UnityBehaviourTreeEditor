@@ -22,6 +22,8 @@ All notable changes to this package will be documented in this file.
 - Blackboard key value property label not appearing on some nodes
 - Fixed node states in debugger when using subtrees
 - Double clicking a subtree node when in playmode will open tree instance instead of asset
+- [Opening BehaviourTree Editor causes error #15](https://github.com/thekiwicoder0/UnityBehaviourTreeEditor/issues/15)
+- [Chance of failure comparison](https://github.com/thekiwicoder0/UnityBehaviourTreeEditor/issues/9)
 
 # [0.0.30] - 01-06-2024
 ## Changed
