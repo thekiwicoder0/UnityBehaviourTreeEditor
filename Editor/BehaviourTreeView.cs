@@ -415,7 +415,7 @@ namespace TheKiwiCoder {
                     newTree.BeginBatch();
                     newTree.CloneTree(subTreeRoot, tree.rootNode, position);
                     newTree.EndBatch();
-                    window.NewTab(tree, false);
+                    window.NewTab(tree, false, tree.name);
                 }
 
                 // Replace subtree with subtree node

@@ -32,7 +32,12 @@ namespace TheKiwiCoder {
             static AssetDeleteResult OnWillDeleteAsset(string path, RemoveAssetOptions opt) {
                 if (HasOpenInstances<BehaviourTreeEditorWindow>()) {
                     BehaviourTreeEditorWindow wnd = GetWindow<BehaviourTreeEditorWindow>();
-                    wnd.ClearIfSelected(path);
+                    var tabs = wnd.tabView.Query<TreeViewTab>().ToList();
+                    foreach (var tab in tabs) {
+                        if (AssetDatabase.GetAssetPath(tab.serializer.tree) == path) {
+                            tab.Close();
+                        }
+                    }
                 }
                 return AssetDeleteResult.DidNotDelete;
             }
@@ -101,7 +106,7 @@ namespace TheKiwiCoder {
             BehaviourTreeEditorWindow wnd = GetWindow<BehaviourTreeEditorWindow>();
             wnd.titleContent = new GUIContent("BehaviourTreeEditor");
             wnd.minSize = new Vector2(800, 600);
-            wnd.SelectNewTree(tree);
+            wnd.NewTab(tree, true, tree.name);
         }
 
         [OnOpenAsset]
@@ -152,7 +157,7 @@ namespace TheKiwiCoder {
                     var fileName = System.IO.Path.GetFileName(path);
                     toolbarMenu.menu.AppendAction($"{fileName}", (a) => {
                         var tree = AssetDatabase.LoadAssetAtPath<BehaviourTree>(path);
-                        SelectNewTree(tree);
+                        NewTab(tree, true, tree.name);
                     });
                 });
                 if (EditorApplication.isPlaying) {
@@ -166,7 +171,7 @@ namespace TheKiwiCoder {
                         if (behaviourTreeInstance != null && gameObject.scene != null && gameObject.scene.name != null) {
 
                             toolbarMenu.menu.AppendAction($"{gameObject.name} [{behaviourTreeInstance.behaviourTree.name}]", (a) => {
-                                SelectNewTree(behaviourTreeInstance.RuntimeTree);
+                                NewTab(behaviourTreeInstance.RuntimeTree, true, behaviourTreeInstance.RuntimeTree.name);
                                 Selection.activeObject = gameObject;
 
                             });
@@ -185,8 +190,8 @@ namespace TheKiwiCoder {
             }
 
             // Overlay view
-            overlayView.OnTreeSelected -= t => NewTab(t, true);
-            overlayView.OnTreeSelected += t => NewTab(t, true);
+            overlayView.OnTreeSelected -= t => NewTab(t, true, t.name);
+            overlayView.OnTreeSelected += t => NewTab(t, true, t.name);
 
             // New Script Dialog
             newScriptDialog.style.visibility = Visibility.Hidden;
@@ -204,12 +209,16 @@ namespace TheKiwiCoder {
             TreeViewTab newTab = current as TreeViewTab;
             inspectorView.Clear();
             blackboardView?.Bind(newTab.serializer);
-            windowState.TabChanged(tabView.selectedTabIndex);
+            if (!newTab.isRuntimeTab) {
+                windowState.TabChanged(tabView.selectedTabIndex);
+            }
         }
 
         public void OnTabClosed(Tab tab) {
             TreeViewTab treeTab = tab as TreeViewTab;
-            windowState.TabClosed(treeTab);
+            if (!treeTab.isRuntimeTab) {
+                windowState.TabClosed(treeTab);
+            }
         }
 
         void CreatePendingScriptNode() {
@@ -297,20 +306,20 @@ namespace TheKiwiCoder {
         private void OnSelectionChange() {
             if (Selection.activeGameObject) {
                 BehaviourTreeInstance runner = Selection.activeGameObject.GetComponent<BehaviourTreeInstance>();
-                if (runner) {
-                    SelectNewTree(runner.RuntimeTree);
+                if (runner != null && runner.RuntimeTree != null) {
+                    string tabName = runner.behaviourTree.name;
+                    if (Application.isPlaying) {
+                        tabName += $" <b>[{Selection.activeGameObject.name.ToUpper()}]</b>";
+                    }
+                    NewTab(runner.RuntimeTree, true, tabName);
                 }
             }
         }
 
-        void SelectNewTree(BehaviourTree tree) {
-            NewTab(tree, true);
-        }
-
-        public void NewTab(BehaviourTree newTree, bool focus) {
+        public void NewTab(BehaviourTree newTree, bool focus, string tabName) {
 
             // Check for existing tab
-            var existingTab = tabView.Q<TreeViewTab>(newTree.name);
+            var existingTab = tabView.Q<TreeViewTab>(tabName);
             if (existingTab != null) {
 
                 // Focus existing tab
@@ -321,7 +330,7 @@ namespace TheKiwiCoder {
             }
 
             // Otherwise create a new tab
-            TreeViewTab newTab = new TreeViewTab(newTree, behaviourTreeStyle);
+            TreeViewTab newTab = new TreeViewTab(newTree, behaviourTreeStyle, tabName);
             tabView.Add(newTab);
 
             // Record active tab
@@ -341,19 +350,6 @@ namespace TheKiwiCoder {
             overlayView?.Show();
         }
 
-        void ClearIfSelected(string path) {
-            if (CurrentSerializer == null) {
-                return;
-            }
-
-            if (AssetDatabase.GetAssetPath(CurrentSerializer.tree) == path) {
-                // Need to delay because this is called from a will delete asset callback
-                EditorApplication.delayCall += () => {
-                    NewTab(null, true);
-                };
-            }
-        }
-
         private void OnInspectorUpdate() {
             if (Application.isPlaying) {
                 editorUpdate.Begin();
@@ -365,7 +361,7 @@ namespace TheKiwiCoder {
         void OnToolbarNewAsset() {
             BehaviourTree tree = EditorUtility.CreateNewTree();
             if (tree) {
-                SelectNewTree(tree);
+                NewTab(tree, true, tree.name);
             }
         }
 

@@ -39,7 +39,7 @@ namespace TheKiwiCoder {
         [Tooltip("If enabled, selecting a node will automatically add all it's children to the selection. If disabled, hold control to select entire node hierarchy")]
         public bool autoSelectNodeHierarchy = false;
 
-        [HideInInspector]
+        //[HideInInspector]
         public BehaviourTreeEditorWindowState windowState = new BehaviourTreeEditorWindowState();
 
         static BehaviourTreeProjectSettings FindSettings() {

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace TheKiwiCoder {
@@ -9,12 +10,15 @@ namespace TheKiwiCoder {
         public int activeTabIndex = -1;
 
         public void Restore(BehaviourTreeEditorWindow window) {
+            activeTabs.RemoveAll(tree => tree == null);
+            activeTabIndex = Math.Clamp(activeTabIndex, 0, activeTabs.Count - 1);
+
             if (activeTabs.Count == 0) {
                 window.overlayView.Show();
             } else {
                 int previousActiveTabIndex = activeTabIndex;
                 foreach (var tree in activeTabs) {
-                    window.NewTab(tree, true);
+                    window.NewTab(tree, true, tree.name);
                 }
                 window.tabView.selectedTabIndex = previousActiveTabIndex;
             }

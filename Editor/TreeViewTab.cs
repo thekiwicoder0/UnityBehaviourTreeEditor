@@ -11,9 +11,9 @@ public class TreeViewTab : Tab {
     public BehaviourTreeView treeView;
     public bool isRuntimeTab = false;
 
-    public TreeViewTab(BehaviourTree tree, StyleSheet styleSheet) : base(tree.name) {
+    public TreeViewTab(BehaviourTree tree, StyleSheet styleSheet, string tabName) : base(tabName) {
         isRuntimeTab = tree.name.Contains("Clone");
-        name = tree.name;
+        name = tabName;
         closeable = true;
         serializer = new SerializedBehaviourTree(tree);
 

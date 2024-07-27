@@ -61,7 +61,7 @@ namespace TheKiwiCoder {
             }
 
             if (treeToFocus != null) {
-                BehaviourTreeEditorWindow.Instance.NewTab(treeToFocus, true);
+                BehaviourTreeEditorWindow.Instance.NewTab(treeToFocus, true, treeToFocus.name);
             }
         }
 
