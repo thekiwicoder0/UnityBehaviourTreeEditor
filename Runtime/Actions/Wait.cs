@@ -7,7 +7,8 @@ namespace TheKiwiCoder {
     [System.Serializable]
     public class Wait : ActionNode {
 
-        [Tooltip("Amount of time to wait before returning success")] public float duration = 1;
+		[Tooltip("Amount of time to wait before returning success")] public NodeProperty<float> duration = new NodeProperty<float>() { Value = 1 };
+        
         float startTime;
 
         protected override void OnStart() {
@@ -18,9 +19,9 @@ namespace TheKiwiCoder {
         }
 
         protected override State OnUpdate() {
-            
+
             float timeRemaining = Time.time - startTime;
-            if (timeRemaining > duration) {
+            if (timeRemaining > duration.Value) {
                 return State.Success;
             }
             return State.Running;
