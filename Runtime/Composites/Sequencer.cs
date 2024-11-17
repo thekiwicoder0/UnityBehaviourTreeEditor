@@ -6,24 +6,28 @@ namespace TheKiwiCoder {
     [System.Serializable]
     public class Sequencer : CompositeNode {
 
-        protected override void OnStart() {
-        }
+		int current = 0;
 
-        protected override void OnStop() {
-        }
+		protected override void OnStart() {
+			current = 0;
+		}
 
-        protected override State OnUpdate() {
-            for (int i = 0; i < children.Count; ++i) {
-                var childStatus = children[i].Update();
-                
-                if (childStatus == State.Running) {
-                    return State.Running;
-                } else if (childStatus == State.Failure) {
-                    return State.Failure;
-                }
-            }
+		protected override void OnStop() {
+		}
 
-            return State.Success;
-        }
-    }
+		protected override State OnUpdate() {
+			Node child = children[current];
+
+			switch (child.Update()) {
+				case State.Running:
+					return State.Running;
+				case State.Failure:
+					return State.Failure;
+				case State.Success:
+					current++;
+					break;
+			}
+			return current == children.Count ? State.Success : State.Running;
+		}
+	}
 }
