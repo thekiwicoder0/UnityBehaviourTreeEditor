@@ -104,7 +104,7 @@ namespace TheKiwiCoder {
         }
     }
 
-    [CustomPropertyDrawer(typeof(NodeProperty))]
+    [CustomPropertyDrawer(typeof(NodeProperty), true)]
     public class NodePropertyPropertyDrawer : PropertyDrawer {
 
         public override VisualElement CreatePropertyGUI(SerializedProperty property) {

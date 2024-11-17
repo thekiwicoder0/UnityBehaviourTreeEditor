@@ -1,5 +1,5 @@
 {
-  "name": "com.thekiwicoder.behaviourtreeditor",
+  "name": "com.wylbo.behaviourtreeditor",
   "version": "0.0.31",
   "displayName": "Behaviour Tree Editor",
   "description": "Behaviour Tree runtime and Editor built with UI Toolkit",
@@ -16,9 +16,9 @@
     "ai behaviour tree"
   ],
   "author": {
-    "name": "TheKiwiCoder",
-    "email": "thekiwicoder@gmail.com",
-    "url": "https://www.thekiwicoder.com"
+    "name": "Wylbo",
+    "email": "maximilien.galea@gmail.com",
+    "url": "https://www.maximilien-galea.com"
   },
   "samples": [
     {
