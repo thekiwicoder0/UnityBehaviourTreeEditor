@@ -8,7 +8,7 @@ using System.Runtime.Remoting.Messaging;
 
 namespace TheKiwiCoder {
 
-    [CustomPropertyDrawer(typeof(NodeProperty<>))]
+    [CustomPropertyDrawer(typeof(NodeProperty<>), true)]
     public class GenericNodePropertyPropertyDrawer : PropertyDrawer {
 
         public override VisualElement CreatePropertyGUI(SerializedProperty property) {
