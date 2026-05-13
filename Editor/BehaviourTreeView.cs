@@ -138,8 +138,11 @@ namespace TheKiwiCoder {
         }
 
         void OnViewTransformChanged(GraphView graphView) {
-            Vector3 position = contentViewContainer.transform.position;
-            Vector3 scale = contentViewContainer.transform.scale;
+            Vector3 position = new Vector3(
+                contentViewContainer.resolvedStyle.translate.x,
+                contentViewContainer.resolvedStyle.translate.y,
+                0);
+            Vector3 scale = contentViewContainer.resolvedStyle.scale.value;
             serializer.SetViewTransform(position, scale);
         }
 
@@ -184,8 +187,8 @@ namespace TheKiwiCoder {
             });
 
             // Set view
-            contentViewContainer.transform.position = serializer.tree.viewPosition;
-            contentViewContainer.transform.scale = serializer.tree.viewScale;
+            contentViewContainer.style.translate = new Translate(serializer.tree.viewPosition.x, serializer.tree.viewPosition.y);
+            contentViewContainer.style.scale = new Scale(serializer.tree.viewScale);
         }
 
         public override List<Port> GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter) {
