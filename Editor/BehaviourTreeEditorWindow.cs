@@ -1,4 +1,6 @@
 using System;
+using System.Linq;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -94,6 +96,10 @@ namespace TheKiwiCoder {
         [SerializeField]
         public PendingScriptCreate pendingScriptCreate = new PendingScriptCreate();
 
+        // Tree view panel (session-only expansion state)
+        public TreeViewPanel treeViewPanel;
+        public Dictionary<BehaviourTree, HashSet<string>> expandedNodeGuids = new Dictionary<BehaviourTree, HashSet<string>>();
+
 
         [MenuItem("Window/AI/BehaviourTree")]
         public static void OpenWindow() {
@@ -141,11 +147,17 @@ namespace TheKiwiCoder {
             toolbarMenu = root.Q<ToolbarMenu>();
             overlayView = root.Q<OverlayView>("OverlayView");
             newScriptDialog = root.Q<NewScriptDialogView>("NewScriptDialogView");
-            tabView = root.Q<TabView>();
+            tabView = root.Q<VisualElement>("right-panel")?.Q<TabView>();
             tabView.activeTabChanged -= OnTabChanged;
             tabView.activeTabChanged += OnTabChanged;
 
             versionLabel = root.Q<Label>("Version");
+
+            // Create the tree view panel and mount it in the left panel tab container
+            treeViewPanel = new TreeViewPanel(this);
+            treeViewPanel.style.flexGrow = 1;
+            var treeViewContainer = root.Q<VisualElement>("tree-view-panel-container");
+            treeViewContainer?.Add(treeViewPanel);
 
             // Toolbar assets menu
             toolbarMenu.RegisterCallback<MouseEnterEvent>((evt) => {
@@ -208,9 +220,12 @@ namespace TheKiwiCoder {
         private void OnTabChanged(Tab previous, Tab current) {
             TreeViewTab newTab = current as TreeViewTab;
             inspectorView.Clear();
-            blackboardView?.Bind(newTab.serializer);
-            if (!newTab.isRuntimeTab) {
-                windowState.TabChanged(tabView.selectedTabIndex);
+            if (newTab != null) {
+                blackboardView?.Bind(newTab.serializer);
+                treeViewPanel?.Bind(newTab.serializer);
+                if (!newTab.isRuntimeTab) {
+                    windowState.TabChanged(tabView.selectedTabIndex);
+                }
             }
         }
 

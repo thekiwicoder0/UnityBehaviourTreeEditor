@@ -6,7 +6,7 @@
         <ui:Label display-tooltip-when-elided="true" name="Version" />
     </uie:Toolbar>
     <TheKiwiCoder.SplitView fixed-pane-initial-dimension="300">
-        <ui:VisualElement name="left-panel">
+        <ui:VisualElement name="left-panel" style="flex-grow: 1;">
             <TheKiwiCoder.SplitView orientation="Vertical" fixed-pane-initial-dimension="400">
                 <ui:VisualElement name="inspector-container" style="background-color: rgb(56, 56, 56);">
                     <ui:Label text="Inspector" display-tooltip-when-elided="true" style="background-color: rgb(37, 37, 37);" />
@@ -26,8 +26,15 @@
                 </ui:VisualElement>
             </TheKiwiCoder.SplitView>
         </ui:VisualElement>
-        <ui:VisualElement name="right-panel">
-            <ui:TabView reorderable="true" style="flex-grow: 1;" />
+        <ui:VisualElement name="right-section" style="flex-grow: 1;">
+            <TheKiwiCoder.SplitView fixed-pane-index="1" fixed-pane-initial-dimension="250" style="flex-grow: 1;">
+                <ui:VisualElement name="right-panel" style="flex-grow: 1;">
+                    <ui:TabView reorderable="true" style="flex-grow: 1;" />
+                </ui:VisualElement>
+                <ui:VisualElement name="tree-view-panel-container" style="background-color: rgb(56, 56, 56);">
+                    <ui:Label text="Tree View" display-tooltip-when-elided="true" style="background-color: rgb(37, 37, 37);" />
+                </ui:VisualElement>
+            </TheKiwiCoder.SplitView>
         </ui:VisualElement>
     </TheKiwiCoder.SplitView>
     <TheKiwiCoder.OverlayView name="OverlayView" style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; align-items: center; justify-content: center; background-color: rgba(0, 0, 0, 0.5); visibility: hidden; display: flex;">

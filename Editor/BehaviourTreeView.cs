@@ -10,6 +10,7 @@ namespace TheKiwiCoder {
     [UxmlElement]
     public partial class BehaviourTreeView : GraphView {
         public Action<NodeView> OnNodeSelected;
+        public Action OnGraphChanged;
 
         protected override bool canCopySelection => true;
 
@@ -189,6 +190,8 @@ namespace TheKiwiCoder {
             // Set view
             contentViewContainer.style.translate = new Translate(serializer.tree.viewPosition.x, serializer.tree.viewPosition.y);
             contentViewContainer.style.scale = new Scale(serializer.tree.viewScale);
+
+            OnGraphChanged?.Invoke();
         }
 
         public override List<Port> GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter) {
@@ -247,6 +250,8 @@ namespace TheKiwiCoder {
                 graphViewChange.elementsToRemove.Remove(elem);
             }
 
+            OnGraphChanged?.Invoke();
+
             return graphViewChange;
         }
 
@@ -274,6 +279,7 @@ namespace TheKiwiCoder {
 
             serializer.EndBatch();
 
+            OnGraphChanged?.Invoke();
             return nodeView;
         }
 
@@ -298,6 +304,7 @@ namespace TheKiwiCoder {
             }
 
             serializer.EndBatch();
+            OnGraphChanged?.Invoke();
             return nodeView;
         }
 

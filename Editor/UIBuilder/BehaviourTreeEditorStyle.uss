@@ -26,8 +26,58 @@ BehaviourTreeView {
     min-height: 1440px;
 }
 
-.unity-tab__header-label {
-    margin-bottom: 25px;
+.tree-view-panel {
+    flex-direction: column;
+    min-width: 200px;
+}
+
+.tree-view-scroll {
+    flex-grow: 1;
+}
+
+.tree-view-row {
+    flex-direction: row;
+    flex-shrink: 0;
+    width: 100%;
+    padding-right: 4px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+}
+
+.tree-view-row-even {
+    background-color: rgb(56, 56, 56);
+}
+
+.tree-view-row-odd {
+    background-color: rgb(48, 48, 48);
+}
+
+.tree-view-row:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.tree-view-selected,
+.tree-view-selected:hover {
+    background-color: rgba(44, 93, 135, 0.9);
+}
+
+.tree-view-arrow {
+    -unity-text-align: middle-center;
+    min-width: 16px;
+    margin-right: 4px;
+}
+
+.tree-view-icon {
+    width: 16px;
+    height: 16px;
+    align-self: center;
+    margin-right: 4px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.tree-view-label {
+    -unity-text-align: middle-left;
+    flex-grow: 1;
 }
 
 .unity-tab__header-underline {

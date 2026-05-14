@@ -21,6 +21,7 @@ public class TreeViewTab : Tab {
         treeView.styleSheets.Add(styleSheet);
         treeView.PopulateView(serializer);
         treeView.OnNodeSelected += OnNodeSelected;
+        treeView.OnGraphChanged += OnGraphChanged;
 
         // TODO: Remove selection when closing the tab
 
@@ -34,6 +35,12 @@ public class TreeViewTab : Tab {
     void OnNodeSelected(NodeView node) {
         BehaviourTreeEditorWindow window = BehaviourTreeEditorWindow.Instance;
         window.InspectNode(serializer, node);
+        window.treeViewPanel?.SelectNode(node?.node?.guid);
+    }
+
+    void OnGraphChanged() {
+        BehaviourTreeEditorWindow window = BehaviourTreeEditorWindow.Instance;
+        window.treeViewPanel?.Bind(serializer);
     }
 
     public void Close() {

@@ -2,7 +2,17 @@
 
 All notable changes to this package will be documented in this file.
 
-# [0.0.31] - WIP
+# [0.4.0] - 14-05-2026
+## Added
+- Added Tree View panel — a hierarchical read-only view of the behaviour tree displayed alongside the graph. Features include:
+  - Expandable/collapsable nodes with depth-based indentation
+  - Alternating row colours and hover/selection highlighting
+  - Bidirectional selection sync with the graph view (selecting a node in either view highlights it in the other)
+  - Auto-expands ancestors when a node is selected
+  - Node type icons displayed inline
+  - Session-persistent expand/collapse state
+
+# [0.0.31] - 27-07-2024
 ## Added
 - SubTree node styling + icon.
 - Added `Create SubTree` feature to node context menu.
